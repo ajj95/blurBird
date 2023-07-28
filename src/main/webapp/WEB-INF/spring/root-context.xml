@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
-	
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
-		
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" /><!-- log4j를 사용하기 위해 사용한다. -->
+		<!-- value="oracle.jdbc.driver.OracleDriver"/> --> <!-- hikariConfig라는 이름으로 oracle을 사용하겠다. -->
+		<property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@192.168.0.53:1521:XE" /><!-- log4j를 사용하기 
+			위해 사용한다. -->
+		<!-- value="jdbc:oracle:thin:@localhost:1521:XE"/> --><!-- oracle 주소는 다음과 같다. -->
+		<property name="username" value="bluesae" /> <!-- id는 이거고 -->
+		<property name="password" value="1234" /><!-- pw는 이거다. -->
+	</bean>
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" /> <!-- hikari가 커넥션 풀이 있어서 커넥션이 들어있음 hikariConfig를 사용해서 dataSource를 설정하겠다. -->
+	</bean>
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" /> <!-- SqlSessionFactoryBean을 생성했다. -->
+	</bean>
+
+	<mybatis-spring:scan
+		base-package="org.blurbird.mapper" />
 </beans>
