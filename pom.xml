@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
-   <groupId>org.bluebird</groupId>
+   <groupId>org.blurbird</groupId>
    <artifactId>controller</artifactId>
    <name>bluebird</name>
    <packaging>war</packaging>
@@ -186,8 +186,7 @@
          <version>2.8.2</version>
       </dependency>
 
-
-      <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+	  <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
       <dependency>
          <groupId>org.springframework.security</groupId>
          <artifactId>spring-security-web</artifactId>
@@ -211,7 +210,7 @@
          <artifactId>spring-security-taglibs</artifactId>
          <version>${org.springframework-version}</version>
       </dependency>
-      
+
    </dependencies>
     <build>
         <plugins>
