@@ -32,10 +32,14 @@
 
 	<mybatis-spring:scan
 		base-package="org.blurbird.mapper" />
+
+	<mybatis-spring:scan base-package="org.blurbird.mapper" />
+
+
 	<context:component-scan base-package="org.blurbird.service.common" />
 	<context:component-scan base-package="org.blurbird.service.bank" />
 	<context:component-scan base-package="org.blurbird.service.info" />
 	<context:component-scan base-package="org.blurbird.service.receipt" />
 	<context:component-scan base-package="org.blurbird.service.docRequest" />
-	
+
 </beans>
