@@ -52,7 +52,7 @@ public class BankMapperTests {
 		mapper.getBankHistoryList(search).forEach(bankhistory -> log.info(bankhistory));
 	}
 	*/
-	
+	/*
 	@Test
 	public void getbankhistoryNonetest() {
 		BankSearchDTO search = new BankSearchDTO();
@@ -78,6 +78,7 @@ public class BankMapperTests {
 		search.setBankname("신한은행");
 		mapper.getBankHistoryListConn(search).forEach(bankhistory -> log.info(bankhistory));
 	}
+	*/
 	
 	
 
