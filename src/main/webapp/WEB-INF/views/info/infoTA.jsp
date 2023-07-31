@@ -40,7 +40,7 @@
 
 table {
 	width: 100%; /* 테이블 전체 넓이를 100%로 설정 */
-	table-layout: fixed; /* 테이블 열 너비를 고정으로 설정*/
+	table-layout: auto; /* 테이블 열 너비를 고정으로 설정*/
 }
 
 th, td {
@@ -49,17 +49,21 @@ th, td {
 }
 
 th:first-child, td:first-child {
-	width: 35px; /* 첫 번째 열 넓이 */
+	/* 첫 번째 열 넓이 */
+	width: 35px;
+}
+th:first-child(2), td:first-child(2) {
+	/* 두번째 열 넓이 */
+	width: 350px;
 }
 
-th:nth-child(2), td:nth-child(2) {
-	width: 50px; /* 두 번째 열 넓이 */
-}
 
 .tabletop {
 	background-color: #F5F5F5 !important;
 }
 
+
+/* 신고현황 그래프 */
 .barInfo {
 	display: flex;
 	justify-content: space-between;
@@ -93,11 +97,11 @@ th:nth-child(2), td:nth-child(2) {
 	justify-content: space-between;
 }
 
-.barInfo{
+.barInfo {
 	font-weight: 700;
 }
 
-.printButton{
+.printButton {
 	border: 0.5px;
 }
 </style>
@@ -251,7 +255,7 @@ th:nth-child(2), td:nth-child(2) {
 						</div>
 					</div>
 					<br>
-					
+
 					<div>
 						신고리스트
 						<button type="button" class="printButton">인쇄</button>
@@ -273,48 +277,46 @@ th:nth-child(2), td:nth-child(2) {
 										<th scope="col" class="tabletop">신고일자</th>
 										<th scope="col" class="tabletop">접수증</th>
 										<th scope="col" class="tabletop">납부서</th>
+										<th scope="col" class="tabletop">전송일자</th>
+										<th scope="col" class="tabletop"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
-										<td>1</td>
-										<td>Brandon Jacob</td>
-										<td>Designer</td>
-										<td>28</td>
-										<td>2016-05-25</td>
+										<td>수임처 더존학원</td>
+										<td>2023.04</td>
+										<td>25999412</td>
+										<td>1624812</td>
+										<td>2016.05.25</td>
+										<td>ic</td>
+										<td>ic</td>
+										<td>2023.05.08</td>
+										<td><button type="button">신고서작성</button></td>
 									</tr>
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
-										<td>2</td>
-										<td>Bridie Kessler</td>
-										<td>Developer</td>
-										<td>35</td>
-										<td>2014-12-05</td>
+										<td>수임처 더존학원더긴제목</td>
+										<td>2023.04</td>
+										<td>25999412</td>
+										<td>1624812</td>
+										<td>2016.05.25</td>
+										<td>ic</td>
+										<td>ic</td>
+										<td>2023.05.08</td>
+										<td><button type="button">신고서작성</button></td>
 									</tr>
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
-										<td>3</td>
-										<td>Ashleigh Langosh</td>
-										<td>Finance</td>
-										<td>45</td>
-										<td>2011-08-12</td>
-									</tr>
-									<tr>
-										<td><input class="form-check-input" type="checkbox"></td>
-										<td>4</td>
-										<td>Angus Grady</td>
-										<td>HR</td>
-										<td>34</td>
-										<td>2012-06-11</td>
-									</tr>
-									<tr>
-										<td><input class="form-check-input" type="checkbox"></td>
-										<td>5</td>
-										<td>Raheem Lehner</td>
-										<td>Dynamic Division Officer</td>
-										<td>47</td>
-										<td>2011-04-19</td>
+										<td>세무사학원</td>
+										<td>2023.04</td>
+										<td>25999412</td>
+										<td>1624812</td>
+										<td>2016.05.25</td>
+										<td>ic</td>
+										<td>ic</td>
+										<td>2023.05.08</td>
+										<td><button type="button">신고서작성</button></td>
 									</tr>
 								</tbody>
 							</table>
