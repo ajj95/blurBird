@@ -13,8 +13,8 @@
 			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" /><!-- log4j를 사용하기 위해 사용한다. -->
 		<!-- value="oracle.jdbc.driver.OracleDriver"/> --> <!-- hikariConfig라는 이름으로 oracle을 사용하겠다. -->
 		<property name="jdbcUrl"
-			value="jdbc:log4jdbc:oracle:thin:@192.168.0.53:1521:XE" /><!-- log4j를 
-			사용하기 위해 사용한다. -->
+			value="jdbc:log4jdbc:oracle:thin:@192.168.0.53:1521:XE" /><!-- log4j를 사용하기 
+			위해 사용한다. -->
 		<!-- value="jdbc:oracle:thin:@localhost:1521:XE"/> --><!-- oracle 주소는 다음과 같다. -->
 		<property name="username" value="bluesae" /> <!-- id는 이거고 -->
 		<property name="password" value="1234" /><!-- pw는 이거다. -->
@@ -32,15 +32,14 @@
 
 	<mybatis-spring:scan
 		base-package="org.blurbird.mapper" />
-		
-	<context:component-scan
-		base-package="org.blurbird.service.common" />
-	<context:component-scan
-		base-package="org.blurbird.service.bank" />
-	<context:component-scan
-		base-package="org.blurbird.service.info" />
-	<context:component-scan
-		base-package="org.blurbird.service.receipt" />
-	<context:component-scan
-		base-package="org.blurbird.service.docRequest" />
+
+	<mybatis-spring:scan base-package="org.blurbird.mapper" />
+
+
+	<context:component-scan base-package="org.blurbird.service.common" />
+	<context:component-scan base-package="org.blurbird.service.bank" />
+	<context:component-scan base-package="org.blurbird.service.info" />
+	<context:component-scan base-package="org.blurbird.service.receipt" />
+	<context:component-scan base-package="org.blurbird.service.docRequest" />
+
 </beans>
