@@ -2,10 +2,49 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.blurbird.mapper.bankMapper">
+<mapper namespace="org.blurbird.mapper.BankMapper">
 	
-	<select id="testGetName" resultType="org.blurbird.domain.MemberVO">
-		select * from member where password='1234'
+	<!-- 통장내역 전체 -->
+	<select id="getBankHistoryList" resultType="org.blurbird.domain.bank.BankHistoryVO"
+			parameterType="org.blurbird.domain.bank.BankSearchDTO">
+		SELECT BHDATE, SOURCE, AMOUNT, SORTNO
+		, SUM(AMOUNT) OVER(ORDER BY BHDATE, BHNO) AS SUM
+		, ACCOUNTNUMBER, S.BHSTATENAME "BHSTATENAME"
+		, B.BANKNAME "BANKNAME", MEMO
+		FROM BANKHISTORY, BHSTATE S, BANK B
+		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
+		AND BHDATE BETWEEN #{startdate} AND #{enddate}
+		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
 	</select>
+	
+	<!-- 통장내역 미연결 -->
+	<select id="getBankHistoryListNone" resultType="org.blurbird.domain.bank.BankHistoryVO"
+			parameterType="org.blurbird.domain.bank.BankSearchDTO">
+		SELECT BHDATE, SOURCE, AMOUNT, SORTNO
+		, SUM(AMOUNT) OVER(ORDER BY BHDATE, BHNO) AS SUM
+		, ACCOUNTNUMBER, S.BHSTATENAME "BHSTATENAME"
+		, B.BANKNAME "BANKNAME", MEMO
+		FROM BANKHISTORY, BHSTATE S, BANK B
+		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
+		AND BANKHISTORY.BHSTATENO='1003'
+		AND BHDATE BETWEEN #{startdate} AND #{enddate}
+		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+	</select>
+	
+	<!-- 통장내역 연결 -->
+	<select id="getBankHistoryListConn" resultType="org.blurbird.domain.bank.BankHistoryVO"
+			parameterType="org.blurbird.domain.bank.BankSearchDTO">
+		SELECT BHDATE, SOURCE, AMOUNT, SORTNO
+		, SUM(AMOUNT) OVER(ORDER BY BHDATE, BHNO) AS SUM
+		, ACCOUNTNUMBER, S.BHSTATENAME "BHSTATENAME"
+		, B.BANKNAME "BANKNAME", MEMO
+		FROM BANKHISTORY, BHSTATE S, BANK B
+		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
+		AND BANKHISTORY.BHSTATENO IN('1001', '1002')
+		AND BHDATE BETWEEN #{startdate} AND #{enddate}
+		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+	</select>
+	
+	
 
 </mapper>
