@@ -1,7 +1,5 @@
 package org.blurbird.domain.bank;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BankSearchDTO {
 
-	private Date startdate;
-	private Date enddate;
+	private String startdate;
+	private String enddate;
 	private String bizno;
 	private String bankname;
+	private String bhstateno;    // slip조회시 가능, 확정, 제외, 삭제 유형
 }

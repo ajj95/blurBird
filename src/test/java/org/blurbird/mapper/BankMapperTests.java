@@ -23,30 +23,15 @@ public class BankMapperTests {
 	@Autowired
 	public BankMapper mapper;
 	
-	/*
+    /*
 	@Test
 	public void getbankhistorytest() {
 		BankSearchDTO search = new BankSearchDTO();
 		
 		String start = "20230801";
 		String end = "20230807";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-	    Date startdate = null;
-		try {
-			startdate = sdf.parse(start);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Date enddate = null;
-		try {
-			enddate = sdf.parse(end);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		search.setStartdate(startdate);
-		search.setEnddate(enddate);
+		search.setStartdate("2023-08-01");
+		search.setEnddate("2023-08-07");
 		search.setBizno("10001");
 		search.setBankname("신한은행");
 		mapper.getBankHistoryList(search).forEach(bankhistory -> log.info(bankhistory));
@@ -79,7 +64,19 @@ public class BankMapperTests {
 		mapper.getBankHistoryListConn(search).forEach(bankhistory -> log.info(bankhistory));
 	}
 	*/
-	
+	@Test
+	public void getbankSliptest() {
+		BankSearchDTO search = new BankSearchDTO();
+		
+		String start = "20230801";
+		String end = "20230807";
+		search.setStartdate("2023-08-01");
+		search.setEnddate("2023-08-07");
+		search.setBizno("10001");
+		search.setBankname("신한은행");
+		search.setBhstateno("1002");
+		mapper.getBankSlipListState(search).forEach(bankhistory -> log.info(bankhistory));
+	}
 	
 
 }

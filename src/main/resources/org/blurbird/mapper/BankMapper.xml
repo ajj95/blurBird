@@ -13,7 +13,8 @@
 		, B.BANKNAME "BANKNAME", MEMO
 		FROM BANKHISTORY, BHSTATE S, BANK B
 		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
-		AND BHDATE BETWEEN #{startdate} AND #{enddate}
+		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+               AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
 	</select>
 	
@@ -27,7 +28,8 @@
 		FROM BANKHISTORY, BHSTATE S, BANK B
 		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
 		AND BANKHISTORY.BHSTATENO='1003'
-		AND BHDATE BETWEEN #{startdate} AND #{enddate}
+		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+               AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
 	</select>
 	
@@ -41,10 +43,66 @@
 		FROM BANKHISTORY, BHSTATE S, BANK B
 		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
 		AND BANKHISTORY.BHSTATENO IN('1001', '1002')
-		AND BHDATE BETWEEN #{startdate} AND #{enddate}
+		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+               AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
 	</select>
 	
 	
+	<!-- 전표내역 전체조회 -->
+	<select id="getBankSlipList" resultType="org.blurbird.domain.bank.BankSlipVO"
+				parameterType="org.blurbird.domain.bank.BankSearchDTO">
+	    SELECT BH.BHNO "BHNO", BH.SOURCE "SOURCE", S.SUMMARY "SUMMARY"
+	    , A.ACCOUNTNAME "ACCOUNTNAME", BS.BHSTATENAME "BHSTATENAME"
+	    , SUM(BH.AMOUNT) OVER(ORDER BY BH.BHDATE, BH.BHNO) AS SUM, S.AMOUNT "AMOUNT"
+	    FROM ACCOUNT A, BANKSLIP S, BUSINESS B, BANKHISTORY BH, BHSTATE BS, BANK K
+	    WHERE A.ACCOUNTNO = S.ACCOUNTNO
+	    AND BH.BIZNO = B.BIZNO
+	    AND BH.BHNO = S.BHNO
+	    AND BS.BHSTATENO = BH.BHSTATENO
+	    AND BH.BIZNO = #{bizno}
+	    AND K.BANKNAME = #{bankname}
+	    AND BH.BHSTATENO IN ('1001', '1002', '1004', '1005')
+	    AND BH.BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+               AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	    AND ((BH.SORTNO = 1 AND S.SORTNO = 4) OR (BH.SORTNO = 2 AND S.SORTNO = 3))
+	    ORDER BY BANKSLIPNO DESC
+	</select>
+	
+	<!-- 전표내역 확정가능 or 확정 or 제외 or 삭제 -->
+	<select id="getBankSlipListState" resultType="org.blurbird.domain.bank.BankSlipVO"
+				parameterType="org.blurbird.domain.bank.BankSearchDTO">
+	    SELECT BH.BHNO "BHNO", BH.SOURCE "SOURCE", S.SUMMARY "SUMMARY"
+	    , A.ACCOUNTNAME "ACCOUNTNAME", BS.BHSTATENAME "BHSTATENAME"
+	    , SUM(BH.AMOUNT) OVER(ORDER BY BH.BHDATE, BH.BHNO) AS SUM, S.AMOUNT "AMOUNT"
+	    FROM ACCOUNT A, BANKSLIP S, BUSINESS B, BANKHISTORY BH, BHSTATE BS, BANK K
+	    WHERE A.ACCOUNTNO = S.ACCOUNTNO
+	    AND BH.BIZNO = B.BIZNO
+	    AND BH.BHNO = S.BHNO
+	    AND BS.BHSTATENO = BH.BHSTATENO
+	    AND BH.BIZNO = #{bizno}
+	    AND K.BANKNAME = #{bankname}
+	    AND BH.BHSTATENO = #{bhstateno}
+	    AND BH.BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+               AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	    AND ((BH.SORTNO = 1 AND S.SORTNO = 4) OR (BH.SORTNO = 2 AND S.SORTNO = 3))
+	    ORDER BY BANKSLIPNO DESC
+	</select>
+
+	<!-- 분개내역 조회 -->
+	<select id="getDetailSlip" resultType="int" parameterType="org.blurbird.domain.bank.DetailSlipVO">
+		SELECT S.SORTNO "SORTNO", S.SORTNAME "SORTNAME", A.ACCOUNTNO "ACCOUNTNO"
+		, A.ACCOUNTNAME" ACCOUNTNAME"
+		, BH.AMOUNT "AMOUNT", BH.SOURCE "SOURCE", BS.SUMMARY "SUMMARY"
+		FROM BANKHISTORY BH, BANKSLIP BS, SORT S, ACCOUNT A
+		WHERE BH.BHNO = BS.BHNO
+		AND BS.SORTNO = S.SORTNO
+		AND A.ACCOUNTNO = BS.ACCOUNTNO
+		AND BH.BHNO = #{bhno}
+	</select>
+
+
+
+
 
 </mapper>

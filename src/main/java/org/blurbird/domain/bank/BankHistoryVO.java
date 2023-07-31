@@ -1,7 +1,5 @@
 package org.blurbird.domain.bank;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class BankHistoryVO {
 	private String bankname;			// 은행이름
 	private String accountnumber;	// 계좌번호
-	private Date bhdate;   				// 통장내역 일자
+	private String bhdate;   			// 통장내역 일자
 	private String source;				// 적요(거래처)
 	private String sortno;				// 1:입금 2:출금
 	private int amount;					// 입금액or출금액

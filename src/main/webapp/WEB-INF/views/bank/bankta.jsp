@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+\<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/taheader.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -312,6 +314,7 @@ input.modaltext {
 	width: 363px;
 }
 </style>
+<script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
 		// 툴팁설정
@@ -406,75 +409,21 @@ input.modaltext {
               	<!-- 탭1 -->
                 <div class="tab-pane fade show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
                  	
-                 <div class="listcondition">
-                 		<div class="line">
-		                  <label for="inputDate" class="col-form-label labeltitle">일자</label>
-		                  <div class="line">
-		                    <input type="date" id="startdate" class="form-control">~&nbsp;<input type="date" id="enddate" class="form-control">
-		                  </div>
-		                </div>
-                 		<div class="line">
-                 			<label class="labeltitle">은행&nbsp;&nbsp;</label>
-							<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-				              전체거래처
-				            </button>
-		                      <ul class="dropdown-menu">
-		                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-		                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-		                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-		                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-		                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-		                      </ul>
-                 		</div>
-                 		<div class="line">
-	                 		<label class="labeltitle">조회내용&nbsp;&nbsp;</label>
-		                     <div class="line">
-			                    <div class="form-check">
-			                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-			                      <label class="form-check-label" for="gridRadios1">
-			                        전체
-			                      </label>
-			                    </div>
-			                    <div class="form-check">
-			                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-			                      <label class="form-check-label" for="gridRadios2">
-			                        입금
-			                      </label>
-			                    </div>
-			                    <div class="form-check">
-			                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios" value="option">
-			                      <label class="form-check-label" for="gridRadios3">
-			                        출금
-			                      </label>
-			                    </div>
-	                  		 </div>
-                 		</div>
-                 		<div class="listconditionbtn">
-                 			<button type="button" class="btn btn-secondary">조회</button>
-                 		</div>
-                 	</div>
-
-                 	<div class="left">
-                 		<!-- 통장내역 -->
-			              <ul class="nav nav-tabs" id="myTab" role="tablist">
-			                <li class="nav-item" role="presentation">
-			                  <button class="nav-link active" id="allbanklist-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">전체</button>
-			                </li>
-			                <li class="nav-item" role="presentation">
-			                  <button class="nav-link" id="nonbanklist-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">전표미연결</button>
-			                </li>
-			                <li class="nav-item" role="presentation">
-			                  <button class="nav-link" id="connbanklist-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">전표연결</button>
-			                </li>
-			              </ul>
-			              <div class="tab-content pt-2" id="myTabContent">
-			                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="allbanklist-tab">
-			                	<!-- 전체 -->
-			                	 <div class="banklogo">
-								 	<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">
-								 	<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			                        신한은행
-			                      </button>
+                 	<!-- 검색조건 form -->
+                 	<form action="/bank/getHistoryAndSlip" method="post">
+	                 	<div class="listcondition">
+	                 		<div class="line">
+			                  <label for="inputDate" class="col-form-label labeltitle">일자</label>
+			                  <div class="line">
+			                    <input type="date" id="startdate" name="startdate" class="form-control">
+			                    ~&nbsp;<input type="date" id="enddate" name="enddate" class="form-control">
+			                  </div>
+			                </div>
+	                 		<div class="line">
+	                 			<label class="labeltitle">은행&nbsp;&nbsp;</label>
+								<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					              전체거래처
+					            </button>
 			                      <ul class="dropdown-menu">
 			                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
 			                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
@@ -482,203 +431,42 @@ input.modaltext {
 			                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
 			                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
 			                      </ul>
-								 </div>
-				                <table id="allbanktable" class="banktable table table-hover table-bordered">
-					                <thead>
-					                  <tr>
-					                  	<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>
-					                    <th scope="col" class="tabletop">날짜</th>
-					                    <th scope="col" class="tabletop">적요</th>
-					                    <th scope="col" class="tabletop">입금액</th>
-					                    <th scope="col" class="tabletop">출금액</th>
-					                    <th scope="col" class="tabletop">잔액</th>
-					                    <th scope="col" class="tabletop">메모</th>
-					                  </tr>
-					                </thead>
-					                <tbody>
-					                  <tr>
-					                  	<td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-01</td>
-					                    <td>(주)회사</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td>14,5000,000</td>
-					                    <td><i class="ri-article-fill"></i></td>
-					                  </tr>
-					                  <tr>
-					                  	<td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-02</td>
-					                    <td>(주)회사</td>
-					                    <td>14,5000,000</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td><i class="ri-article-fill"></i></td>
-					                  </tr>
-					                  <tr>
-					                    <td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-03</td>
-					                     <td>(주)회사</td>
-					                    <td>14,5000,000</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td><i class="ri-article-fill"></i></td>
-					                  </tr>
-					                  <tr>
-					                  	<td class="total"></td>
-					                  	<td class="total"><strong>합계</strong></td>
-					                  	<td class="total"></td>
-					                  	<td class="total">67,515,870</td>
-					                  	<td class="total">82,015,850</td>
-					                  	<td class="total">0</td>
-					                  	<td class="total"></td>
-					                  </tr>
-					                </tbody>
-				              </table>         	
-			                </div><!-- End 전체 탭 -->
-			                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="nonbanklist-tab">
-								<!-- 미연결 -->
-								 <div class="banklogo">
-								 	<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">
-								 	<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			                        신한은행
-			                      </button>
-			                      <ul class="dropdown-menu">
-			                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-			                      </ul>
-								 </div>
-				                <table id="nonbanktable" class="banktable table table-hover table-bordered">
-					                <thead>
-					                  <tr>
-					                  	<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>
-					                    <th scope="col" class="tabletop">날짜</th>
-					                    <th scope="col" class="tabletop">적요</th>
-					                    <th scope="col" class="tabletop">입금액</th>
-					                    <th scope="col" class="tabletop">출금액</th>
-					                    <th scope="col" class="tabletop">잔액</th>
-					                    <th scope="col" class="tabletop">메모</th>
-					                  </tr>
-					                </thead>
-					                <tbody>
-					                  <tr>
-					                  	<td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-01</td>
-					                    <td>(주)회사</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td>14,5000,000</td>
-					                    <td><i class="ri-article-fill"></i></td>
-					                  </tr>
-					                  <tr>
-					                  	<td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-02</td>
-					                    <td>(주)회사</td>
-					                    <td>14,5000,000</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td><i class="ri-article-fill"></i></td>
-					                  </tr>
-					                  <tr>
-					                    <td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-03</td>
-					                     <td>(주)회사</td>
-					                    <td>14,5000,000</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td><i class="ri-article-fill"></i></td>
-					                  </tr>
-					                  <tr>
-					                  	<td class="total"></td>
-					                  	<td class="total"><strong>합계</strong></td>
-					                  	<td class="total"></td>
-					                  	<td class="total">67,515,870</td>
-					                  	<td class="total">82,015,850</td>
-					                  	<td class="total">0</td>
-					                  	<td class="total"></td>
-					                  </tr>
-					                </tbody>
-				              </table>
-				              <button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small">전표입력</button>
-				              <button type="button" id="memoplzbtn" class="btn btn-primary btn-small">내용확인요청</button>
-				              <button type="button" class="btn btn-outline-secondary">입력제외</button>
-			                </div><!-- End 미연결 -->
-			                
-			                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="connbanklist-tab">
-								<!-- 연결 -->
-								 <div class="banklogo">
-								 	<img src="/resources/assets/img/shinhan.png" alt="ShinhanBank" width="20" height="20">
-								 	<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			                        신한은행
-			                      </button>
-			                      <ul class="dropdown-menu">
-			                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-			                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-			                      </ul>
-								 </div>
-				                <table id="connbanktable" class="banktable table table-hover table-bordered">
-					                <thead>
-					                  <tr>
-					                  	<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>
-					                    <th scope="col" class="tabletop">날짜</th>
-					                    <th scope="col" class="tabletop">적요</th>
-					                    <th scope="col" class="tabletop">입금액</th>
-					                    <th scope="col" class="tabletop">출금액</th>
-					                    <th scope="col" class="tabletop">잔액</th>
-					                    <th scope="col" class="tabletop">메모</th>
-					                  </tr>
-					                </thead>
-					                <tbody>
-					                  <tr>
-					                  	<td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-01</td>
-					                    <td>(주)회사</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td>14,5000,000</td>
-					                    <td>
-					                    <a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="메모내용"><i class="ri-article-fill"></i></a></td>
-					                  </tr>
-					                  <tr>
-					                  	<td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-02</td>
-					                    <td>(주)회사</td>
-					                    <td>14,5000,000</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td><a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="메모내용"><i class="ri-article-fill"></i></a></td>
-					                  </tr>
-					                  <tr>
-					                    <td><input class="form-check-input" type="checkbox"></td>
-					                    <td>04-03</td>
-					                     <td>(주)회사</td>
-					                    <td>14,5000,000</td>
-					                    <td></td>
-					                    <td>14,5000,000</td>
-					                    <td>
-					                    	<a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="메모내용"><i class="ri-article-fill"></i></a>
-					                     </td>
-					                  </tr>
-					                  <tr>
-					                  	<td class="total"></td>
-					                  	<td class="total"><strong>합계</strong></td>
-					                  	<td class="total"></td>
-					                  	<td class="total">67,515,870</td>
-					                  	<td class="total">82,015,850</td>
-					                  	<td class="total">0</td>
-					                  	<td class="total"></td>
-					                  </tr>
-					                </tbody>
-				              </table>
-				              <button type="button" id="watchslipbtn" class="btn btn-primary btn-small">분개내역조회</button>
-			                </div><!-- End 연결 탭 -->
-                 	</div>
-                </div><!-- End div left -->
+	                 		</div>
+	                 		<div class="line">
+		                 		<label class="labeltitle">조회내용&nbsp;&nbsp;</label>
+			                     <div class="line">
+				                    <div class="form-check">
+				                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+				                      <label class="form-check-label" for="gridRadios1">
+				                        전체
+				                      </label>
+				                    </div>
+				                    <div class="form-check">
+				                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+				                      <label class="form-check-label" for="gridRadios2">
+				                        입금
+				                      </label>
+				                    </div>
+				                    <div class="form-check">
+				                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios" value="option">
+				                      <label class="form-check-label" for="gridRadios3">
+				                        출금
+				                      </label>
+				                    </div>
+		                  		 </div>
+	                 		</div>
+	                 		<div class="listconditionbtn">
+	                 			<button type="submit" id="searchHistorySlip" class="btn btn-secondary">조회</button>
+	                 		</div>
+	                 	</div>
+	                 	<input type="hidden" name="bizno" value="10001">
+	                 	<input type="hidden" name="bankname" value="신한은행">
+	                 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                 	</form>
+                 
+                 <!-- 동적 생성부분 -->
+                 <div class="searhstart">
+                 </div>
                 
                 <div class="right">
                 	<!-- 전표내역 -->
@@ -799,7 +587,7 @@ input.modaltext {
 		              <button type="button" class="btn btn-outline-confirm">저장</button>
 		              <button type="button" class="btn btn-outline-secondary">취소</button>
 		              
-                 	</div>                	
+                 	</div>        <!-- 동적 생성 끝 -->        	
              </div><!-- End 탭1 -->    	
              <!-- 탭2 -->
              <div class="tab-pane fade" id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">

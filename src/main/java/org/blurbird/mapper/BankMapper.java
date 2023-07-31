@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
+import org.blurbird.domain.bank.BankSlipVO;
+import org.blurbird.domain.bank.DetailSlipVO;
 
 public interface BankMapper {
 	
@@ -15,17 +17,12 @@ public interface BankMapper {
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search);
 	
 	// 전표내역 전체 조회
-	
-	// 전표내역 확정 가능 조회
-	
-	// 전표내역 확정 조회
-	
-	// 전표내역 제외 조회
-	
-	// 전표내역 삭제 조회
-	
+	public List<BankSlipVO> getBankSlipList(BankSearchDTO search);
+	// 전표내역 가능or확정or제외or삭제 조회
+	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search);
 	
 	// 분개내역 조회
+	public List<DetailSlipVO> getDetailSlip(int bhno);
 	
 	
 }
