@@ -22,49 +22,55 @@ public class BankServiceImpl implements BankService {
 
 	public BankMapper mapper;
 	
-	// ÅëÀå³»¿ª ÀüÃ¼¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì „ì²´ì¡°íšŒ
 	@Override
 	public List<BankHistoryVO> getBankHistoryList(BankSearchDTO search) {
 		return mapper.getBankHistoryList(search);
 	}
 
-	// ÅëÀå³»¿ª ÀüÇ¥¹Ì¿¬°á ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ë¯¸ì—°ê²° ì¡°íšŒ
 	@Override
 	public List<BankHistoryVO> getBankHistoryListNone(BankSearchDTO search) {
 		return mapper.getBankHistoryListNone(search);
 	}
 
-	// ÅëÀå³»¿ª ÀüÇ¥¿¬°á ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì—°ê²° ì¡°íšŒ
 	@Override
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search) {
 		return mapper.getBankHistoryListConn(search);
 	}
 
-	// ÀüÇ¥ ³»¿ª ÀüÃ¼ ¸®½ºÆ®
+	// ì „í‘œ ì „ì²´ ë¦¬ìŠ¤íŠ¸ ì¡°íšŒ
 	@Override
 	public List<BankSlipVO> getBankSlipList(BankSearchDTO search) {
 		return mapper.getBankSlipList(search);
 	}
 
-	// ÀüÇ¥ ³»¿ª Æ¯Á¤ »óÅÂ ¸®½ºÆ®
+	// ì „í‘œ ìƒíƒœë³„ ì¡°íšŒ
 	@Override
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search) {
 		return mapper.getBankSlipListState(search);
 	}
 	
-	// ÀüÇ¥ ¿¹»ó ÀÜ¾× ÇÕ°è ¸®½ºÆ®
+	// ì˜ˆìƒ ì”ì•¡, ì°¨ì•¡ ì¡°íšŒ
 	@Override
 	public TotalDTO getTotalSum() {
 		return mapper.getTotalSum();
 	}
 
-	// ºĞ°³ ³»¿ª Á¶È¸
+	// ë¶„ê°œë‚´ì—­ ì¡°íšŒ
 	@Override
 	public List<DetailSlipVO> getDetailSlip(String bhno) {
 		return mapper.getDetailSlip(bhno);
 	}
+	
+	// ë¶„ê°œë‚´ì—­ ìˆ˜ì •
+	@Override
+	public int modifySlip(DetailSlipVO detailSlip) {
+		return mapper.modifySlip(detailSlip);
+	}
 
-	// ÀüÇ¥ À¯Çüº° ¼ö
+	// ì „í‘œ ìƒíƒœë³„ ê°œìˆ˜
 	@Override
 	public int allSlipCount() {
 		return mapper.allSlipCount();
@@ -89,7 +95,6 @@ public class BankServiceImpl implements BankService {
 	public int removeSlipCount() {
 		return mapper.removeSlipCount();
 	}
-
 
 
 }

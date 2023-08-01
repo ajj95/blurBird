@@ -26,9 +26,28 @@ $(function(){
            historySlipRequest(search);
         });
  
+		// 분개내역조회 버튼 클릭 시 조회
+		$("#right").on("click", "#detailslipshow", function(){
+			// bhno 가지고 bankslip 테이블에서 2행 조회
+			
+			// 체크된 체크박스 값을 저장할 배열
+			let selectedBhnoList = [];
+			
+			// 각 체크박스를 순회하면서 체크된 체크박스의 bhno 값을 배열에 저장
+		    $('.form-check-input:checked').each(function() {
+		      let bhnoValue = $(this).closest('tr').find('[name="bhno"]').val();
+		      if (bhnoValue) {
+		        selectedBhnoList.push(bhnoValue);
+		      }
+		    });
+			
+		    // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 페이지로 이동
+		    if (selectedBhnoList.length > 0) {
+		    	getDetailSlip(selectedBhnoList);
+		    }
+			
+		});
 	
-	
-		// --------------------------------------------------------------------------------------------
 
 	
 });// windowload function
@@ -425,9 +444,13 @@ $(function(){
 	str += '<td class="total"></td>';
 	str += '<td class="total"><strong>합계</strong></td>';
 	str += '<td class="total" colspan="4">잔액: ';
-	str += formatNumberWithCommas(total.totalsum);
+	if(total.totalsum!=null){
+		str += formatNumberWithCommas(total.totalsum);
+	}
 	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
-	str += formatNumberWithCommas(total.diffsum);
+	if(total.diffsum!=null){
+		str += formatNumberWithCommas(total.diffsum);
+	}
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
@@ -702,9 +725,9 @@ $(function(){
 
 	  searchstart.empty();
 	  
-	  let str = '';
-	  	str += '<form action ="" method="post">';
-		str += '<table id="" class="table detailsliptable table-bordered">';
+	  	let str = '';
+	  	str += '<form method="POST" action="/bank/updateDetailSlips">';
+		str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
 		str += '<th scope="col" class="tabletop">구분</th>';
@@ -721,29 +744,35 @@ $(function(){
 		 if(detailSlip && detailSlip.length>0){
 	  		for(let i=0; i<detailSlip.length; i++){
 	  			str += '<tr>';
+	  			str += '<input type="hidden" name="bankslipno" value="';
+	  			str += detailSlip[i].bankslipno;
+	  			str += '" />';
+	  			str += '<input type="hidden" name="bhno" value="';
+	  			str += detailSlip[i].bhno;
+	  			str += '" />';
 				str += '<td>';
-				str += '<select class="form-select" name="sortno[]" aria-label="Default select example">';
+				str += '<select class="form-select" name="sortno" aria-label="Default select example">';
 				
 				// 가져온 분개전표의 sortno에 따라 달라지는 select문
-				if (detailSlip[i].sortno === 1) {
+				if (detailSlip[i].sortno == 1) {
 				  str += '<option value="1" selected>입금</option>';
 				} else {
 				  str += '<option value="1">입금</option>';
 				}
 				
-				if (detailSlip[i].sortno === 2) {
+				if (detailSlip[i].sortno == 2) {
 				  str += '<option value="2" selected>출금</option>';
 				} else {
 				  str += '<option value="2">출금</option>';
 				}
 				
-				if (detailSlip[i].sortno === 3) {
+				if (detailSlip[i].sortno == 3) {
 				  str += '<option value="3" selected>차변</option>';
 				} else {
 				  str += '<option value="3">차변</option>';
 				}
 				
-				if (detailSlip[i].sortno === 4) {
+				if (detailSlip[i].sortno == 4) {
 				  str += '<option value="4" selected>대변</option>';
 				} else {
 				  str += '<option value="4">대변</option>';
@@ -751,67 +780,71 @@ $(function(){
 
 				str += '</select>';
 				str += '</td>';
-				str += '<td><input type="text" id="accountNo[]" name="text" class="intable" value="';
+				str += '<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#accountCode" onclick="openAccountCodeModal(this)">';
+				str += '<i class="ri-article-fill"></i>';
+				str += '</button><input type="text" name="accountno" class="intable" value="';
 				str += detailSlip[i].accountno;
 				str += '"></td>';
-				str += '<td><input type="text" name="accountName[]" class="intable" value="';
-				str += detailSlip[i].accoutName;
+				str += '<td><input type="text" name="accountname" class="intable" value="';
+				str += detailSlip[i].accountname;
 				str += '"></td>';
 				
 				// 차변이면
-				if(detailSlip[i].sortno === 3){
+				if(detailSlip[i].sortno == 3){
 					// 첫번째 amount 칸에 값 입력
-					str += '<td><input type="text" name="amount[]" class="intable" value="';
-					str += detailSlip[i].accountno;
+					str += '<td><input type="text" name="amount" class="intable" value="';
+					str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
 					str += '"></td>';
-					str += '<td><input type="text" name="amount[]" class="intable" readonly></td>';
+					str += '<td class="cantwrite"><input type="text" name="amount" class="intable cantwrite" readonly="readonly"></td>';
 				}else{
 					// 대변이면 두번째 칸에 값 입력
-					str += '<td><input type="text" name="amount[]" class="intable" readonly></td>';
-					str += '<td><input type="text" name="amount[]" class="intable" value="';
-					str += detailSlip[i].accountno;
+					str += '<td class="cantwrite"><input type="text" name="amount" class="intable cantwrite" readonly="readonly"></td>';
+					str += '<td><input type="text" name="amount" class="intable" value="';
+					str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
 					str += '"></td>';
 					
 				}
 				
-				str += '<td><input type="text" name="source[]" class="intable" value="';
+				str += '<td><input type="text" name="source" class="intable" value="';
 				str += detailSlip[i].source;
 				str += '"></td>';
-				str += '<td><input type="text" name="summary[]" class="intable" value="';
-				str += detailSlip[i].summary;
+				str += '<td><input type="text" name="summary" class="intable" value="';
+				
+				if(detailSlip[i].summary==null){
+					str += '"></td>';
+				}else{
+					str += detailSlip[i].summary;
+				}
 				str += '"></td>';
 				str += '</tr>';
-				str += '<tr>';
-				str += '<td>';
-				str += '</tr>';
-				str += '</tbody>';
-				str += '</table>';
-	  			str += '<button type="submit" class="btn btn-outline-confirm">저장</button>';
-	  			str += '<button type="reset" class="btn btn-outline-secondary">취소</button>';
-
 	  		}//end for
+	  		
+	  		str += '</tbody>';
+			str += '</table>';
+	  		str += '<button type="submit" class="btn btn-outline-confirm" id="modifyslipbtn">저장</button>';
+	  		str += '<button type="reset" class="btn btn-outline-secondary">취소</button>';
 	  	 }else{
 	  	 
 	  	 	// 처음 로딩됐을때, 아무것도 없을 때
 	  	 	str += '<tr>';
 			str += '<td>';
-			str += '<select class="form-select" name="sortno[]"aria-label="Default select example">';
+			str += '<select class="form-select" name="sortno"aria-label="Default select example">';
 			str += '<option value="1">입금</option>';
 			str += '<option value="2">출금</option>';
 			str += '<option value="3" selected>차변</option>';
 			str += '<option value="4">대변</option>';
 			str += '</select>';
 			str += '</td>';
-			str += '<td><input type="text" id="accountNo[]" name="text" class="intable"></td>';
-			str += '<td><input type="text" name="accountName[]" class="intable"></td>';
-			str += '<td><input type="text" name="amount[]" class="intable"></td>';
-			str += '<td><input type="text" name="amount[]" class="intable"></td>';
-			str += '<td><input type="text" name="source[]" class="intable"></td>';
-			str += '<td><input type="text" name="summary[]" class="intable"></td>';
+			str += '<td><input type="text" name="accountno" class="intable"></td>';
+			str += '<td><input type="text" name="accountname" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="source" class="intable"></td>';
+			str += '<td><input type="text" name="summary" class="intable"></td>';
 			str += '</tr>';
 			str += '<tr>';
 			str += '<td>';
-			str += '<select class="form-select" name="sortno[]" aria-label="Default select example">';
+			str += '<select class="form-select" name="sortno" aria-label="Default select example">';
 			str += '<option selected>차변</option>';
 			str += '<option value="1">입금</option>';
 			str += '<option value="2">출금</option>';
@@ -819,12 +852,12 @@ $(function(){
 			str += '<option value="4" selected>대변</option>';
 			str += '</select>';
 			str += '</td>';
-			str += '<td><input type="text" id="accountNo[]" name="text" class="intable"></td>';
-			str += '<td><input type="text" name="accountName[]" class="intable"></td>';
-			str += '<td><input type="text" name="amount[]" class="intable"></td>';
-			str += '<td><input type="text" name="amount[]" class="intable"></td>';
-			str += '<td><input type="text" name="source[]" class="intable"></td>';
-			str += '<td><input type="text" name="summary[]" class="intable"></td>';
+			str += '<td><input type="text" name="accountno" class="intable"></td>';
+			str += '<td><input type="text" name="accountname" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="source" class="intable"></td>';
+			str += '<td><input type="text" name="summary" class="intable"></td>';
 			str += '</tr>';
 			str += '</tbody>';
 			str += '</table>';
@@ -856,5 +889,107 @@ $(function(){
 	
 	function formatNumberWithCommas(number) {
   		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  		
 	}
+	
+	// 클릭한 버튼을 매개변수로 받음
+	function openAccountCodeModal(btn) {
+			$.ajax({
+				url: "/receipt/accountList",
+				type: "GET",
+				dataType: "json",
+				success: function (data) {
+					// Update the content of the modal with the fetched data
+					$("#accountListModal").empty();
+					let accountList = data;
+					let tableBody = $("#accountListModal");
+					$.each(data, function (index, item) {
+						let accountno = item.accountNo;
+						const temp = document.createElement('tr');
+						temp.innerHTML = "<td>" + item.accountNo + "</td><td>"
+							+ item.accountName + "</td>";
+						$('#accountListModal').append(temp);
+					});
+
+					// 모달을 열 때, 클릭한 버튼 객체를 모달 내에서 활용하기 위해 data() 메소드를 사용하여 저장
+      				//$("#accountCode").data('clickedButton', btn);
+      				
+					// 모달을 열 때, 모달을 열기 위해 클릭했던 버튼을 기억하기 위해(모달 id)
+					// + 클릭 버튼 객체를 가져오기 위해
+					// 아래와 같이 모달을 열면서 모달 내의 더블클릭 이벤트를 처리한다.
+					$("#accountCode").modal("show").on("shown.bs.modal", function () {
+					    $(document).on("dblclick", '#accountListModal tr', function () {
+					    
+		                  let selectedAccountNo = $(this).find('td:first-child').text();
+		                  let selectedAccountName = $(this).find('td:nth-child(2)').text();
+					      
+					      // this= 더블클릭한 tr
+					      //let selectedAccountInfo = $(this).data('accountInfo');
+					      //let selectedAccountNo = selectedAccountInfo.accountNo;
+					      //let selectedAccountName = selectedAccountInfo.accountName;
+					
+					      // 클릭했던 버튼과 같은 tr의 input들에 각각 값 넣어주기
+					      $(btn).closest('tr').find('input[name="accountno"]').val(selectedAccountNo);
+					      $(btn).closest('tr').find('input[name="accountname"]').val(selectedAccountName);
+					
+					      // 모달 창 닫기
+					      $("#accountCode").modal("hide");
+					    });
+					  });
+				},
+				error: function (xhr, status, error) {
+					console.log(error);
+				}
+			});
+		}
+		
+	function searchAccount() {
+			$.ajax({
+			    url: "/receipt/accountList",
+			    type: "GET",
+			    dataType: "json",
+			    success: function (data) {
+			      const accountList = data; // Ajax 성공 시 데이터를 accountList에 할당합니다.
+			      const searchTerm = $('.valueToAccount').val().trim();
+			      // 데이터를 검색어를 기준으로 필터링합니다.
+			      const filteredAccounts = accountList.filter((account) => {
+			        return (
+			          account.accountName.includes(searchTerm) || account.accountNo.includes(searchTerm)
+			        );
+			      });
+			      // 검색 결과를 표시합니다.
+			      const accountListModal = $('#accountListModal');
+			      accountListModal.empty();
+
+			      if (filteredAccounts.length === 0) {
+			        // 일치하는 결과가 없는 경우
+			        accountListModal.append('<tr><td colspan="2">일치하는 계정과목이 없습니다.</td></tr>');
+			      } else {
+			        // 일치하는 결과가 있는 경우
+			        filteredAccounts.forEach(account => {
+			          const row = $('<tr>');
+			          row.append('<td>' + account.accountNo + '</td><td>' + account.accountName + '</td>');
+			          accountListModal.append(row);
+			        });
+			        $('#accountListModal tr').dblclick(function () {
+	                    let selectedAccountNo = $(this).find('td:first-child').text();
+	                    let selectedAccountName = $(this).find('td:nth-child(2)').text();
+	                    // 이제 선택한 값에 대해 원하는 처리를 하면 됩니다.
+	                    // 예: 선택한 값을 특정 input 요소에 넣기
+	                    $('#searchedaccountno').val(selectedAccountNo);
+	                    $('#searchedaccountname').val(selectedAccountName);
+	                    
+	                    // 이걸 이렇게 넣어줄게 아니라 ajax로 또 값 넘겨줘야한다.
+
+	                    // 모달 창 닫기
+	                    $("#accountCode").modal("hide");
+	                });
+			      }
+			    },
+			    error: function (xhr, status, error) {
+			      // 에러 처리
+			      console.log("Error:", error);
+			    },
+			  });
+		}
 

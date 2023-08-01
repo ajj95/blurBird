@@ -125,9 +125,10 @@
 	</delete>
 
 	<!-- 분개내역 조회 -->
-	<select id="getDetailSlip" resultType="String" parameterType="org.blurbird.domain.bank.DetailSlipVO">
-		SELECT BS.BANKSLIPNO, BS.BHNO, S.SORTNO "SORTNO", S.SORTNAME "SORTNAME"
-		, A.ACCOUNTNO "ACCOUNTNO", A.ACCOUNTNAME" ACCOUNTNAME"
+	<select id="getDetailSlip" parameterType="String" resultType="org.blurbird.domain.bank.DetailSlipVO">
+		SELECT BS.BANKSLIPNO "BANKSLIPNO", BS.BHNO "BHNO", S.SORTNO "SORTNO"
+		, S.SORTNAME "SORTNAME"
+		, A.ACCOUNTNO "ACCOUNTNO", A.ACCOUNTNAME "ACCOUNTNAME"
 		, BH.AMOUNT "AMOUNT", BH.SOURCE "SOURCE", BS.SUMMARY "SUMMARY"
 		FROM BANKHISTORY BH, BANKSLIP BS, SORT S, ACCOUNT A
 		WHERE BH.BHNO = BS.BHNO
@@ -144,9 +145,10 @@
 	
 	<!-- 분개내역 수정 -->
 	<update id="modifySlip" parameterType="org.blurbird.domain.bank.DetailSlipVO">
-		UPDATE BANKSLIP SET SORTNO=#{sortno}, ACCOUNTNO=#{accountno}
+		UPDATE BANKSLIP SET SORTNO=#{sortno}
 		, AMOUNT=#{amount}, SUMMARY=#{summary}
 		WHERE BANKSLIPNO = #{bankslipno}
+		<!-- , ACCOUNTNO=#{accountno} -->
 	</update>
 
 

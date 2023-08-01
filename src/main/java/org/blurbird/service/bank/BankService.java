@@ -9,30 +9,33 @@ import org.blurbird.domain.bank.DetailSlipVO;
 import org.blurbird.domain.bank.TotalDTO;
 
 public interface BankService {
-	// ÅëÀå³»¿ª ÀüÃ¼ ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì „ì²´ ì¡°íšŒ
 	public List<BankHistoryVO> getBankHistoryList(BankSearchDTO search);
-	// ÅëÀå³»¿ª ¹Ì¿¬°á ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì „í‘œë¯¸ì—°ê²° ì¡°íšŒ
 	public List<BankHistoryVO> getBankHistoryListNone(BankSearchDTO search);
-	// ÅëÀå³»¿ª ¿¬°á ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì „í‘œì—°ê²° ì¡°íšŒ
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search);
 	
-	// ÀüÇ¥ ÀüÃ¼ ¸®½ºÆ®
+	// ì „í‘œë‚´ì—­ ì¡°íšŒ
 	public List<BankSlipVO> getBankSlipList(BankSearchDTO search);
-	// ÀüÇ¥ Æ¯Á¤ À¯Çü ¸®½ºÆ®
+	// ì „í‘œë‚´ì—­ ìƒíƒœë³„ ì¡°íšŒ
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search);
 	
-	// ÀüÇ¥ À¯Çüº° °³¼ö
+	// ì „í‘œë‚´ì—­ ìƒíƒœë³„ ê°œìˆ˜
 	public int allSlipCount();
 	public int canSlipCount();
 	public int confirmSlipCount();
 	public int exceptSlipCount();
 	public int removeSlipCount();
 	
-	// ÀüÇ¥ ¿¹»ó ÀÜ¾×, Â÷¾× ÇÕ°è
+	// ì˜ˆìƒì”ì•¡, ì°¨ì•¡
 	public TotalDTO getTotalSum();
 	
-	// ºĞ°³ ³»¿ª Á¶È¸
+	// ë¶„ê°œë‚´ì—­ ì¡°íšŒ
 	public List<DetailSlipVO> getDetailSlip(String bhno);
+	
+	// ë¶„ê°œ ë‚´ì—­ ìˆ˜ì •
+	public int modifySlip(DetailSlipVO detailSlip);
 	
 	
 }

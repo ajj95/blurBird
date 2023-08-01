@@ -383,6 +383,10 @@
 input.modaltext {
 	width: 363px;
 }
+.cantwrite{
+	background-color: #F5F5F5 !important;
+}
+
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
@@ -393,28 +397,64 @@ input.modaltext {
 			$("#memoplzmodal").modal('show');
 		});
 	
-		// 분개내역조회 버튼 클릭 시 조회
-		$("#right").on("click", "#detailslipshow", function(){
-			// bhno 가지고 bankslip 테이블에서 2행 조회
-			
-			// 체크된 체크박스 값을 저장할 배열
-			let selectedBhnoList = [];
-			
-			// 각 체크박스를 순회하면서 체크된 체크박스의 bhno 값을 배열에 저장
-		    $('.form-check-input:checked').each(function() {
-		      let bhnoValue = $(this).closest('tr').find('[name="bhno"]').val();
-		      if (bhnoValue) {
-		        selectedBhnoList.push(bhnoValue);
-		      }
-		    });
-			
-		    // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 페이지로 이동
-		    if (selectedBhnoList.length > 0) {
-		    	getDetailSlip(selectedBhnoList);
-		    }
-			
+		
+		
+		
+
+
+		// 분개내역 수정 후 저장 시 ajax 호출
+		$("#bottom").on("click", "#modifyslipbtn", function(){
+			 	let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
+
+			    // detailSlips 배열에 필요한 데이터를 넣어준다.
+			    $('.detailsliptable tbody tr').each(function() {
+			    	//alert($(this).find('[name="bankslipno"]').val());
+			    	//alert($(this).find('[name="bhno"]').val());
+			    	//alert($(this).find('[name="sortno"]').val());
+			    	//alert($(this).find('[name="accountno"]').val());
+			    	//alert($(this).find('[name="accountname"]').val());
+			    	//alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
+			    	//alert($(this).find('[name="source"]').val());
+			    	//alert($(this).find('[name="summary"]').val());
+			        let detailSlip = {
+			            bankslipno: $(this).find('[name="bankslipno"]').val(),
+			            bhno: $(this).find('[name="bhno"]').val(),
+			            sortno: $(this).find('[name="sortno"]').val(),
+			            //accountno: $(this).find('[name="accountno"]').val(),
+			            accountname: $(this).find('[name="accountname"]').val(),
+			            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
+			            source: $(this).find('[name="source"]').val(),
+			            summary: $(this).find('[name="summary"]').val()
+			        };
+
+			        detailSlipList.push(detailSlip);
+			    });
+
+			    // AJAX로 업데이트 요청을 보낸다.
+			    updateDetailSlips(detailSlipList);
 		});
 		
+
+		// 분개전표 수정
+		function updateDetailSlips(detailSlipList) {
+		    $.ajax({
+		        type: "POST",
+		        contentType: "application/json;charset=UTF-8",
+		        //beforeSend: function (xhr) {
+		        //    xhr.setRequestHeader("Content-type","application/json");
+		       // },
+		        url: "/bank/updateDetailSlips",
+		        data: JSON.stringify(detailSlipList),
+		        dataType: "json",
+		        success: function(response) {
+		            // 성공적으로 업데이트가 완료되면 안내
+		            alert(response);
+		        },
+		        error: function(xhr, status, error) {
+		            alert("저장에 실패하였습니다.");
+		        }
+		    });
+		}
 	
 		
 	});
@@ -608,9 +648,47 @@ input.modaltext {
                   </div>
                 </div>
               </div><!-- End Vertically centered Modal-->
-
-            </div>
-       </div><!-- end card body -->
+              
+              <!-- 계정과목 모달 -->
+              <div class="modal fade" id="accountCode" tabindex="-1" aria-labelledby="exampleModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="exampleModalLabel">계정과목
+											코드도움</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<table class="accountTable table table-hover table-bordered">
+											<thead>
+												<tr>
+													<th>No.</th>
+													<th>계정과목명</th>
+												</tr>
+											</thead>
+											<tbody id="accountListModal">
+											</tbody>
+										</table>
+									</div>
+									<div class="modal-footer">
+										<div class="input-group mb-3">
+											<input type="text" id="searchedaccountno" class="valueToAccount form-control" placeholder="계정코드 입력"
+												aria-label="accontInfo" aria-describedby="button-addon2">
+											<input type="hidden" id="searchedaccountname">
+											<button class="search-account btn btn-outline-secondary" type="button"
+												id="button-addon2" onclick="searchAccount()">찾기</button>
+										</div>
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save
+											changes</button>
+									</div>
+								</div>
+							</div>
+						</div><!-- 계정과목 모달 끝 -->
+       		</div><!-- end card body -->
      </div><!-- end card -->
     
     </section><!-- End section dashboard -->

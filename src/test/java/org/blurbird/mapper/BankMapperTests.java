@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.blurbird.domain.bank.BankSearchDTO;
+import org.blurbird.domain.bank.DetailSlipVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class BankMapperTests {
 		search.setStartdate("2023-08-01");
 		search.setEnddate("2023-08-07");
 		search.setBizno("10001");
-		search.setBankname("½ÅÇÑÀºÇà");
+		search.setBankname("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		mapper.getBankHistoryList(search).forEach(bankhistory -> log.info(bankhistory));
 	}
 	*/
@@ -60,7 +61,7 @@ public class BankMapperTests {
 		search.setStartdate(startdate);
 		search.setEnddate(enddate);
 		search.setBizno("10001");
-		search.setBankname("½ÅÇÑÀºÇà");
+		search.setBankname("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		mapper.getBankHistoryListConn(search).forEach(bankhistory -> log.info(bankhistory));
 	}
 	*/
@@ -72,14 +73,38 @@ public class BankMapperTests {
 		search.setStartdate("2023-08-01");
 		search.setEnddate("2023-08-07");
 		search.setBizno("10001");
-		search.setBankname("½ÅÇÑÀºÇà");
+		search.setBankname("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		//search.setBhstateno("1002");
 		mapper.getBankSlipList(search).forEach(slip -> log.info(slip));
 	}
 	*/
 
+	/*
 	@Test
 	public void getCount() {
 		log.info(mapper.confirmSlipCount());
 	}
+	*/
+	/*
+	@Test
+	public void getDetailSlip(){
+		mapper.getDetailSlip("10009").forEach(slip -> log.info(slip));
+	}
+	*/
+	
+	@Test
+	public void modifySlipTest() {
+		DetailSlipVO slip = new DetailSlipVO();
+		slip.setBankslipno("10021");
+		slip.setAccountno("103");
+		slip.setSortno("1");
+		slip.setAmount(1000);
+		slip.setSummary("ì ìš”ì¶”ê°€");
+		slip.setSource("ê±°ë˜ì²˜ë³€ê²½");
+		log.info(mapper.modifySlip(slip));
+	}
+	
+	
+	
+	
 }

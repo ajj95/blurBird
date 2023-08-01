@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 public class DetailSlipVO {
 
 
-	private String bankslipno;		// ÀüÇ¥ÄÚµå
-	private String bhno;				// ÅëÀå³»¿ª ÄÚµå
-	private String sortno;			// ±¸ºĞÄÚµå (1~4)
-	private String sortname;		// ±¸ºĞ¸í (ÀÔ±İ~´ëº¯)
-	private String accountno;		// °èÁ¤ÄÚµå
-	private String accountname;	// °èÁ¤¸í
-	private int amount;				// Â÷º¯ or ´ëº¯ ±İ¾×
-	private String source;			// °Å·¡Ã³¸í
-	private String summary;		// ÀüÇ¥Àû¿ä
+	private String bankslipno;		// ì „í‘œì½”ë“œ
+	private String bhno;				// í†µì¥ë‚´ì—­ ì½”ë“œ
+	private String sortno;			// êµ¬ë¶„ì½”ë“œ (1~4)
+	private String accountno;		// ê³„ì •ì½”ë“œ
+	private String accountname;	// ê³„ì •ëª…
+	private int amount;				// ì°¨ë³€ or ëŒ€ë³€ ê¸ˆì•¡
+	private String source;			// ê±°ë˜ì²˜ëª…
+	private String summary;		// ì „í‘œì ìš”
 
 }
+
