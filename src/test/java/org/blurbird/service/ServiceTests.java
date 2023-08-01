@@ -1,13 +1,8 @@
-package org.blurbird.controller;
+package org.blurbird.service;
 
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
-import org.blurbird.mapper.ReceiptMapper;
+import org.blurbird.service.receipt.ReceiptService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +14,15 @@ import lombok.extern.log4j.Log4j;
 @RunWith(SpringJUnit4ClassRunner.class) // JUnit으로 테스트 하겠다.
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml") // 설정 파일 위치
 @Log4j
-public class testMappers {
+public class ServiceTests {
 
 	@Autowired
-	private DataSource ds;
-	@Autowired
-	private ReceiptMapper mapper;
+	private ReceiptService service;
 	
 	@Test
 	public void test() throws Exception{
-		/*
-		 * try { log.info(ds.getConnection()); } catch (SQLException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */
-		log.info(mapper.getAccountName("412"));
+//		service.read("451");
+		service.getList();
 	}
 
 }
