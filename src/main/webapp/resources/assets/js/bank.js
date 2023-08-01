@@ -23,13 +23,19 @@ $(function(){
                 bankname: bankname
             };
             
-            sendAjaxRequest(search);
+           historySlipRequest(search);
         });
+ 
 	
 	
+		// --------------------------------------------------------------------------------------------
+
 	
- 		// Ajax 요청을 보낼 함수
-        function sendAjaxRequest(search) {
+});// windowload function
+
+
+	 	// 일자, 수임사 선택 후 조회 시 호출하는 ajax
+        function historySlipRequest(search) {
             $.ajax({
                 type: "POST",
                 contentType: "application/json;charset=UTF-8",
@@ -38,28 +44,30 @@ $(function(){
                 dataType: "json",
                 success: function(response) {
                     // 서버로부터 받은 데이터 처리
-                    var historyList = response.historyList;
-                    var slipList = response.slipList;
+                    let historyList = response.historyList;
+                    let slipList = response.slipList;
+                    let total = response.total;
                     
                     createBankHistoryAllTable(historyList);
-                    createBankSlipAllTable(slipList);
+                    createBankSlipAllTable(slipList, total);
+                    createDetailSlipTable();
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
                 }
             });
-        }
-	
-});
+        }// end historySlipRequest
 
+
+
+	// historySlipRequest ajax가 호출하는 처리 함수
 	function createBankHistoryAllTable(data){
 		
-		let searchstart = $('#searhstartleft');
+		let searchstart = $('.left');
 
 	  	searchstart.empty();
 	  	
 	let str = '';
-	str += '<div class="left">';
 	str += '<ul class="nav nav-tabs" id="myTab" role="tablist">';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link active" id="allbanklist-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">전체</button>';
@@ -102,7 +110,8 @@ $(function(){
 	str += '</thead>';
 	str += '<tbody>';
 	
-	 for (let i = 0; i < data.length; i++) {
+	if(data && data.length >0){
+		for (let i = 0; i < data.length; i++) {
       	str +='<tr>';
  	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
  	  	str +='<td>';
@@ -136,6 +145,8 @@ $(function(){
 	  	}
 		str +='</tr>';
 	  }
+	}else{
+	}
 	
 	str += '</tbody>';
 	str += '</table>';
@@ -285,7 +296,6 @@ $(function(){
 	str += '<button type="button" id="watchslipbtn" class="btn btn-primary btn-small">분개내역조회</button>';
 	str += '</div>'; // 연결탭 끝
 	str += '</div>';
-	str += '</div>'; // left 끝
 	
 	
 	searchstart.html(str);
@@ -293,28 +303,43 @@ $(function(){
 	// tooltip 초기화
 	$('[data-bs-toggle="tooltip"]').tooltip();
 	
-	}
-
-
-   
+	}//end 통장내역 조회
 
 
 	// 전표내역 전체 조회 테이블 생성 함수
-	function createBankSlipAllTable(data) {
-	  let searchstart = $('#searchstartright');
+	function createBankSlipAllTable(slipList, total) {
+	  let searchstart = $('.right');
 
 	  searchstart.empty();
 	  
-	  let str = '';
-	  str += '<div class="right">';
-	  str += '<div class="button-container">';
-	  str += '<button type="button" class="btn btn-outline-secondary">전체   10</button>';
-	  str += '<button type="button" class="btn btn-outline-success">가능   0</button>';
-	  str += '<button type="button" class="btn btn-outline-confirm">확정   10</button>';
-	  str += '<button type="button" class="btn btn-outline-warning">제외   0</button>';
-	  str += '<button type="button" class="btn btn-outline-dark">삭제   0</button>';
-	  str += '</div>';
-	  str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	let str = '';
+	str += '<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-home" aria-selected="true">';
+	str += '<span class="button-text">전&nbsp;&nbsp;&nbsp;&nbsp;체</span><div class="howmany">10</div></button>';
+	str += '</li>';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link" id="pills-can-tab" data-bs-toggle="pill" data-bs-target="#pills-can" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">';
+	str += '<span class="button-text">확정가능</span><div class="howmany">10</div></button>';
+	str += '</li>';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link" id="pills-certain-tab" data-bs-toggle="pill" data-bs-target="#pills-certain" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
+	str += '<span class="button-text">확&nbsp;&nbsp;&nbsp;&nbsp;정</span><div class="howmany">10</div></button>';
+	str += '</li>';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link" id="pills-except-tab" data-bs-toggle="pill" data-bs-target="#pills-except" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
+	str += '<span class="button-text">제&nbsp;&nbsp;&nbsp;&nbsp;외</span><div class="howmany">10</div></button>';
+	str += '</li>';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link" id="pills-remove-tab" data-bs-toggle="pill" data-bs-target="#pills-remove" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
+	str += '<span class="button-text">삭&nbsp;&nbsp;&nbsp;&nbsp;제</span><div class="howmany">10</div></button>';
+	str += '</li>';
+	str += '</ul>';
+	str += '<div class="tab-content pt-2" id="myTabContent">';
+	str += '<div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="home-tab">';
+	
+	// 전체 탭
+	str += '<table id="" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -325,51 +350,376 @@ $(function(){
 	  str += '</tr></thead>';
 	  str += '<tbody>';
 	  
-	  for (let i = 0; i < data.length; i++) {
-	  	str += '<tr>';
-	  	str += '<input type="hidden" name="bhno" value="';
-	  	str += data[i].bhno;
-	  	str += '"/>';
-	  	str += '<td><input class="form-check-input" type="checkbox"></td>';
-		str += '<td>';
-	 	str += data[i].source;
-	 	str += '</td>';
-	 	if(data[i].summary==null){
-	 		str += '<td>';
-	 		str += '</td>';
-	 	}else{
-	 		str += '<td>';
-	 		str += data[i].summary;
-	 		str += '</td>';
-	 	}
-
-	 	str += '<td>';
-	 	str += data[i].accountname;
-	 	str += '</td>';
-	 	str += '<td>';
-	 	str += data[i].bhstatename;
-	 	str += '</td>';
-	 	str += '<td>';
-	 	str += formatNumberWithCommas(data[i].sum);
-	 	str += '</td></tr>';
+	  if(slipList && slipList.length>0){
+	  		for(let i=0; i<slipList.length; i++){
+				str += '<tr>';
+			  	str += '<input type="hidden" name="bhno" value="';
+			  	str += slipList[i].bhno;
+			  	str += '"/>';
+			  	str += '<td><input class="form-check-input" type="checkbox"></td>';
+				str += '<td>';
+			 	str += slipList[i].source;
+			 	str += '</td>';
+			 	if(slipList[i].summary==null){
+			 		str += '<td>';
+			 		str += '</td>';
+			 	}else{
+			 		str += '<td>';
+			 		str += slipList[i].summary;
+			 		str += '</td>';
+			 	}
+		
+			 	str += '<td>';
+			 	str += slipList[i].accountname;
+			 	str += '</td>';
+			 	str += '<td>';
+			 	str += slipList[i].bhstatename;
+			 	str += '</td>';
+			 	str += '<td>';
+			 	str += formatNumberWithCommas(slipList[i].sum);
+			 	str += '</td></tr>';
+			}
+	  }else{
 	  }
+	
+	str += ' <tr>';
+	str += '<td class="total"></td>';
+	str += '<td class="total"><strong>합계</strong></td>';
+	str += '<td class="total" colspan="4">잔액: ';
+	str += formatNumberWithCommas(total.totalsum);
+	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
+	str += formatNumberWithCommas(total.diffsum);
+	str += '</span></td>';
+	str += '</tr>';
+	str +='</tbody></table>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '</div>';
+	
+	// 확정가능 탭
+	str += '<div class="tab-pane fade" id="pills-can" role="tabpanel" aria-labelledby="profile-tab">';
+	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	  str += '<thead><tr>';
+	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	  str += '<th scope="col" class="tabletop">거래처명</th>';
+	  str += '<th scope="col" class="tabletop">전표적요</th>';
+	  str += '<th scope="col" class="tabletop">상대계정</th>';
+	  str += '<th scope="col" class="tabletop">상태</th>';
+	  str += '<th scope="col" class="tabletop">예상잔액</th>';
+	  str += '</tr></thead>';
+	  str += '<tbody>';
 	  
-  	str +='<tr><td class="total"></td>';
-  	str +='<td class="total"><strong>합계</strong></td>';
-  	str +='<td class="total" colspan="4">잔액: 35,500,000 (차액: 35,500,000)</td>';
-  	str +='</tr></tbody></table>';
-  	str +='<div class="lightbtns">';
-  	str +='<button type="button" class="btn btn-light">확정</button>';
-  	str +='<button type="button" class="btn btn-light">분개내역조회</button>';
-  	str +='<button type="button" class="btn btn-light">삭제</button>';
-  	str +='</div>';
-    str +='</div>';
- 
+	  if(slipList && slipList.length>0){
+	  		for(let i=0; i<slipList.length; i++){
+	  			if(slipList[i].bhstatename=='확정가능'){
+	  				str += '<tr>';
+				  	str += '<input type="hidden" name="bhno" value="';
+				  	str += slipList[i].bhno;
+				  	str += '"/>';
+				  	str += '<td><input class="form-check-input" type="checkbox"></td>';
+					str += '<td>';
+				 	str += slipList[i].source;
+				 	str += '</td>';
+				 	if(slipList[i].summary==null){
+				 		str += '<td>';
+				 		str += '</td>';
+				 	}else{
+				 		str += '<td>';
+				 		str += slipList[i].summary;
+				 		str += '</td>';
+				 	}
+			
+				 	str += '<td>';
+				 	str += slipList[i].accountname;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += slipList[i].bhstatename;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += formatNumberWithCommas(slipList[i].sum);
+				 	str += '</td></tr>';
+
+	  			}else{
+	  			}//end if
+			}//end for
+	  }else{
+	  }
+	
+	str += '<tr>';
+	str += '<td class="total"></td>';
+	str += '<td class="total"><strong>합계</strong></td>';
+	str += '<td class="total" colspan="4">잔액: ';
+	str += formatNumberWithCommas(total.totalsum);
+	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
+	str += formatNumberWithCommas(total.diffsum);
+	str += '</span></td>';
+	str += '</tr>';
+	str +='</tbody></table>';
+	str += '<button type="button" id="certainslip" class="btn btn-light">확정</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="exceptslip" class="btn btn-light">제외</button>';
+	str += '<button type="button" id="removeslip" class="btn btn-light">삭제</button>';
+	str += '</div>';
+	
+	// 확정
+	str += '<div class="tab-pane fade" id="pills-certain" role="tabpanel" aria-labelledby="contact-tab">';
+	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	  str += '<thead><tr>';
+	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	  str += '<th scope="col" class="tabletop">거래처명</th>';
+	  str += '<th scope="col" class="tabletop">전표적요</th>';
+	  str += '<th scope="col" class="tabletop">상대계정</th>';
+	  str += '<th scope="col" class="tabletop">상태</th>';
+	  str += '<th scope="col" class="tabletop">예상잔액</th>';
+	  str += '</tr></thead>';
+	  str += '<tbody>';
+	  
+	  if(slipList && slipList.length>0){
+	  		for(let i=0; i<slipList.length; i++){
+	  			if(slipList[i].bhstatename=='확정'){
+	  				str += '<tr>';
+				  	str += '<input type="hidden" name="bhno" value="';
+				  	str += slipList[i].bhno;
+				  	str += '"/>';
+				  	str += '<td><input class="form-check-input" type="checkbox"></td>';
+					str += '<td>';
+				 	str += slipList[i].source;
+				 	str += '</td>';
+				 	if(slipList[i].summary==null){
+				 		str += '<td>';
+				 		str += '</td>';
+				 	}else{
+				 		str += '<td>';
+				 		str += slipList[i].summary;
+				 		str += '</td>';
+				 	}
+			
+				 	str += '<td>';
+				 	str += slipList[i].accountname;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += slipList[i].bhstatename;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += formatNumberWithCommas(slipList[i].sum);
+				 	str += '</td></tr>';
+
+	  			}else{
+	  			}//end if
+			}//end for
+	  }else{
+	  }
+	
+	str += '<tr>';
+	str += '<td class="total"></td>';
+	str += '<td class="total"><strong>합계</strong></td>';
+	str += '<td class="total" colspan="4">잔액: ';
+	str += formatNumberWithCommas(total.totalsum);
+	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
+	str += formatNumberWithCommas(total.diffsum);
+	str += '</span></td>';
+	str += '</tr>';
+	str +='</tbody></table>';
+	str += '<button type="button" id="cancelcertainslip" class="btn btn-light">확정취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="exceptslip" class="btn btn-light">제외</button>';
+	str += '<button type="button" id="removeslip" class="btn btn-light">삭제</button>';
+	str += '</div>';
+	
+	// 제외
+	str += '<div class="tab-pane fade" id="pills-except" role="tabpanel" aria-labelledby="contact-tab">';
+	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	  str += '<thead><tr>';
+	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	  str += '<th scope="col" class="tabletop">거래처명</th>';
+	  str += '<th scope="col" class="tabletop">전표적요</th>';
+	  str += '<th scope="col" class="tabletop">상대계정</th>';
+	  str += '<th scope="col" class="tabletop">상태</th>';
+	  str += '<th scope="col" class="tabletop">예상잔액</th>';
+	  str += '</tr></thead>';
+	  str += '<tbody>';
+	  
+	  if(slipList && slipList.length>0){
+	  		for(let i=0; i<slipList.length; i++){
+	  			if(slipList[i].bhstatename=='제외'){
+	  				str += '<tr>';
+				  	str += '<input type="hidden" name="bhno" value="';
+				  	str += slipList[i].bhno;
+				  	str += '"/>';
+				  	str += '<td><input class="form-check-input" type="checkbox"></td>';
+					str += '<td>';
+				 	str += slipList[i].source;
+				 	str += '</td>';
+				 	if(slipList[i].summary==null){
+				 		str += '<td>';
+				 		str += '</td>';
+				 	}else{
+				 		str += '<td>';
+				 		str += slipList[i].summary;
+				 		str += '</td>';
+				 	}
+			
+				 	str += '<td>';
+				 	str += slipList[i].accountname;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += slipList[i].bhstatename;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += formatNumberWithCommas(slipList[i].sum);
+				 	str += '</td></tr>';
+
+	  			}else{
+	  			}//end if
+			}//end for
+	  }else{
+	  }
+	
+	str += '<tr>';
+	str += '<td class="total"></td>';
+	str += '<td class="total"><strong>합계</strong></td>';
+	str += '<td class="total" colspan="4">잔액: ';
+	str += formatNumberWithCommas(total.totalsum);
+	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
+	str += formatNumberWithCommas(total.diffsum);
+	str += '</span></td>';
+	str += '</tr>';
+	str +='</tbody></table>';
+	str += '<button type="button" id="cancelexceptslip" class="btn btn-light">제외취소</button>';
+	str += '</div>';
+	
+	// 삭제
+	str += '<div class="tab-pane fade" id="pills-remove" role="tabpanel" aria-labelledby="contact-tab">';
+	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	  str += '<thead><tr>';
+	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	  str += '<th scope="col" class="tabletop">거래처명</th>';
+	  str += '<th scope="col" class="tabletop">전표적요</th>';
+	  str += '<th scope="col" class="tabletop">상대계정</th>';
+	  str += '<th scope="col" class="tabletop">상태</th>';
+	  str += '<th scope="col" class="tabletop">예상잔액</th>';
+	  str += '</tr></thead>';
+	  str += '<tbody>';
+	  
+	  if(slipList && slipList.length>0){
+	  		for(let i=0; i<slipList.length; i++){
+	  			if(slipList[i].bhstatename=='삭제'){
+	  				str += '<tr>';
+				  	str += '<input type="hidden" name="bhno" value="';
+				  	str += slipList[i].bhno;
+				  	str += '"/>';
+				  	str += '<td><input class="form-check-input" type="checkbox"></td>';
+					str += '<td>';
+				 	str += slipList[i].source;
+				 	str += '</td>';
+				 	if(slipList[i].summary==null){
+				 		str += '<td>';
+				 		str += '</td>';
+				 	}else{
+				 		str += '<td>';
+				 		str += slipList[i].summary;
+				 		str += '</td>';
+				 	}
+			
+				 	str += '<td>';
+				 	str += slipList[i].accountname;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += slipList[i].bhstatename;
+				 	str += '</td>';
+				 	str += '<td>';
+				 	str += formatNumberWithCommas(slipList[i].sum);
+				 	str += '</td></tr>';
+
+	  			}else{
+	  			}//end if
+			}//end for
+	  }else{
+	  }
+	
+	str += '<tr>';
+	str += '<td class="total"></td>';
+	str += '<td class="total"><strong>합계</strong></td>';
+	str += '<td class="total" colspan="4">잔액: ';
+	str += formatNumberWithCommas(total.totalsum);
+	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
+	str += formatNumberWithCommas(total.diffsum);
+	str += '</span></td>';
+	str += '</tr>';
+	str +='</tbody></table>';
+	str += '<button type="button" id="cancelremoveslip" class="btn btn-light">삭제취소</button>';
+	str += '</div>';
+	str += '</div>';
+	  
+
 	searchstart.html(str);	              
 
 	}//end of createBankSlipAllTable
 
 
+	
+	// 처음 로딩 시 분개내역 조회 테이블 생성 함수
+	function createDetailSlipTable() {
+	  let searchstart = $('.bottom');
+
+	  searchstart.empty();
+	  
+	  let str = '';
+		str += '<table id="" class="table detailsliptable table-bordered">';
+		str += '<thead>';
+		str += '<tr>';
+		str += '<th scope="col" class="tabletop">구분</th>';
+		str += '<th colspan="2" scope="col" class="tabletop">계정과목</th>';
+		str += '<th scope="col" class="tabletop">차변</th>';
+		str += '<th scope="col" class="tabletop">대변</th>';
+		str += '<th scope="col" class="tabletop">거래처명</th>';
+		str += '<th scope="col" class="tabletop">적요</th>';
+		str += '</tr>';
+		str += '</thead>';
+		str += '<tbody>';
+		str += '<tr>';
+		str += '<td>';
+		str += '<select class="form-select" aria-label="Default select example">';
+		str += '<option value="1">입금</option>';
+		str += '<option value="2">출금</option>';
+		str += '<option value="3" selected>차변</option>';
+		str += '<option value="4">대변</option>';
+		str += '</select>';
+		str += '</td>';
+		str += '<td><input type="text" id="accountNo" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '</tr>';
+		str += '<tr>';
+		str += '<td>';
+		str += '<select class="form-select" aria-label="Default select example">';
+		str += '<option selected>차변</option>';
+		str += '<option value="1">입금</option>';
+		str += '<option value="2">출금</option>';
+		str += '<option value="3">차변</option>';
+		str += '<option value="4" selected>대변</option>';
+		str += '</select>';
+		str += '</td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '<td><input type="text" name="text" class="intable"></td>';
+		str += '</tr>';
+		str += '</tbody>';
+		str += '</table>';
+	  
+	 
+	  searchstart.html(str);
+	}
+
+
+	// 분개내역조회 클릭 시 내용 생성 함수
+	//		              <button type="button" class="btn btn-outline-confirm">저장</button>
+	//	              <button type="button" class="btn btn-outline-secondary">취소</button>
 
 
 	function formatDate(dateString) {

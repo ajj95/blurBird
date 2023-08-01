@@ -64,6 +64,7 @@ public class BankMapperTests {
 		mapper.getBankHistoryListConn(search).forEach(bankhistory -> log.info(bankhistory));
 	}
 	*/
+	
 	@Test
 	public void getbankSliptest() {
 		BankSearchDTO search = new BankSearchDTO();
@@ -75,6 +76,5 @@ public class BankMapperTests {
 		//search.setBhstateno("1002");
 		mapper.getBankSlipList(search).forEach(slip -> log.info(slip));
 	}
-	
 
 }

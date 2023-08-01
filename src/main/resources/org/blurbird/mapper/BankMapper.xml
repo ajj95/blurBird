@@ -91,11 +91,23 @@
 	    AND ((BH.SORTNO = 1 AND S.SORTNO = 4) OR (BH.SORTNO = 2 AND S.SORTNO = 3))
 	    ORDER BY BANKSLIPNO DESC
 	</select>
+	
+	
+	
+	<select id="getTotalSum" resultType="org.blurbird.domain.bank.TotalDTO">
+		SELECT T.SUM "TOTALSUM", D.SUM "DIFFSUM"
+		FROM VIEW_TOTALSUM T, VIEW_DIFFSUM D
+	</select>
+	
+	<!-- 전표 삭제 -->
+	<delete id="removeSlip" parameterType="String">
+		DELETE FROM BANKSLIP WHERE BHNO=#{bhno}
+	</delete>
 
 	<!-- 분개내역 조회 -->
 	<select id="getDetailSlip" resultType="int" parameterType="org.blurbird.domain.bank.DetailSlipVO">
-		SELECT S.SORTNO "SORTNO", S.SORTNAME "SORTNAME", A.ACCOUNTNO "ACCOUNTNO"
-		, A.ACCOUNTNAME" ACCOUNTNAME"
+		SELECT BS.BANKSLIPNO, BS.BHNO, S.SORTNO "SORTNO", S.SORTNAME "SORTNAME"
+		, A.ACCOUNTNO "ACCOUNTNO", A.ACCOUNTNAME" ACCOUNTNAME"
 		, BH.AMOUNT "AMOUNT", BH.SOURCE "SOURCE", BS.SUMMARY "SUMMARY"
 		FROM BANKHISTORY BH, BANKSLIP BS, SORT S, ACCOUNT A
 		WHERE BH.BHNO = BS.BHNO
@@ -104,7 +116,18 @@
 		AND BH.BHNO = #{bhno}
 	</select>
 
-
+	<!-- 분개내역 등록 -->
+	<insert id="registerSlip" parameterType="org.blurbird.domain.bank.DetailSlipVO">
+		INSERT INTO BANKSLIP VALUES(SEQ_BANKSLIP.NEXTVAL
+		, #{bhno}, ${sortno}, #{accountno}, #{amount}, #{summary})
+	</insert>
+	
+	<!-- 분개내역 수정 -->
+	<update id="modifySlip" parameterType="org.blurbird.domain.bank.DetailSlipVO">
+		UPDATE BANKSLIP SET SORTNO=#{sortno}, ACCOUNTNO=#{accountno}
+		, AMOUNT=#{amount}, SUMMARY=#{summary}
+		WHERE BANKSLIPNO = #{bankslipno}
+	</update>
 
 
 

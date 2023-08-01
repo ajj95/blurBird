@@ -136,17 +136,40 @@
     box-sizing: border-box;
     height: 400px;
     overflow: auto;
+    margin-bottom: 20px;
   }
 
-  .right {
-    float: right;
+  
+  .right{
+  	float: right;
     width: 49%; 
     box-sizing: border-box;
 	flex-wrap: wrap;
 	height: 400px;
     overflow: auto;
+    margin-bottom: 20px;
   }
-	
+
+  .totallist{
+  	display: flex;
+  }
+  
+  .totalname{
+  	margin-right: 150px;
+  }
+  
+  .totalsum{
+  	margin-right: 50px;
+  }
+  
+  .diffsum{
+  	color: red;
+  }
+  
+  .totalname{
+  	font-weight: bold;
+  }
+
 	.button-container {
 	  display: flex;
 	  flex-grow: 1;
@@ -193,26 +216,52 @@
   background-color: #fcfdfd;
   border-color: #DCDCDC;
 }
-.btn-outline-secondary {
+
+.howmany{
+	font-wieght: bold;
+	margin-left: 10px;
+	display: inline;
+}
+.button-text {
+    display: inline;
+}
+.right .nav {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.right .nav-item {
+    flex: 1;
+}
+#pills-all-tab {
   color: #8592a3;
-  border-color: #8592a3;
   background: transparent;
 }
-.btn-outline-secondary:hover {
-  color: #8592a3;
-  background-color: white;
-  border-color: #788393;
+#pills-all-tab:hover {
+  color: black;
+  background-color: #F5F5F5;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+}
+#pills-all-tab.active {
+  color: black;
+  background-color: #F5F5F5;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
 }
 
-.btn-outline-success {
+#pills-can-tab {
   color: #198754;
   border-color: #198754;
   background: transparent;
 }
-.btn-outline-success:hover {
+#pills-can-tab:hover {
   color: #198754;
-  background-color: white;
+  background-color: #F0FFF0;
+  border-color: #198754;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4);
+}
+#pills-can-tab.active {
+  color: #198754;
+  background-color: #F0FFF0;
   border-color: #198754;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4);
 }
@@ -228,25 +277,37 @@
   border-color: #03b0d4;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(3, 195, 236, 0.4);
 }
-.btn-outline-confirm{
+#pills-certain-tab{
     color: #4169E1;
     border-color: #4169E1;
     background: transparent;
 }
-.btn-outline-confirm:hover{
-  color: #4169E1;
-  background-color: white;
+#pills-certain-tab:hover{
+  color: white;
+  background-color: #4169E1;
   border-color: #4169E1;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
 }
-.btn-outline-warning {
+#pills-certain-tab.active{
+  color: white;
+  background-color: #4169E1;
+  border-color: #4169E1;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+#pills-except-tab {
   color: #ffab00;
-  border-color: #ffab00;
+  border-color: #e69a00;
   background: transparent;
 }
-.btn-outline-warning:hover {
-  color: #ffab00;
-  background-color: white;
+#pills-except-tab:hover {
+  color: black;
+  background-color: #FFE4B5;
+  border-color: #e69a00;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 171, 0, 0.4);
+}
+#pills-except-tab.active {
+  color: black;
+  background-color: #FFE4B5;
   border-color: #e69a00;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 171, 0, 0.4);
 }
@@ -262,17 +323,23 @@
   box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 62, 29, 0.4);
 }
 
-.btn-outline-dark {
-  color: #233446;
-  border-color: #233446;
-  background: transparent;
-}
-.btn-outline-dark:hover {
+#pills-remove-tab {
   color: #233446;
   background-color: white;
   border-color: #202f3f;
+}
+#pills-remove-tab:hover {
+  color: white;
+  background-color: #696969;
+  border-color: #202f3f;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(35, 52, 70, 0.4);
 /*   transform: translateY(-1px); */
+}
+#pills-remove-tab.active{
+  color: white;
+  background-color: 	#696969;
+  border-color: #202f3f;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(35, 52, 70, 0.4);
 }
 
 .btn-outline-gray {
@@ -321,11 +388,14 @@ input.modaltext {
 <script type="text/javascript">
 	$(function(){
 
-		
-		// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$("#memoplzbtn").on("click", function(){
+		// 내용확인요청 시 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
+		$("#left").on("click", "#memoplzbtn", function(){
 			$("#memoplzmodal").modal('show');
 		});
+	
+		
+		
+
 		
 	});
 </script>
@@ -464,65 +534,17 @@ input.modaltext {
                  	</form>
                  
                  <!-- 동적 생성부분 -->
-                 <div class="searhstartleft" id="searhstartleft">
+                 <div class="left">
                  </div>
-                
-                 <div class="searchstartright" id="searchstartright">
+                 
+                 <div class="right">
                  </div>
-               
-                 	<div class="bottom">
-                 		 <!-- 분개내역 -->
-		                 <table id="" class="table detailsliptable table-bordered">
-			                <thead>
-			                  <tr>
-			                    <th scope="col" class="tabletop">구분</th>
-			                    <th colspan="2" scope="col" class="tabletop">계정과목</th>
-			                    <th scope="col" class="tabletop">차변</th>
-			                    <th scope="col" class="tabletop">대변</th>
-			                    <th scope="col" class="tabletop">거래처명</th>
-			                    <th scope="col" class="tabletop">적요</th>
-			                  </tr>
-			                </thead>
-			                <tbody>
-			                  <tr>
-			                  	<td>
-			                  		<select class="form-select" aria-label="Default select example">
-				                      <option value="1">입금</option>
-				                      <option value="2">출금</option>
-				                      <option value="3" selected>차변</option>
-				                      <option value="4">대변</option>
-				                    </select>
-			                  	</td>
-			                    <td><input type="text" id="accountNo" name="text" class="intable" value="103"></td>
-			                    <td><input type="text" name="text" class="intable" value="보통예금"></td>
-			                    <td><input type="text" name="text" class="intable"></td>
-			                    <td><input type="text" name="text" class="intable"></td>
-			                    <td><input type="text" name="text" class="intable" value="신한은행"></td>
-			                    <td><input type="text" name="text" class="intable"></td>
-			                  </tr>
-			                  <tr>
-			                    <td>
-			                    	<select class="form-select" aria-label="Default select example">
-				                      <option selected>차변</option>
-				                      <option value="1">입금</option>
-				                      <option value="2">출금</option>
-				                      <option value="3">차변</option>
-				                      <option value="4" selected>대변</option>
-				                    </select>
-			                    </td>
-			                    <td><input type="text" name="text" class="intable" value="911"></td>
-			                    <td><input type="text" name="text" class="intable" value="복리후생비"></td>
-			                    <td><input type="text" name="text" class="intable"></td>
-			                    <td><input type="text" name="text" class="intable"></td>
-			                    <td><input type="text" name="text" class="intable" value="**구리"></td>
-			                    <td><input type="text" name="text" class="intable"></td>
-			                  </tr>
-			                </tbody>
-		              </table>
-		              <button type="button" class="btn btn-outline-confirm">저장</button>
-		              <button type="button" class="btn btn-outline-secondary">취소</button>
-		              
-                 	</div>        <!-- 동적 생성 끝 -->        	
+
+                 <div class="bottom">
+                 </div>
+                 <!-- 동적 생성 끝 -->   
+                 
+                      	
              </div><!-- End 탭1 -->    	
              <!-- 탭2 -->
              <div class="tab-pane fade" id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">

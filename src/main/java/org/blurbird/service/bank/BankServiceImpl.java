@@ -6,6 +6,7 @@ import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.TotalDTO;
 import org.blurbird.mapper.BankMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,11 +51,19 @@ public class BankServiceImpl implements BankService {
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search) {
 		return mapper.getBankSlipListState(search);
 	}
+	
+	// 전표 예상 잔액 합계 리스트
+	@Override
+	public TotalDTO getTotalSum() {
+		return mapper.getTotalSum();
+	}
 
 	// 분개 내역 조회
 	@Override
 	public List<DetailSlipVO> getDetailSlip(int bhno) {
 		return mapper.getDetailSlip(bhno);
 	}
+
+
 
 }
