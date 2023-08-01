@@ -2,10 +2,62 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.blurbird.mapper.testMapper">
-	
-	<select id="testGetName" resultType="org.blurbird.domain.MemberVO">
-		select * from member where password='1234'
+<mapper namespace="org.blurbird.mapper.InfoMapper">
+
+	<select id="getListBusiness"
+		resultType="org.blurbird.domain.bank.BusinessVO">
+		select * from business
 	</select>
+
+	<select id="getSalesfromAuto"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (401, 402) and sortno=4
+		then amount else 0 end) as
+		SalesfromAutoSlip
+		from autoslip where regdate between
+		to_date('2023-01-01') and
+		to_date('2023-12-31')
+	</select>
+
+	<select id="getSalesfromBank"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (401, 402) and sortno=4
+		then amount else 0 end) as
+		SalesfromBankSlip
+		from (select b.accountno,
+		b.amount, b.sortno, bh.bhdate from bankhistory
+		bh join bankslip b on
+		bh.bhno=b.bhno
+		where bh.bhdate between to_date('2023-01-01') and
+		to_date('2023-12-31'))
+	</select>
+
+
+
+
+
+
+
+
+
+
+	<!-- 재무상태표 항목 -->
+	<select id="getA"
+		resultType="org.blurbird.domain.info.FinancialSVO">
+		select
+		sum(case WHEN accountNo IN (101, 102, 103, 108, 120,
+		146, 150, 153) and
+		sortno=3 THEN amount else 0 end) as CurrentAssets
+		from (select b.accountno, b.amount, b.sortno, bh.bhdate from
+		bankhistory
+		bh join bankslip b on bh.bhno=b.bhno
+		where bh.bhdate between
+		to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+
+
 
 </mapper>
