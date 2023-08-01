@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.blurbird.mapper.DocrequestMapper">
+
+<!-- MemberVO를 위한 resultMap -->
+<resultMap id="MemberResultMap" type="org.blurbird.domain.MemberVO">
+    <id property="memberno" column="memberno" />
+    <result property="membername" column="membername" />
+    <result property="memberid" column="memberid" />
+    <result property="password" column="password" />
+    <result property="ssn" column="ssn" />
+</resultMap>
+
+<!-- UsersVO를 위한 resultMap -->
+<resultMap id="UsersResultMap" type="org.blurbird.domain.UsersVO">
+    <id property="userno" column="userno" />
+    <result property="memberno" column="memberno" />
+    <result property="bizno" column="bizno" />
+    <result property="authno" column="authno" />
+</resultMap>
+
+<!-- DocReqHistoryVO를 위한 resultMap -->
+<resultMap id="DocReqHistoryResultMap" type="org.blurbird.domain.docrequest.DocReqHistoryVO">
+    <id property="historyno" column="historyno" />
+    <result property="drstateno" column="drstateno" />
+    <result property="docreqno" column="docreqno" />
+    <result property="receivingdate" column="receivingdate" />
+</resultMap>
+
+<!-- DocumentRequestVO를 위한 resultMap -->
+<resultMap id="DocumentRequestResultMap" type="org.blurbird.domain.docrequest.DocumentRequestVO">
+    <id property="docreqno" column="docreqno" />
+    <result property="userno" column="userno" />
+    <result property="applicationdate" column="applicationdate" />
+    <result property="purpose" column="purpose" />
+    <result property="status" column="status" />
+    <result property="count" column="count" />
+    <result property="wishdate" column="wishdate" />
+    <result property="way" column="way" />
+    <result property="doctagetdate" column="doctagetdate" />
+    <result property="doctype" column="doctype" />
+</resultMap>
+
+<!-- DrStateVO를 위한 resultMap -->
+<resultMap id="DrStateResultMap" type="org.blurbird.domain.docrequest.DrStateVO">
+    <id property="drstateno" column="drstateno" />
+    <result property="drstatename" column="drstatename" />
+</resultMap>
+
+<!-- DocumentVO를 위한 resultMap -->
+<resultMap id="DocumentResultMap" type="org.blurbird.domain.docrequest.DocumentVO">
+    <id property="docno" column="docno" />
+    <result property="docpath" column="docpath" />
+    <result property="ssnpublic" column="ssnpublic" />
+    <result property="docreqno" column="docreqno" />
+</resultMap>
+
+<!-- DocumentRequestList 를위한 resultMap -->
+<resultMap id="DocumentRequestListResultMap" type="org.blurbird.domain.docrequest.DocumentRequestVO">
+    <!-- DocumentRequestVO의 id, property 매핑 -->
+    <id property="docreqno" column="docreqno" />
+    <result property="userno" column="userno" />
+    <result property="applicationdate" column="applicationdate" />
+    <result property="purpose" column="purpose" />
+    <result property="status" column="status" />
+    <result property="count" column="count" />
+    <result property="wishdate" column="wishdate" />
+    <result property="way" column="way" />
+    <result property="doctagetdate" column="doctagetdate" />
+    <result property="doctype" column="doctype" />
+
+    <!-- Join된 멤버의 이름과 상태의 이름 매핑 -->
+    <association property="member" resultMap="MemberResultMap">
+        <result column="membername" property="membername" />
+    </association>
+    <association property="drstate" resultMap="DrStateResultMap">
+        <result column="drstatename" property="drstatename" />
+    </association>
+</resultMap>
+
+	<!--  getDocrequest 전체 -->
+<select id="getDocrequestList" resultMap="DocumentRequestListResultMap">
+    <![CDATA[
+        SELECT membername, doctype, count, wishdate, purpose, drstatename
+        FROM documentrequest dr
+        INNER JOIN users u ON dr.userno = u.userno
+        INNER JOIN member m ON u.memberno = m.memberno
+        INNER JOIN docreqhistory drh ON dr.docreqno = drh.docreqno
+        INNER JOIN drstate ds ON drh.drstateno = ds.drstateno
+    ]]>
+</select>
+
+
+</mapper>
