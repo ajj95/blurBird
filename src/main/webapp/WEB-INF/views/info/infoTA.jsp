@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/taheader.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -52,16 +54,15 @@ th:first-child, td:first-child {
 	/* 첫 번째 열 넓이 */
 	width: 35px;
 }
+
 th:first-child(2), td:first-child(2) {
 	/* 두번째 열 넓이 */
 	width: 350px;
 }
 
-
 .tabletop {
 	background-color: #F5F5F5 !important;
 }
-
 
 /* 신고현황 그래프 */
 .barInfo {
@@ -183,7 +184,7 @@ th:first-child(2), td:first-child(2) {
 						role="tablist">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="home-tab"
-								data-bs-toggle="tab" data-bs-target="#bordered-home"
+								data-bs-toggle="tab" data-bs-target="#bordered-contact"
 								type="button" role="tab" aria-controls="home"
 								aria-selected="true">원천세</button>
 						</li>
@@ -204,7 +205,7 @@ th:first-child(2), td:first-child(2) {
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-								data-bs-target="#bordered-contact" type="button" role="tab"
+								data-bs-target="#bordered-home" type="button" role="tab"
 								aria-controls="contact" aria-selected="false">종합소득세</button>
 						</li>
 						<li class="nav-item" role="presentation">
@@ -271,9 +272,10 @@ th:first-child(2), td:first-child(2) {
 										<th scope="col" class="tabletop"><input
 											class="form-check-input" type="checkbox"></th>
 										<th scope="col" class="tabletop">수임처</th>
+										<th scope="col" class="tabletop">대표자명</th>
 										<th scope="col" class="tabletop">귀속년월</th>
-										<th scope="col" class="tabletop">총 지급액</th>
-										<th scope="col" class="tabletop">납부세액</th>
+										<th scope="col" class="tabletop">종합소득금액</th>
+										<th scope="col" class="tabletop">결정세액</th>
 										<th scope="col" class="tabletop">신고일자</th>
 										<th scope="col" class="tabletop">접수증</th>
 										<th scope="col" class="tabletop">납부서</th>
@@ -281,10 +283,30 @@ th:first-child(2), td:first-child(2) {
 										<th scope="col" class="tabletop"></th>
 									</tr>
 								</thead>
+
+
+
+
 								<tbody>
+									<c:forEach items="${list}" var="business">
+										<tr>
+											<td></td>
+											<td><c:out value="${business.bizname}" /></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</c:forEach>
+									
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>수임처 더존학원</td>
+										<td>전대장</td>
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
@@ -297,6 +319,7 @@ th:first-child(2), td:first-child(2) {
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>수임처 더존학원더긴제목</td>
+										<td>안깃헙</td>
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
@@ -309,6 +332,20 @@ th:first-child(2), td:first-child(2) {
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>세무사학원</td>
+										<td>정디비</td>
+										<td>2023.04</td>
+										<td>25999412</td>
+										<td>1624812</td>
+										<td>2016.05.25</td>
+										<td>ic</td>
+										<td>ic</td>
+										<td>2023.05.08</td>
+										<td><button type="button">신고서작성</button></td>
+									</tr>
+									<tr>
+										<td><input class="form-check-input" type="checkbox"></td>
+										<td>맛있는 카페</td>
+										<td>강대표</td>
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
