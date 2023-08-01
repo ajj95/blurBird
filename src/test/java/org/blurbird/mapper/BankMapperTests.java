@@ -68,14 +68,12 @@ public class BankMapperTests {
 	public void getbankSliptest() {
 		BankSearchDTO search = new BankSearchDTO();
 		
-		String start = "20230801";
-		String end = "20230807";
 		search.setStartdate("2023-08-01");
 		search.setEnddate("2023-08-07");
 		search.setBizno("10001");
 		search.setBankname("신한은행");
-		search.setBhstateno("1002");
-		mapper.getBankSlipListState(search).forEach(bankhistory -> log.info(bankhistory));
+		//search.setBhstateno("1002");
+		mapper.getBankSlipList(search).forEach(slip -> log.info(slip));
 	}
 	
 

@@ -38,5 +38,6 @@ public class BankRestController {
         return ResponseEntity.ok(result);
     }
 	
+    // 전표 내역 선택 시 분개내역 출력
 
 }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-\<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/taheader.jsp"%>
 <!DOCTYPE html>
@@ -12,7 +12,10 @@
 <meta content="" name="description">
 <meta content="" name="keywords">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../resources/assets/css/style.css" rel="stylesheet">
+<style type="text/css">
+
   .pagetitle{
   	margin-top: 8px;
   }
@@ -317,11 +320,7 @@ input.modaltext {
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
-		// 툴팁설정
-		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-		  return new bootstrap.Tooltip(tooltipTriggerEl)
-		})
+
 		
 		// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
 		$("#memoplzbtn").on("click", function(){
@@ -456,85 +455,21 @@ input.modaltext {
 		                  		 </div>
 	                 		</div>
 	                 		<div class="listconditionbtn">
-	                 			<button type="submit" id="searchHistorySlip" class="btn btn-secondary">조회</button>
+	                 			<button type="button" id="searchHistorySlip" class="btn btn-secondary">조회</button>
 	                 		</div>
 	                 	</div>
-	                 	<input type="hidden" name="bizno" value="10001">
-	                 	<input type="hidden" name="bankname" value="신한은행">
+	                 	<input type="hidden" name="bizno" id="bizno" value="10001">
+	                 	<input type="hidden" name="bankname" id="bankname" value="신한은행">
 	                 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                  	</form>
                  
                  <!-- 동적 생성부분 -->
-                 <div class="searhstart">
+                 <div class="searhstartleft" id="searhstartleft">
                  </div>
                 
-                <div class="right">
-                	<!-- 전표내역 -->
-					 <div class="button-container">
- 					    <button type="button" class="btn btn-outline-secondary">전체   12</button>
-					    <button type="button" class="btn btn-outline-success">가능   4</button>
-					    <button type="button" class="btn btn-outline-confirm">확정   3</button>
-					    <button type="button" class="btn btn-outline-warning">제외   1</button>
-					    <button type="button" class="btn btn-outline-dark">삭제   2</button>
-					  </div>
-	                <table id="" class="banksliptable table table-hover table-bordered">
-		                <thead>
-		                  <tr>
-		                  	<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>
-		                    <th scope="col" class="tabletop">거래처명</th>
-		                    <th scope="col" class="tabletop">전표적요</th>
-		                    <th scope="col" class="tabletop">상대계정</th>
-		                    <th scope="col" class="tabletop">상태</th>
-		                    <th scope="col" class="tabletop">예상잔액</th>
-		                  </tr>
-		                </thead>
-		                <tbody>
-		                  <tr>
-		                  	<td><input class="form-check-input" type="checkbox"></td>
-		                    <td>**구리</td>
-		                    <td></td>
-		                    <td>(판)복리후생비</td>
-		                    <td>전표확정</td>
-		                    <td>35,500,000</td>
-		                  </tr>
-		                  <tr>
-		                  	<td><input class="form-check-input" type="checkbox"></td>
-		                    <td>**스토리</td>
-		                    <td></td>
-		                    <td>받을어음</td>
-		                    <td>전표확정</td>
-		                    <td>57,500,000</td>
-		                  </tr>
-		                  <tr>
-		                  	<td><input class="form-check-input" type="checkbox"></td>
-		                    <td>**스토리</td>
-		                    <td></td>
-		                    <td>(판)복리후생비</td>
-		                    <td>확정가능</td>
-		                    <td>35,500,000</td>
-		                  </tr>
-		                  <tr>
-		                  	<td><input class="form-check-input" type="checkbox"></td>
-		                    <td>**구리</td>
-		                    <td></td>
-		                    <td>외상매출금</td>
-		                    <td>삭제전표</td>
-		                    <td>35,500,000</td>
-		                  </tr>
-		     			  <tr>
-		                  	<td class="total"></td>
-		                  	<td class="total"><strong>합계</strong></td>
-		                  	<td class="total" colspan="4">잔액: 35,500,000 (차액: 35,500,000)</td>
-				          </tr>
-		                </tbody>
-	              </table>
-	              <div class="lightbtns">
-	                <button type="button" class="btn btn-light">확정</button>
-	              	<button type="button" class="btn btn-light">분개내역조회</button>
-	              	<button type="button" class="btn btn-light">삭제</button>
-	              	<!-- 가능:확정/확정:확정취소/삭제:삭제취소 -->
-	              </div>
-              </div><!-- end right -->
+                 <div class="searchstartright" id="searchstartright">
+                 </div>
+               
                  	<div class="bottom">
                  		 <!-- 분개내역 -->
 		                 <table id="" class="table detailsliptable table-bordered">

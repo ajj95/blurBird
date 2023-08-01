@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankHistoryVO {
+	private String bhno;					// 은행내역 번호
 	private String bankname;			// 은행이름
 	private String accountnumber;	// 계좌번호
 	private String bhdate;   			// 통장내역 일자

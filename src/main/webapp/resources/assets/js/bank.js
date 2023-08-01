@@ -2,26 +2,28 @@
 // 조회버튼 클릭시 통장내역 조회
 $(function(){
 	
+		// 툴팁설정
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		  return new bootstrap.Tooltip(tooltipTriggerEl)
+		})
+		
 		// 일자, 수임사 선택 후 조회 시
 		// form을 submit 할 때 Ajax 요청을 보내도록 처리
-        $("#searchHistorySlip").on("submit", function(event) {
-            event.preventDefault();
-            alert('테스트');
-            /*
-            var startDate = $("#startdate").val();
-            var endDate = $("#enddate").val();
-            var bankName = $(".dropdown-toggle").text().trim();
-            var gridRadios = $("input[name='gridRadios']:checked").val();
+        $("#searchHistorySlip").on("click", function(event){
+            let startDate = $("#startdate").val();
+            let endDate = $("#enddate").val();
+            let bizno = $("#bizno").val();
+            let bankname = $("#bankname").val();
             
-            var search = {
+            let search = {
                 startdate: startDate,
                 enddate: endDate,
-                bankname: bankName,
-                gridRadios: gridRadios
+                bizno: bizno,
+                bankname: bankname
             };
             
             sendAjaxRequest(search);
-            */
         });
 	
 	
@@ -30,7 +32,7 @@ $(function(){
         function sendAjaxRequest(search) {
             $.ajax({
                 type: "POST",
-                contentType: "application/json",
+                contentType: "application/json;charset=UTF-8",
                 url: "/bank/getHistoryAndSlip",
                 data: JSON.stringify(search),
                 dataType: "json",
@@ -39,13 +41,10 @@ $(function(){
                     var historyList = response.historyList;
                     var slipList = response.slipList;
                     
-                    // 이후 원하는 방식으로 데이터를 처리하면 됩니다.
-                    // 예시로는 historyList와 slipList를 콘솔에 출력하는 것입니다.
-                    console.log(historyList);
-                    console.log(slipList);
+                    createBankHistoryAllTable(historyList);
+                    createBankSlipAllTable(slipList);
                 },
                 error: function(xhr, status, error) {
-                    // 에러 처리
                     console.error(error);
                 }
             });
@@ -53,109 +52,337 @@ $(function(){
 	
 });
 
+	function createBankHistoryAllTable(data){
+		
+		let searchstart = $('#searhstartleft');
 
-
-
-    // 통장내역 전체 조회 테이블 생성 함수
-	function createBankHistoryAllTable(data) {
-	  let searchstart = $('.searhstart');
-
-	  searchstart.empty();
-	    
-	  let leftDiv = $('<div class="left"></div>');
-	  leftDiv.append('<ul class="nav nav-tabs" id="myTab" role="tablist">');
-	  leftDiv.append('<li class="nav-item" role="presentation">');
-	  leftDiv.append('<button class="nav-link active" id="allbanklist-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">전체</button>');
-	  leftDiv.append('</li>');
-	  leftDiv.append('<li class="nav-item" role="presentation">');
-	  leftDiv.append('<button class="nav-link" id="nonbanklist-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">전표미연결</button>');
-	  leftDiv.append('</li>');
-	  leftDiv.append('<li class="nav-item" role="presentation">');
-	  leftDiv.append('<button class="nav-link" id="connbanklist-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">전표연결</button>');
-	  leftDiv.append('</li>');
-	  leftDiv.append('</ul>');
-	  leftDiv.append('<div class="tab-content pt-2" id="myTabContent">');
-	  leftDiv.append('<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="allbanklist-tab">');
-	  leftDiv.append('<div class="banklogo">');
-	  leftDiv.append('<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">');
-	  leftDiv.append('<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">');
-	  leftDiv.append('신한은행');
-	  leftDiv.append('</button>');
-	  leftDiv.append('<ul class="dropdown-menu">');
-	  leftDiv.append('<li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>');
-	  leftDiv.append('<li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>');
-	  leftDiv.append('<li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>');
-	  leftDiv.append('<li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>');
-	  leftDiv.append('<li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>');
-	  leftDiv.append('</ul>');
-	  leftDiv.append('</div>');
-	  leftDiv.append('<table id="allbanktable" class="banktable table table-hover table-bordered">');
-	  leftDiv.append('<thead>');
-	  leftDiv.append('<tr>');
-	  leftDiv.append('<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>');
-	  leftDiv.append('<th scope="col" class="tabletop">날짜</th>');
-	  leftDiv.append('<th scope="col" class="tabletop">적요</th>');
-	  leftDiv.append('<th scope="col" class="tabletop">입금액</th>');
-	  leftDiv.append('<th scope="col" class="tabletop">출금액</th>');
-	  leftDiv.append('<th scope="col" class="tabletop">잔액</th>');
-	  leftDiv.append('<th scope="col" class="tabletop">메모</th>');
-	  leftDiv.append('</tr>');
-	  leftDiv.append('</thead>');
-	  leftDiv.append('<tbody>');
-	  
-	  // bankhistorylist만큼 반복
-	  for (let i = 0; i < data.length; i++) {
-      	leftDiv.append('<tr>');
- 	  	leftDiv.append('<td><input class="form-check-input" type="checkbox"></td>');
- 	  	leftDiv.append('<td>');
- 	  	leftDiv.append(data[i].bhdate);
- 	  	leftDiv.append('</td>');
- 	  	leftDiv.append('<td>');
- 	  	leftDiv.append(data[i].source);
- 	  	leftDiv.append('</td>');
+	  	searchstart.empty();
+	  	
+	let str = '';
+	str += '<div class="left">';
+	str += '<ul class="nav nav-tabs" id="myTab" role="tablist">';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link active" id="allbanklist-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">전체</button>';
+	str += '</li>';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link" id="nonbanklist-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">전표미연결</button>';
+	str += '</li>';
+	str += '<li class="nav-item" role="presentation">';
+	str += '<button class="nav-link" id="connbanklist-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">전표연결</button>';
+	str += '</li>';
+	str += '</ul>';
+	str += '<div class="tab-content pt-2" id="myTabContent">';
+	
+	// 전체
+	str += '<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="allbanklist-tab">';
+	str += '<div class="banklogo">';
+	str += '<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">';
+	str += '<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">';
+	str += '신한은행';
+	str += '</button>';
+	str += '<ul class="dropdown-menu">';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>';
+	str += '</ul>';
+	str += '</div>';
+	str += '<table id="allbanktable" class="banktable table table-hover table-bordered">';
+	str += '<thead>';
+	str += '<tr>';
+	str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	str += '<th scope="col" class="tabletop">날짜</th>';
+	str += '<th scope="col" class="tabletop">적요</th>';
+	str += '<th scope="col" class="tabletop">입금액</th>';
+	str += '<th scope="col" class="tabletop">출금액</th>';
+	str += '<th scope="col" class="tabletop">잔액</th>';
+	str += '<th scope="col" class="tabletop">메모</th>';
+	str += '</tr>';
+	str += '</thead>';
+	str += '<tbody>';
+	
+	 for (let i = 0; i < data.length; i++) {
+      	str +='<tr>';
+ 	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
+ 	  	str +='<td>';
+ 	  	str += formatDate(data[i].bhdate);
+ 	  	str +='</td>';
+ 	  	str +='<td>';
+ 	  	str +=data[i].source;
+ 	  	str +='</td>';
  	  	if(data[i].sortno==1){
  	  		// 입금
- 	  		leftDiv.append('<td>');
-	 	  	leftDiv.append(data[i].amount);
-	 	  	leftDiv.append('</td>');
-	 	  	leftDiv.append('<td></td>');
+ 	  		str +='<td>';
+	 	  	str +=formatNumberWithCommas(data[i].amount);
+	 	  	str +='</td>';
+	 	  	str +='<td></td>';
  	  	}else{
  	  		// 출금
- 	  		leftDiv.append('<td></td>');
- 	  		leftDiv.append('<td>');
-	 	  	leftDiv.append(data[i].amount);
-	 	  	leftDiv.append('</td>');
+ 	  		str +='<td></td>';
+ 	  		str +='<td>';
+	 	  	str +=formatNumberWithCommas(data[i].amount);
+	 	  	str +='</td>';
  	  	}
- 	  	leftDiv.append('<td>');
- 	  	leftDiv.append(data[i].sum);
- 	  	leftDiv.append('</td>');
+ 	  	str +='<td>';
+ 	  	str +=formatNumberWithCommas(data[i].sum);
+ 	  	str +='</td>';
 	  	if(data[i].memo==null){
-	  		leftDiv.append('<td><i class="ri-article-fill"></i></td>');
+	  		 str +='<td><i class="ri-article-fill"></i></td>';
 	  	}else{
-	  		 leftDiv.append('<td><a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="');
-	  		 leftDiv.append(data[i].memo);
-	  		 leftDiv.append('"><i class="ri-article-fill"></i></a></td>');
+	  		 str +='<td><a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="';
+	  		 str +=data[i].memo;
+	  		 str +='"><i class="ri-article-fill"></i></a></td>';
 	  	}
-		leftDiv.append('</tr>');
+		str +='</tr>';
+	  }
+	
+	str += '</tbody>';
+	str += '</table>';
+	str += '</div>';
+	
+	// 미연결
+	str += '<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="nonbanklist-tab">';
+	str += '<div class="banklogo">';
+	str += '<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">';
+	str += '<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">';
+	str += '신한은행';
+	str += '</button>';
+	str += '<ul class="dropdown-menu">';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>';
+	str += '</ul>';
+	str += '</div>';
+	str += '<table id="nonbanktable" class="banktable table table-hover table-bordered">';
+	str += '<thead>';
+	str += '<tr>';
+	str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	str += '<th scope="col" class="tabletop">날짜</th>';
+	str += '<th scope="col" class="tabletop">적요</th>';
+	str += '<th scope="col" class="tabletop">입금액</th>';
+	str += '<th scope="col" class="tabletop">출금액</th>';
+	str += '<th scope="col" class="tabletop">잔액</th>';
+	str += '<th scope="col" class="tabletop">메모</th>';
+	str += '</tr>';
+	str += '</thead>';
+	str += '<tbody>';
+	
+	for (let i = 0; i < data.length; i++) {
+		if(data[i].bhstatename=='미연결'){
+	      	str +='<tr>';
+	 	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
+	 	  	str +='<td>';
+	 	  	str +=formatDate(data[i].bhdate);
+	 	  	str +='</td>';
+	 	  	str +='<td>';
+	 	  	str +=data[i].source;
+	 	  	str +='</td>';
+	 	  	if(data[i].sortno==1){
+	 	  		// 입금
+	 	  		str +='<td>';
+		 	  	str +=formatNumberWithCommas(data[i].amount);
+		 	  	str +='</td>';
+		 	  	str +='<td></td>';
+	 	  	}else{
+	 	  		// 출금
+	 	  		str +='<td></td>';
+	 	  		str +='<td>';
+		 	  	str +=formatNumberWithCommas(data[i].amount);
+		 	  	str +='</td>';
+	 	  	}
+	 	  	str +='<td>';
+	 	  	str +=formatNumberWithCommas(data[i].sum);
+	 	  	str +='</td>';
+		  	if(data[i].memo==null){
+		  		 str +='<td><i class="ri-article-fill"></i></td>';
+		  	}else{
+		  		 str +='<td><a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="';
+		  		 str +=data[i].memo;
+		  		 str +='"><i class="ri-article-fill"></i></a></td>';
+		  	}
+			str +='</tr>';
+	 	 }
+	}
+	
+	str += '</tbody>';
+	str += '</table>';
+	str += '<button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small">전표입력</button>';
+	str += '<button type="button" id="memoplzbtn" class="btn btn-primary btn-small">내용확인요청</button>';
+	str += '<button type="button" class="btn btn-outline-secondary">입력제외</button>';
+	str += '</div>';
+	
+	// 연결
+	str += '<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="connbanklist-tab">';
+	str += '<div class="banklogo">';
+	str += '<img src="/resources/assets/img/shinhan.png" alt="ShinhanBank" width="20" height="20">';
+	str += '<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">';
+	str += '신한은행';
+	str += '</button>';
+	str += '<ul class="dropdown-menu">';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>';
+	str += '<li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>';
+	str += '</ul>';
+	str += '</div>';
+	str += '<table id="connbanktable" class="banktable table table-hover table-bordered">';
+	str += '<thead>';
+	str += '<tr>';
+	str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	str += '<th scope="col" class="tabletop">날짜</th>';
+	str += '<th scope="col" class="tabletop">적요</th>';
+	str += '<th scope="col" class="tabletop">입금액</th>';
+	str += '<th scope="col" class="tabletop">출금액</th>';
+	str += '<th scope="col" class="tabletop">잔액</th>';
+	str += '<th scope="col" class="tabletop">메모</th>';
+	str += '</tr>';
+	str += '</thead>';
+	str += '<tbody>';
+	
+	for (let i = 0; i < data.length; i++) {
+		if(data[i].bhstatename=='확정가능' || data[i].bhstatename=='확정'){
+	      	str +='<tr>';
+	 	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
+	 	  	str +='<td>';
+	 	  	str +=formatDate(data[i].bhdate);
+	 	  	str +='</td>';
+	 	  	str +='<td>';
+	 	  	str +=data[i].source;
+	 	  	str +='</td>';
+	 	  	if(data[i].sortno==1){
+	 	  		// 입금
+	 	  		str +='<td>';
+		 	  	str +=formatNumberWithCommas(data[i].amount);
+		 	  	str +='</td>';
+		 	  	str +='<td></td>';
+	 	  	}else{
+	 	  		// 출금
+	 	  		str +='<td></td>';
+	 	  		str +='<td>';
+		 	  	str +=formatNumberWithCommas(data[i].amount);
+		 	  	str +='</td>';
+	 	  	}
+	 	  	str +='<td>';
+	 	  	str +=formatNumberWithCommas(data[i].sum);
+	 	  	str +='</td>';
+		  	if(data[i].memo==null){
+		  		 str +='<td><i class="ri-article-fill"></i></td>';
+		  	}else{
+		  		 str +='<td><a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="';
+		  		 str +=data[i].memo;
+		  		 str +='"><i class="ri-article-fill"></i></a></td>';
+		  	}
+			str +='</tr>';
+	  }
+	}
+	
+	str += '</tbody>';
+	str += '</table>';
+	str += '<button type="button" id="watchslipbtn" class="btn btn-primary btn-small">분개내역조회</button>';
+	str += '</div>'; // 연결탭 끝
+	str += '</div>';
+	str += '</div>'; // left 끝
+	
+	
+	searchstart.html(str);
+	
+	// tooltip 초기화
+	$('[data-bs-toggle="tooltip"]').tooltip();
+	
+	}
+
+
+   
+
+
+	// 전표내역 전체 조회 테이블 생성 함수
+	function createBankSlipAllTable(data) {
+	  let searchstart = $('#searchstartright');
+
+	  searchstart.empty();
+	  
+	  let str = '';
+	  str += '<div class="right">';
+	  str += '<div class="button-container">';
+	  str += '<button type="button" class="btn btn-outline-secondary">전체   10</button>';
+	  str += '<button type="button" class="btn btn-outline-success">가능   0</button>';
+	  str += '<button type="button" class="btn btn-outline-confirm">확정   10</button>';
+	  str += '<button type="button" class="btn btn-outline-warning">제외   0</button>';
+	  str += '<button type="button" class="btn btn-outline-dark">삭제   0</button>';
+	  str += '</div>';
+	  str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	  str += '<thead><tr>';
+	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
+	  str += '<th scope="col" class="tabletop">거래처명</th>';
+	  str += '<th scope="col" class="tabletop">전표적요</th>';
+	  str += '<th scope="col" class="tabletop">상대계정</th>';
+	  str += '<th scope="col" class="tabletop">상태</th>';
+	  str += '<th scope="col" class="tabletop">예상잔액</th>';
+	  str += '</tr></thead>';
+	  str += '<tbody>';
+	  
+	  for (let i = 0; i < data.length; i++) {
+	  	str += '<tr>';
+	  	str += '<input type="hidden" name="bhno" value="';
+	  	str += data[i].bhno;
+	  	str += '"/>';
+	  	str += '<td><input class="form-check-input" type="checkbox"></td>';
+		str += '<td>';
+	 	str += data[i].source;
+	 	str += '</td>';
+	 	if(data[i].summary==null){
+	 		str += '<td>';
+	 		str += '</td>';
+	 	}else{
+	 		str += '<td>';
+	 		str += data[i].summary;
+	 		str += '</td>';
+	 	}
+
+	 	str += '<td>';
+	 	str += data[i].accountname;
+	 	str += '</td>';
+	 	str += '<td>';
+	 	str += data[i].bhstatename;
+	 	str += '</td>';
+	 	str += '<td>';
+	 	str += formatNumberWithCommas(data[i].sum);
+	 	str += '</td></tr>';
 	  }
 	  
-	  leftDiv.append('</tbody>');
-	  leftDiv.append('</table>');
-	  leftDiv.append('</div>');
-	  leftDiv.append('<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="nonbanklist-tab">');
-	  leftDiv.append('</div>');
-	  leftDiv.append('<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="connbanklist-tab">');
-	  leftDiv.append('</div>');
-	  leftDiv.append('</div>');
-	  leftDiv.append('</div>');  // left 끝
-	  
-	  searchstart.append(leftDiv);
+  	str +='<tr><td class="total"></td>';
+  	str +='<td class="total"><strong>합계</strong></td>';
+  	str +='<td class="total" colspan="4">잔액: 35,500,000 (차액: 35,500,000)</td>';
+  	str +='</tr></tbody></table>';
+  	str +='<div class="lightbtns">';
+  	str +='<button type="button" class="btn btn-light">확정</button>';
+  	str +='<button type="button" class="btn btn-light">분개내역조회</button>';
+  	str +='<button type="button" class="btn btn-light">삭제</button>';
+  	str +='</div>';
+    str +='</div>';
+ 
+	searchstart.html(str);	              
 
-	}//end of createBankHistoryAllTable
-
-
-
+	}//end of createBankSlipAllTable
 
 
 
+
+	function formatDate(dateString) {
+	  const date = new Date(dateString);
+	  //const year = date.getFullYear();
+	  const month = String(date.getMonth() + 1).padStart(2, '0');
+	  const day = String(date.getDate()).padStart(2, '0');
+	  return `${month}-${day}`;
+	}
+	
+	
+	
+	function formatNumberWithCommas(number) {
+  		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
 

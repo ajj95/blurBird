@@ -7,7 +7,7 @@
 	<!-- 통장내역 전체 -->
 	<select id="getBankHistoryList" resultType="org.blurbird.domain.bank.BankHistoryVO"
 			parameterType="org.blurbird.domain.bank.BankSearchDTO">
-		SELECT BHDATE, SOURCE, AMOUNT, SORTNO
+		SELECT BHNO, BHDATE, SOURCE, AMOUNT, SORTNO
 		, SUM(AMOUNT) OVER(ORDER BY BHDATE, BHNO) AS SUM
 		, ACCOUNTNUMBER, S.BHSTATENAME "BHSTATENAME"
 		, B.BANKNAME "BANKNAME", MEMO
@@ -16,12 +16,13 @@
 		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
                AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+		ORDER BY BHNO DESC
 	</select>
 	
 	<!-- 통장내역 미연결 -->
 	<select id="getBankHistoryListNone" resultType="org.blurbird.domain.bank.BankHistoryVO"
 			parameterType="org.blurbird.domain.bank.BankSearchDTO">
-		SELECT BHDATE, SOURCE, AMOUNT, SORTNO
+		SELECT BHNO, BHDATE, SOURCE, AMOUNT, SORTNO
 		, SUM(AMOUNT) OVER(ORDER BY BHDATE, BHNO) AS SUM
 		, ACCOUNTNUMBER, S.BHSTATENAME "BHSTATENAME"
 		, B.BANKNAME "BANKNAME", MEMO
@@ -31,12 +32,13 @@
 		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
                AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+		ORDER BY BHNO DESC
 	</select>
 	
 	<!-- 통장내역 연결 -->
 	<select id="getBankHistoryListConn" resultType="org.blurbird.domain.bank.BankHistoryVO"
 			parameterType="org.blurbird.domain.bank.BankSearchDTO">
-		SELECT BHDATE, SOURCE, AMOUNT, SORTNO
+		SELECT BHNO, BHDATE, SOURCE, AMOUNT, SORTNO
 		, SUM(AMOUNT) OVER(ORDER BY BHDATE, BHNO) AS SUM
 		, ACCOUNTNUMBER, S.BHSTATENAME "BHSTATENAME"
 		, B.BANKNAME "BANKNAME", MEMO
@@ -46,6 +48,7 @@
 		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
                AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+		ORDER BY BHNO DESC
 	</select>
 	
 	

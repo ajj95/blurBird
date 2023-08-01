@@ -14,4 +14,5 @@ public class BankSlipVO {
 	private String accountname;  // 상대계정
 	private String bhstatename;  // 전표상태
 	private int sum;				   // 예상잔액
+	private int amount;				
 }
