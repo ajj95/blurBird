@@ -393,9 +393,29 @@ input.modaltext {
 			$("#memoplzmodal").modal('show');
 		});
 	
+		// 분개내역조회 버튼 클릭 시 조회
+		$("#right").on("click", "#detailslipshow", function(){
+			// bhno 가지고 bankslip 테이블에서 2행 조회
+			
+			// 체크된 체크박스 값을 저장할 배열
+			let selectedBhnoList = [];
+			
+			// 각 체크박스를 순회하면서 체크된 체크박스의 bhno 값을 배열에 저장
+		    $('.form-check-input:checked').each(function() {
+		      let bhnoValue = $(this).closest('tr').find('[name="bhno"]').val();
+		      if (bhnoValue) {
+		        selectedBhnoList.push(bhnoValue);
+		      }
+		    });
+			
+		    // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 페이지로 이동
+		    if (selectedBhnoList.length > 0) {
+		    	getDetailSlip(selectedBhnoList);
+		    }
+			
+		});
 		
-		
-
+	
 		
 	});
 </script>
@@ -534,13 +554,13 @@ input.modaltext {
                  	</form>
                  
                  <!-- 동적 생성부분 -->
-                 <div class="left">
+                 <div class="left" id="left">
                  </div>
                  
-                 <div class="right">
+                 <div class="right" id="right">
                  </div>
 
-                 <div class="bottom">
+                 <div class="bottom" id="bottom">
                  </div>
                  <!-- 동적 생성 끝 -->   
                  

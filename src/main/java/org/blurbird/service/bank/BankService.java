@@ -21,11 +21,18 @@ public interface BankService {
 	// 전표 특정 유형 리스트
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search);
 	
+	// 전표 유형별 개수
+	public int allSlipCount();
+	public int canSlipCount();
+	public int confirmSlipCount();
+	public int exceptSlipCount();
+	public int removeSlipCount();
+	
 	// 전표 예상 잔액, 차액 합계
 	public TotalDTO getTotalSum();
 	
 	// 분개 내역 조회
-	public List<DetailSlipVO> getDetailSlip(int bhno);
+	public List<DetailSlipVO> getDetailSlip(String bhno);
 	
 	
 }

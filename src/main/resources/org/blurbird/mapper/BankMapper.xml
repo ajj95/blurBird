@@ -92,8 +92,28 @@
 	    ORDER BY BANKSLIPNO DESC
 	</select>
 	
+	<!-- 전표 상태별 개수 조회 -->
+	<select id="allSlipCount" resultType="int">
+		SELECT COUNT(*) FROM BANKHISTORY WHERE BHSTATENO != '1003'
+	</select>
 	
+	<select id="canSlipCount" resultType="int">
+		SELECT COUNT(*) FROM BANKHISTORY WHERE BHSTATENO='1001'
+	</select>
 	
+	<select id="confirmSlipCount" resultType="int">
+		SELECT COUNT(*) FROM BANKHISTORY WHERE BHSTATENO='1002'
+	</select>
+	
+	<select id="exceptSlipCount" resultType="int">
+		SELECT COUNT(*) FROM BANKHISTORY WHERE BHSTATENO='1004'
+	</select>
+	
+	<select id="removeSlipCount" resultType="int">
+		SELECT COUNT(*) FROM BANKHISTORY WHERE BHSTATENO='1005'
+	</select>
+	
+	<!-- 예상잔액, 차액 -->
 	<select id="getTotalSum" resultType="org.blurbird.domain.bank.TotalDTO">
 		SELECT T.SUM "TOTALSUM", D.SUM "DIFFSUM"
 		FROM VIEW_TOTALSUM T, VIEW_DIFFSUM D
@@ -105,7 +125,7 @@
 	</delete>
 
 	<!-- 분개내역 조회 -->
-	<select id="getDetailSlip" resultType="int" parameterType="org.blurbird.domain.bank.DetailSlipVO">
+	<select id="getDetailSlip" resultType="String" parameterType="org.blurbird.domain.bank.DetailSlipVO">
 		SELECT BS.BANKSLIPNO, BS.BHNO, S.SORTNO "SORTNO", S.SORTNAME "SORTNAME"
 		, A.ACCOUNTNO "ACCOUNTNO", A.ACCOUNTNAME" ACCOUNTNAME"
 		, BH.AMOUNT "AMOUNT", BH.SOURCE "SOURCE", BS.SUMMARY "SUMMARY"

@@ -60,8 +60,34 @@ public class BankServiceImpl implements BankService {
 
 	// 분개 내역 조회
 	@Override
-	public List<DetailSlipVO> getDetailSlip(int bhno) {
+	public List<DetailSlipVO> getDetailSlip(String bhno) {
 		return mapper.getDetailSlip(bhno);
+	}
+
+	// 전표 유형별 수
+	@Override
+	public int allSlipCount() {
+		return mapper.allSlipCount();
+	}
+
+	@Override
+	public int canSlipCount() {
+		return mapper.canSlipCount();
+	}
+
+	@Override
+	public int confirmSlipCount() {
+		return mapper.confirmSlipCount();
+	}
+
+	@Override
+	public int exceptSlipCount() {
+		return mapper.exceptSlipCount();
+	}
+
+	@Override
+	public int removeSlipCount() {
+		return mapper.removeSlipCount();
 	}
 
 

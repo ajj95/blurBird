@@ -22,11 +22,19 @@ public interface BankMapper {
 	// 전표내역 가능or확정or제외or삭제 조회
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search);
 	
+	// 전표내역 상태 개수(가능, 확정, 제외, 삭제)
+	public int allSlipCount();
+	public int canSlipCount();
+	public int confirmSlipCount();
+	public int exceptSlipCount();
+	public int removeSlipCount();
+	
+	
 	// 전표내역 잔액, 차액 합계
 	public TotalDTO getTotalSum();
 	
 	// 분개내역 조회
-	public List<DetailSlipVO> getDetailSlip(int bhno);
+	public List<DetailSlipVO> getDetailSlip(String bhno);
 	// 분개내역 입력
 	public void registerSlip(DetailSlipVO slip);
 	// 분개내역 수정
@@ -35,7 +43,6 @@ public interface BankMapper {
 	// 전표 삭제 (2행 모두)
 	public int removeSlip(String bhno);
 	
-	// 전표내역 상태 개수(가능, 확정, 제외, 삭제)
 	
 	// 계정과목 조회 (검색)
 	//public List<>

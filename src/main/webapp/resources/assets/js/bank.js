@@ -35,6 +35,7 @@ $(function(){
 
 
 	 	// 일자, 수임사 선택 후 조회 시 호출하는 ajax
+	 	// search: 호출하는 자바스크립트로부터 받아옴
         function historySlipRequest(search) {
             $.ajax({
                 type: "POST",
@@ -47,9 +48,14 @@ $(function(){
                     let historyList = response.historyList;
                     let slipList = response.slipList;
                     let total = response.total;
+                    let all = response.all;
+                    let can = response.can;
+                    let confirmed = response.confirmed;
+                    let except = response.except;
+                    let remove = response.remove;
                     
                     createBankHistoryAllTable(historyList);
-                    createBankSlipAllTable(slipList, total);
+                    createBankSlipAllTable(slipList, total, all, can, confirmed, except, remove);
                     createDetailSlipTable();
                 },
                 error: function(xhr, status, error) {
@@ -57,8 +63,31 @@ $(function(){
                 }
             });
         }// end historySlipRequest
-
-
+        
+       
+        // 분개내역 조회시 호출하는 ajax 함수
+        // bhnoList: 호출하는 자바스크립트로부터 받아옴
+		function getDetailSlip(bhnoList) {
+		  // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 URL 생성
+		  if (bhnoList.length > 0) {
+		    // url 생성해서 넘겨주기
+		    let queryString = bhnoList.map(bhno => 'bhno=' + bhno).join('&');
+		    
+		    $.ajax({
+		      type: "GET",
+		      contentType: "application/json;charset=UTF-8",
+		      url: "/bank/detailslip?" + queryString,
+		      dataType: "json",
+		      success: function(response) {
+		        // 성공적으로 데이터를 받아온 후 createDetailSlipTable 함수 호출
+		        createDetailSlipTable(response);
+		      },
+		      error: function(xhr, status, error) {
+		        console.error(error);
+		      }
+		    });//end ajax
+		  }//end if
+		}
 
 	// historySlipRequest ajax가 호출하는 처리 함수
 	function createBankHistoryAllTable(data){
@@ -307,7 +336,7 @@ $(function(){
 
 
 	// 전표내역 전체 조회 테이블 생성 함수
-	function createBankSlipAllTable(slipList, total) {
+	function createBankSlipAllTable(slipList, total, all, can, confirmed, except, remove) {
 	  let searchstart = $('.right');
 
 	  searchstart.empty();
@@ -316,23 +345,33 @@ $(function(){
 	str += '<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-home" aria-selected="true">';
-	str += '<span class="button-text">전&nbsp;&nbsp;&nbsp;&nbsp;체</span><div class="howmany">10</div></button>';
+	str += '<span class="button-text">전&nbsp;&nbsp;&nbsp;&nbsp;체</span><div class="howmany">';
+	str += all;
+	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-can-tab" data-bs-toggle="pill" data-bs-target="#pills-can" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">';
-	str += '<span class="button-text">확정가능</span><div class="howmany">10</div></button>';
+	str += '<span class="button-text">확정가능</span><div class="howmany">';
+	str += can;
+	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-certain-tab" data-bs-toggle="pill" data-bs-target="#pills-certain" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">확&nbsp;&nbsp;&nbsp;&nbsp;정</span><div class="howmany">10</div></button>';
+	str += '<span class="button-text">확&nbsp;&nbsp;&nbsp;&nbsp;정</span><div class="howmany">';
+	str += confirmed;
+	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-except-tab" data-bs-toggle="pill" data-bs-target="#pills-except" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">제&nbsp;&nbsp;&nbsp;&nbsp;외</span><div class="howmany">10</div></button>';
+	str += '<span class="button-text">제&nbsp;&nbsp;&nbsp;&nbsp;외</span><div class="howmany">';
+	str += except;
+	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-remove-tab" data-bs-toggle="pill" data-bs-target="#pills-remove" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">삭&nbsp;&nbsp;&nbsp;&nbsp;제</span><div class="howmany">10</div></button>';
+	str += '<span class="button-text">삭&nbsp;&nbsp;&nbsp;&nbsp;제</span><div class="howmany">';
+	str += remove;
+	str += '</div></button>';
 	str += '</li>';
 	str += '</ul>';
 	str += '<div class="tab-content pt-2" id="myTabContent">';
@@ -658,12 +697,13 @@ $(function(){
 
 	
 	// 처음 로딩 시 분개내역 조회 테이블 생성 함수
-	function createDetailSlipTable() {
+	function createDetailSlipTable(detailSlip) {
 	  let searchstart = $('.bottom');
 
 	  searchstart.empty();
 	  
 	  let str = '';
+	  	str += '<form action ="" method="post">';
 		str += '<table id="" class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -676,41 +716,123 @@ $(function(){
 		str += '</tr>';
 		str += '</thead>';
 		str += '<tbody>';
-		str += '<tr>';
-		str += '<td>';
-		str += '<select class="form-select" aria-label="Default select example">';
-		str += '<option value="1">입금</option>';
-		str += '<option value="2">출금</option>';
-		str += '<option value="3" selected>차변</option>';
-		str += '<option value="4">대변</option>';
-		str += '</select>';
-		str += '</td>';
-		str += '<td><input type="text" id="accountNo" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '</tr>';
-		str += '<tr>';
-		str += '<td>';
-		str += '<select class="form-select" aria-label="Default select example">';
-		str += '<option selected>차변</option>';
-		str += '<option value="1">입금</option>';
-		str += '<option value="2">출금</option>';
-		str += '<option value="3">차변</option>';
-		str += '<option value="4" selected>대변</option>';
-		str += '</select>';
-		str += '</td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '<td><input type="text" name="text" class="intable"></td>';
-		str += '</tr>';
-		str += '</tbody>';
-		str += '</table>';
+		
+		
+		 if(detailSlip && detailSlip.length>0){
+	  		for(let i=0; i<detailSlip.length; i++){
+	  			str += '<tr>';
+				str += '<td>';
+				str += '<select class="form-select" name="sortno[]" aria-label="Default select example">';
+				
+				// 가져온 분개전표의 sortno에 따라 달라지는 select문
+				if (detailSlip[i].sortno === 1) {
+				  str += '<option value="1" selected>입금</option>';
+				} else {
+				  str += '<option value="1">입금</option>';
+				}
+				
+				if (detailSlip[i].sortno === 2) {
+				  str += '<option value="2" selected>출금</option>';
+				} else {
+				  str += '<option value="2">출금</option>';
+				}
+				
+				if (detailSlip[i].sortno === 3) {
+				  str += '<option value="3" selected>차변</option>';
+				} else {
+				  str += '<option value="3">차변</option>';
+				}
+				
+				if (detailSlip[i].sortno === 4) {
+				  str += '<option value="4" selected>대변</option>';
+				} else {
+				  str += '<option value="4">대변</option>';
+				}
+
+				str += '</select>';
+				str += '</td>';
+				str += '<td><input type="text" id="accountNo[]" name="text" class="intable" value="';
+				str += detailSlip[i].accountno;
+				str += '"></td>';
+				str += '<td><input type="text" name="accountName[]" class="intable" value="';
+				str += detailSlip[i].accoutName;
+				str += '"></td>';
+				
+				// 차변이면
+				if(detailSlip[i].sortno === 3){
+					// 첫번째 amount 칸에 값 입력
+					str += '<td><input type="text" name="amount[]" class="intable" value="';
+					str += detailSlip[i].accountno;
+					str += '"></td>';
+					str += '<td><input type="text" name="amount[]" class="intable" readonly></td>';
+				}else{
+					// 대변이면 두번째 칸에 값 입력
+					str += '<td><input type="text" name="amount[]" class="intable" readonly></td>';
+					str += '<td><input type="text" name="amount[]" class="intable" value="';
+					str += detailSlip[i].accountno;
+					str += '"></td>';
+					
+				}
+				
+				str += '<td><input type="text" name="source[]" class="intable" value="';
+				str += detailSlip[i].source;
+				str += '"></td>';
+				str += '<td><input type="text" name="summary[]" class="intable" value="';
+				str += detailSlip[i].summary;
+				str += '"></td>';
+				str += '</tr>';
+				str += '<tr>';
+				str += '<td>';
+				str += '</tr>';
+				str += '</tbody>';
+				str += '</table>';
+	  			str += '<button type="submit" class="btn btn-outline-confirm">저장</button>';
+	  			str += '<button type="reset" class="btn btn-outline-secondary">취소</button>';
+
+	  		}//end for
+	  	 }else{
+	  	 
+	  	 	// 처음 로딩됐을때, 아무것도 없을 때
+	  	 	str += '<tr>';
+			str += '<td>';
+			str += '<select class="form-select" name="sortno[]"aria-label="Default select example">';
+			str += '<option value="1">입금</option>';
+			str += '<option value="2">출금</option>';
+			str += '<option value="3" selected>차변</option>';
+			str += '<option value="4">대변</option>';
+			str += '</select>';
+			str += '</td>';
+			str += '<td><input type="text" id="accountNo[]" name="text" class="intable"></td>';
+			str += '<td><input type="text" name="accountName[]" class="intable"></td>';
+			str += '<td><input type="text" name="amount[]" class="intable"></td>';
+			str += '<td><input type="text" name="amount[]" class="intable"></td>';
+			str += '<td><input type="text" name="source[]" class="intable"></td>';
+			str += '<td><input type="text" name="summary[]" class="intable"></td>';
+			str += '</tr>';
+			str += '<tr>';
+			str += '<td>';
+			str += '<select class="form-select" name="sortno[]" aria-label="Default select example">';
+			str += '<option selected>차변</option>';
+			str += '<option value="1">입금</option>';
+			str += '<option value="2">출금</option>';
+			str += '<option value="3">차변</option>';
+			str += '<option value="4" selected>대변</option>';
+			str += '</select>';
+			str += '</td>';
+			str += '<td><input type="text" id="accountNo[]" name="text" class="intable"></td>';
+			str += '<td><input type="text" name="accountName[]" class="intable"></td>';
+			str += '<td><input type="text" name="amount[]" class="intable"></td>';
+			str += '<td><input type="text" name="amount[]" class="intable"></td>';
+			str += '<td><input type="text" name="source[]" class="intable"></td>';
+			str += '<td><input type="text" name="summary[]" class="intable"></td>';
+			str += '</tr>';
+			str += '</tbody>';
+			str += '</table>';
+	  	 }
+
+
+		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
+		str += '</form>';
 	  
 	 
 	  searchstart.html(str);
