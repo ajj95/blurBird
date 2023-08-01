@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DetailSlipVO {
 
-	private String sortno;			// ±¸ºÐÄÚµå (1~4)
-	private String sortname;		// ±¸ºÐ¸í (ÀÔ±Ý~´ëº¯)
-	private String accountno;		// °èÁ¤ÄÚµå
-	private String accountname;	// °èÁ¤¸í
-	private int amount;				// Â÷º¯ or ´ëº¯ ±Ý¾×
-	private String source;			// °Å·¡Ã³¸í
-	private String summary;		// ÀüÇ¥Àû¿ä
+	private String sortno;			// ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ (1~4)
+	private String sortname;		// ï¿½ï¿½ï¿½Ð¸ï¿½ (ï¿½Ô±ï¿½~ï¿½ëº¯)
+	private String accountno;		// ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
+	private String accountname;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private int amount;				// ï¿½ï¿½ï¿½ï¿½ or ï¿½ëº¯ ï¿½Ý¾ï¿½
+	private String source;			// ï¿½Å·ï¿½Ã³ï¿½ï¿½
+	private String summary;		// ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½
 }

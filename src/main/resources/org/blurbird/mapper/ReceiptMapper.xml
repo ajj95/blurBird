@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.blurbird.mapper.ReceiptMapper">
+	
+	<select id="getAccountName" resultType="org.blurbird.domain.receipt.AccountVO">
+		select * from account where accountno=#{accountNo}
+	</select>
+	
+	<select id="getList" resultType="org.blurbird.domain.receipt.AccountVO">
+	<![CDATA[
+	select * 
+	from account
+	where accountno > 0
+	order by accountno
+	]]>
+	</select>
+	
+	
+
+</mapper>
