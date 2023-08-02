@@ -21,6 +21,8 @@ public class IncomeSVO {
 	private Long OperExpensefromBankSlip;
 	private Long OperExpensefromCashSlip;
 	private Long totaloe;
+	
+	private Long businessIncome;
 
 	private Long NonOperIncomefromAutoSlip;
 	private Long NonOperIncomefromBankSlip;
@@ -32,5 +34,5 @@ public class IncomeSVO {
 	private Long NonOperExpensefromCashSlip;
 	private Long totalnoe;
 	
-	
+	private Long tax;
 }

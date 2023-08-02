@@ -26,6 +26,12 @@ public class InfoServiceTests {
 //		log.info(service.getListBusiness());
 //	}
 	
+	@Test
+	public void testGetISElements() {
+		long sales = service.getISElements().getTotalsales();
+		log.info("sales: " + sales);
+	}
+	
 	
 
 }
