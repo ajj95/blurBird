@@ -4,18 +4,22 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.blurbird.mapper.InfoMapper">
 
+	<!-- 수임사 목록 -->
 	<select id="getListBusiness"
 		resultType="org.blurbird.domain.bank.BusinessVO">
 		select * from business
 	</select>
 
+	<!-- 손익계산서 항목 -->
+	<!-- 매출(총 수입금액) -->
 	<select id="getSalesfromAuto"
 		resultType="org.blurbird.domain.info.IncomeSVO">
 		select
 		sum(case when accountNo in (401, 402) and sortno=4
 		then amount else 0 end) as
 		SalesfromAutoSlip
-		from autoslip where regdate between
+		from autoslip where regdate
+		between
 		to_date('2023-01-01') and
 		to_date('2023-12-31')
 	</select>
@@ -34,8 +38,148 @@
 		to_date('2023-12-31'))
 	</select>
 
+	<!-- 매출원가(필요경비) -->
+	<select id="getCOGSfromAuto"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (451, 455) and sortno=3
+		then amount else 0 end) as
+		COGSfromAutoSlip
+		from autoslip where regdate
+		between to_date('2023-01-01') and
+		to_date('2023-12-31')
+	</select>
+
+	<select id="getCOGSfromBank"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (451, 455) and sortno=3
+		then amount else 0 end) as
+		COGSfromBankSlip
+		from (select b.accountno,
+		b.amount, b.sortno, bh.bhdate from bankhistory
+		bh join bankslip b on
+		bh.bhno=b.bhno
+		where bh.bhdate between to_date('2023-01-01') and
+		to_date('2023-12-31'))
+	</select>
+
+	<select id="getCOGSfromCash"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (451, 455) and sortno=3
+		then amount else 0 end) as
+		COGSfromCashSlip
+		from (select c.accountno,
+		c.amount, c.sortno, cf.regdate from confirmed cf
+		join cashslip c on
+		cf.confirmedno=c.confirmedno
+		where cf.regdate between
+		to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+	<!-- 매출 총 이익(= 매출-매출원가) -->
+
+	<!-- 판관비 -->
+	<select id="getOperExpensefromAuto"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (501, 502, 503, 505, 510,
+		511) and sortno=3 then
+		amount else 0 end) as OperExpensefromAutoSlip
+		from autoslip where regdate between to_date('2023-01-01') and
+		to_date('2023-12-31')
+	</select>
+
+	<select id="getOperExpensefromBank"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (501, 502, 503, 505, 510,
+		511) and sortno=3 then
+		amount else 0 end) as OperExpensefromBankSlip
+		from (select b.accountno, b.amount, b.sortno, bh.bhdate from
+		bankhistory
+		bh join bankslip b on bh.bhno=b.bhno
+		where bh.bhdate between
+		to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+	<select id="getOperExpensefromCash"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (501, 502, 503, 505, 510,
+		511) and sortno=3 then
+		amount else 0 end) as OperExpensefromCashSlip
+		from (select c.accountno, c.amount, c.sortno, cf.regdate from
+		confirmed cf
+		join cashslip c on cf.confirmedno=c.confirmedno
+		where
+		cf.regdate between to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+	<!-- 영업이익(= 매출 총 이익 - 판관비 = 사업소득금액) -->
 
 
+	<!-- 이하 법인세 관련 값 (확장 예정) -->
+	<!-- 영업외수익 -->
+	<select id="getNonOperIncomefromAuto"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (901, 902, 903, 906, 912, 930) and sortno=4 then
+		amount else 0 end) as NonOperIncomefromAutoSlip
+		from autoslip where regdate between to_date('2023-01-01') and
+		to_date('2023-12-31')
+	</select>
+
+	<select id="getNonOperIncomefromBank"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (901, 902, 903, 906, 912, 930) and sortno=4 then
+		amount else 0 end) as NonOperIncomefromBankSlip
+		from(select b.accountno, b.amount, b.sortno, bh.bhdate from bankhistory bh join
+		bankslip b on bh.bhno=b.bhno
+		where bh.bhdate between to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+	<select id="getNonOperIncomefromCash"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum(case when accountNo in (901, 902, 903, 906, 912, 930) and sortno=4 then
+		amount else 0 end) as NonOperIncomefromCashSlip
+		from(select c.accountno, c.amount, c.sortno, cf.regdate from cashslip c join
+		confirmed cf on c.confirmedno=cf.confirmedno
+		where cf.regdate between to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+	<!-- 영업외비용 -->
+	<select id="getNonOperExpensefromAuto"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum (case when accountNo in (931, 933, 960) and sortno=3 then amount else
+		0 end) as NonOperExpensefromAutoSlip
+		from autoslip where regdate between to_date('2023-01-01') and
+		to_date('2023-12-31')
+	</select>
+
+	<select id="getNonOperExpensefromBank"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum (case when accountNo in (931, 933, 960) and sortno=3 then amount else
+		0 end) as NonOperExpensefromBankSlip
+		from(select b.accountno, b.amount, b.sortno, bh.bhdate from bankhistory bh join
+		bankslip b on bh.bhno=b.bhno
+		where bh.bhdate between to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+	<select id="getNonOperExpensefromCash"
+		resultType="org.blurbird.domain.info.IncomeSVO">
+		select
+		sum (case when accountNo in (931, 933, 960) and sortno=3 then amount else
+		0 end) as NonOperExpensefromCashSlip
+		from(select c.accountno, c.amount, C.sortno, cf.regdate from cashslip c join
+		confirmed cf on c.confirmedno=cf.confirmedno
+		where cf.regdate between to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
 
 
 

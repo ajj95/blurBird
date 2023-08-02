@@ -13,4 +13,11 @@ public interface InfoMapper {
 	public IncomeSVO getSalesfromAuto();
 	public IncomeSVO getSalesfromBank();
 	
+	public IncomeSVO getCOGSfromAuto();
+	public IncomeSVO getCOGSfromBank();
+	public IncomeSVO getCOGSfromCash();
+	
+	public IncomeSVO getOperExpensefromAuto();
+	public IncomeSVO getOperExpensefromBank();
+	public IncomeSVO getOperExpensefromCash();	
 }
