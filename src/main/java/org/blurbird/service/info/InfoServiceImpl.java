@@ -9,15 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Service
 @Log4j
 @AllArgsConstructor
+@NoArgsConstructor
 public class InfoServiceImpl implements InfoService {
 	
 	@Autowired
 	private InfoMapper mapper;
+	
+//	@Autowired
+//	private IncomeSVO vo;
 
 	@Override
 	public List<BusinessVO> getListBusiness() {
@@ -25,17 +30,22 @@ public class InfoServiceImpl implements InfoService {
 		return mapper.getListBusiness();
 	}
 
-	@Override
-	public IncomeSVO getTotalSales() {
-			log.info("ÃÑ ¸ÅÃâ Âï¾î³»±â");
-			IncomeSVO vo = new IncomeSVO();
-			vo.setSalesfromautoslip(mapper.getSalesfromAuto().getSalesfromautoslip());
-			vo.setSalesfrombankslip(mapper.getSalesfromBank().getSalesfrombankslip());
-			vo.setTotalsales(mapper.getSalesfromAuto().getSalesfromautoslip() + mapper.getSalesfromBank().getSalesfrombankslip());
-			
-		return vo;
-	}
-	
+//	@Override
+//	public IncomeSVO getISElements() {
+//		
+//		long sales = mapper.getSalesfromAuto().getSalesfromautoslip() +
+//		mapper.getSalesfromBank().getSalesfrombankslip();
+//		
+//		long cogs = mapper.getCOGSfromAuto().getCogsfromautoslip() +
+//				mapper.getCOGSfromBank().getCogsfrombankslip() +
+//				mapper.getCOGSfromCash().getCogsfromcashslip();
+//		
+//		vo.setTotalsales(sales);
+//		vo.setTotalcogs(cogs);
+//		
+//		return vo;
+//	}
+
 	
 
 }

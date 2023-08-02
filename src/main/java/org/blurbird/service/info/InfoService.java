@@ -9,5 +9,5 @@ public interface InfoService {
 
 	public List<BusinessVO> getListBusiness();
 	
-	public IncomeSVO getTotalSales();
+//	public IncomeSVO getISElements();
 }

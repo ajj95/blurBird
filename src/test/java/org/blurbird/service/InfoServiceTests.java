@@ -26,9 +26,6 @@ public class InfoServiceTests {
 //		log.info(service.getListBusiness());
 //	}
 	
-	@Test
-	public void testGetTotalSales() {
-		log.info(service.getTotalSales());
-}
+	
 
 }

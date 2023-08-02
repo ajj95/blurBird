@@ -28,7 +28,6 @@ public class InfoController {
 	public void getInfoTA(Model model) {
 		log.info(service.getListBusiness());
 		model.addAttribute("list", service.getListBusiness());
-		model.addAttribute("sales", service.getTotalSales());
 	}
 	
 	@GetMapping("/infoCO")
