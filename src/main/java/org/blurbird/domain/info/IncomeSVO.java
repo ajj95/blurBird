@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 
 @Data
+@Component
 public class IncomeSVO {
 	
 	private Long salesfromautoslip;
@@ -24,15 +25,17 @@ public class IncomeSVO {
 	
 	private Long businessIncome;
 
-	private Long NonOperIncomefromAutoSlip;
-	private Long NonOperIncomefromBankSlip;
-	private Long NonOperIncomefromCashSlip;
-	private Long totalnoi;
-	
-	private Long NonOperExpensefromAutoSlip;
-	private Long NonOperExpensefromBankSlip;
-	private Long NonOperExpensefromCashSlip;
-	private Long totalnoe;
+//	private Long NonOperIncomefromAutoSlip;
+//	private Long NonOperIncomefromBankSlip;
+//	private Long NonOperIncomefromCashSlip;
+//	private Long totalnoi;
+//	
+//	private Long NonOperExpensefromAutoSlip;
+//	private Long NonOperExpensefromBankSlip;
+//	private Long NonOperExpensefromCashSlip;
+//	private Long totalnoe;
 	
 	private Long tax;
+	
+	
 }

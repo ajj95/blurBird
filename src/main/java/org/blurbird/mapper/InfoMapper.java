@@ -5,19 +5,20 @@ import java.util.List;
 import org.blurbird.domain.bank.BusinessVO;
 import org.blurbird.domain.info.FinancialSVO;
 import org.blurbird.domain.info.IncomeSVO;
+import org.blurbird.domain.info.InfoData;
 
 public interface InfoMapper {
 
 	public List<BusinessVO> getListBusiness();
 	
-	public IncomeSVO getSalesfromAuto();
-	public IncomeSVO getSalesfromBank();
+	public Long getSalesfromAuto(InfoData infoData);
+	public Long getSalesfromBank(Long bizno, String year);
 	
-	public IncomeSVO getCOGSfromAuto();
-	public IncomeSVO getCOGSfromBank();
-	public IncomeSVO getCOGSfromCash();
+	public Long getCOGSfromAuto(Long bizno, String year);
+	public Long getCOGSfromBank(Long bizno, String year);
+	public Long getCOGSfromCash(Long bizno, String year);
 	
-	public IncomeSVO getOperExpensefromAuto();
-	public IncomeSVO getOperExpensefromBank();
-	public IncomeSVO getOperExpensefromCash();	
+	public Long getOperExpensefromAuto(Long bizno, String year);
+	public Long getOperExpensefromBank(Long bizno, String year);
+	public Long getOperExpensefromCash(Long bizno, String year);	
 }

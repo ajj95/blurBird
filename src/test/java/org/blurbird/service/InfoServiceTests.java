@@ -3,6 +3,7 @@ package org.blurbird.service;
 import static org.junit.Assert.*;
 
 import org.blurbird.domain.info.IncomeSVO;
+import org.blurbird.domain.info.InfoData;
 import org.blurbird.mapper.InfoMapperTests;
 import org.blurbird.service.info.InfoService;
 import org.junit.Test;
@@ -26,12 +27,21 @@ public class InfoServiceTests {
 //		log.info(service.getListBusiness());
 //	}
 	
-	@Test
-	public void testGetISElements() {
-		long sales = service.getISElements().getTotalsales();
-		log.info("sales: " + sales);
-	}
+//	@Test
+//	public void testGetISElements() {
+//		long sales = service.getISElements(10001L, "2023-07");
+//		log.info("sales: " + sales);
+//	}
 	
+	@Test
+	public void test() {
+		InfoData info = new InfoData();
+		info.setBizno("10001");
+		info.setYear("2023");
+		log.info(info.getYear().toString());
+		log.info("===============================");
+		log.info(service.getSalesfromAuto(info));
+	}
 	
 
 }
