@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+  pageEncoding="UTF-8"%>
 <%@include file="../common/coheader.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -149,15 +150,8 @@ table.total {
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<th scope="row">이름</th>
-										<td>신청서류[1부]</td>
-										<td>발급희망일</td>
-										<td>용도 및 제출처</td>
-										<td>발급상태</td>
-									</tr>
-
 									<c:forEach items="${list}" var="docreq">
+									<c:if test="${docreq.drstate.drstatename eq '발급신청' || docreq.drstate.drstatename eq '발급대기'}">
 										<tr>
 											<th scope="row"><c:out
 													value="${docreq.member.membername}" /></th>
@@ -172,6 +166,7 @@ table.total {
 
 											<td><c:out value="${docreq.drstate.drstatename}" /></td>
 										</tr>
+										</c:if>
 									</c:forEach>
 								</tbody>
 							</table>
@@ -192,14 +187,6 @@ table.total {
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row">이름</th>
-									<td>신청서류[1부]</td>
-									<td>발급희망일</td>
-									<td>용도 및 제출처</td>
-									<td>발급상태</td>
-								</tr>
-
 								<c:forEach items="${list}" var="docreq">
 									<c:if test="${docreq.drstate.drstatename eq '발급완료' || docreq.drstate.drstatename eq '수신완료'}">
 										<tr>
@@ -241,7 +228,8 @@ table.total {
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close"></button>
 					</div>
-					<form action="/docrequest/create" method="post" >
+					<form role="form" action="/docrequest/create" method="post">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<div class="modal-body">
 							<div class="modaltable">
 								<div class="card-body">
@@ -251,15 +239,14 @@ table.total {
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">회사담당자</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" value="박길동"
-												readonly="readonly">
+											<input type="text" class="form-control" value="박길동" readonly="readonly" name="member.membername">
 										</div>
 									</div>
 
 									<div class="row mb-3">
 										<label class="col-sm-2 col-form-label">신청서류</label>
 										<div class="col-sm-10">
-											<select class="form-select" aria-label="Default select example" name="doctype">
+											<select class="form-select" aria-label="Default select example"  name="doctype">
 												<option value="">신청 서류 선택</option>
 												<option value="사업자등록신청서">사업자등록신청서</option>
 												<option value="사업자등록증재교부신청서">사업자등록증재교부신청서</option>
@@ -358,7 +345,8 @@ table.total {
 											<div class="form-check">
 												<input class="form-check-input" type="radio"
 													 id="gridRadios1" value="option1"
-													checked=""> <label class="form-check-label"
+													checked=""> 
+													<label class="form-check-label"
 													for="gridRadios1"> 공개 </label>
 											</div>
 											<div class="form-check">
@@ -379,13 +367,13 @@ table.total {
 											data-bs-dismiss="modal">취소</button>
 										<button type="submit" class="btn btn-primary">확인</button>
 									</div>
+						</div>
+					</div>
+				</div>
 					</form>
 					<!-- End General Form Elements -->
 				</div>
 			</div>
-		</div>
-		</div>
-		</div>
 		</div>
 		<!-- End Vertically centered Modal-->
 

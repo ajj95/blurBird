@@ -6,6 +6,7 @@ import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.TotalDTO;
 import org.blurbird.mapper.BankMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,40 +22,97 @@ public class BankServiceImpl implements BankService {
 
 	public BankMapper mapper;
 	
-	// ÅëÀå³»¿ª ÀüÃ¼¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì „ì²´ì¡°íšŒ
 	@Override
 	public List<BankHistoryVO> getBankHistoryList(BankSearchDTO search) {
 		return mapper.getBankHistoryList(search);
 	}
 
-	// ÅëÀå³»¿ª ÀüÇ¥¹Ì¿¬°á ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ë¯¸ì—°ê²° ì¡°íšŒ
 	@Override
 	public List<BankHistoryVO> getBankHistoryListNone(BankSearchDTO search) {
 		return mapper.getBankHistoryListNone(search);
 	}
 
-	// ÅëÀå³»¿ª ÀüÇ¥¿¬°á ¸®½ºÆ®
+	// í†µì¥ë‚´ì—­ ì—°ê²° ì¡°íšŒ
 	@Override
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search) {
 		return mapper.getBankHistoryListConn(search);
 	}
 
-	// ÀüÇ¥ ³»¿ª ÀüÃ¼ ¸®½ºÆ®
+	// ì „í‘œ ì „ì²´ ë¦¬ìŠ¤íŠ¸ ì¡°íšŒ
 	@Override
 	public List<BankSlipVO> getBankSlipList(BankSearchDTO search) {
 		return mapper.getBankSlipList(search);
 	}
 
-	// ÀüÇ¥ ³»¿ª Æ¯Á¤ »óÅÂ ¸®½ºÆ®
+	// ì „í‘œ ìƒíƒœë³„ ì¡°íšŒ
 	@Override
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search) {
 		return mapper.getBankSlipListState(search);
 	}
-
-	// ºĞ°³ ³»¿ª Á¶È¸
+	
+	// ì˜ˆìƒ ì”ì•¡, ì°¨ì•¡ ì¡°íšŒ
 	@Override
-	public List<DetailSlipVO> getDetailSlip(int bhno) {
+	public TotalDTO getTotalSum() {
+		return mapper.getTotalSum();
+	}
+
+	// ë¶„ê°œë‚´ì—­ ì¡°íšŒ
+	@Override
+	public List<DetailSlipVO> getDetailSlip(String bhno) {
 		return mapper.getDetailSlip(bhno);
 	}
+	
+	// ë¶„ê°œë‚´ì—­ ìˆ˜ì •
+	@Override
+	public int modifySlip(DetailSlipVO detailSlip) {
+		return mapper.modifySlip(detailSlip);
+	}
+
+	// ì „í‘œ ìƒíƒœë³„ ê°œìˆ˜
+	@Override
+	public int allSlipCount() {
+		return mapper.allSlipCount();
+	}
+
+	@Override
+	public int canSlipCount() {
+		return mapper.canSlipCount();
+	}
+
+	@Override
+	public int confirmSlipCount() {
+		return mapper.confirmSlipCount();
+	}
+
+	@Override
+	public int exceptSlipCount() {
+		return mapper.exceptSlipCount();
+	}
+
+	@Override
+	public int removeSlipCount() {
+		return mapper.removeSlipCount();
+	}
+
+	// ì „í‘œ ìƒíƒœ ìˆ˜ì •
+	@Override
+	public boolean modifySlipState(String bhno, String bhstateno) {
+		return mapper.modifySlipState(bhno, bhstateno)==1;
+	}
+
+	// ì›í•˜ëŠ” í†µì¥ë‚´ì—­ ì¡°íšŒ
+	@Override
+	public List<BankHistoryVO> getBankHistoryDetail(List<String> bhnos) {
+	    return mapper.getBankHistoryDetail(bhnos);
+	}
+
+	// ë¶„ê°œì „í‘œ ë“±ë¡
+	@Override
+	public void registerDetailSlip(DetailSlipVO detailSlip) {
+		mapper.registerSlip(detailSlip);
+	}
+
 
 }

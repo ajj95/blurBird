@@ -9,11 +9,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DetailSlipVO {
 
-	private String sortno;			// �����ڵ� (1~4)
-	private String sortname;		// ���и� (�Ա�~�뺯)
-	private String accountno;		// �����ڵ�
-	private String accountname;	// ������
-	private int amount;				// ���� or �뺯 �ݾ�
-	private String source;			// �ŷ�ó��
-	private String summary;		// ��ǥ����
+
+	private String bankslipno;		// 전표코드
+	private String bhno;				// 통장내역 코드
+	private String sortno;			// 구분코드 (1~4)
+	private String accountno;		// 계정코드
+	private String accountname;	// 계정명
+	private int amount;				// 차변 or 대변 금액
+	private String source;			// 거래처명
+	private String summary;		// 전표적요
+
 }
+
