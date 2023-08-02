@@ -37,9 +37,13 @@ public class InfoControllerTests {
 	@Test
 	public void testinfoTA() throws Exception {
 		log.info(
-				mockMvc.perform(MockMvcRequestBuilders.get("/info/infoTA"))
+				mockMvc.perform(MockMvcRequestBuilders.post("/info/infoTA")
+				.param("bizno", "10001")
+				.param("year", "2023"))
+				
 				.andReturn() // 요청에 대한 리턴을 받고
 				.getModelAndView() // 해당 결과값을 MAV에 넣어준다.
 				.getModelMap()); // MAV의 값을 보여준다.
 	}
+	
 }

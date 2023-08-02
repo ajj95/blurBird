@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/taheader.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -218,11 +218,16 @@ th:first-child(2), td:first-child(2) {
 
 					<!-- 지급년월/연월선택 캘린더 -->
 					<div>
-						<br> <span>지급년월</span>
-						<!-- 연월 선택 캘린더 -->
-						<div class="selectMonth">
-							<input type="month" value="2023-01"></input>
-						</div>
+						<form class="selectYear" action="/info/infoTA" method="post">
+							<br> <span>조회 희망 월</span>
+							<!-- 연월 선택 캘린더 -->
+							<div class="selectMonth">
+								<input type="number" name="year" placeholder="2023"
+									value='<c:out value="${year}"/>' min="1900" max="2100"></input>
+								<button type="submit" id="submitYear">조회</button>
+							</div>
+						</form>
+
 						<br>
 					</div>
 
@@ -269,10 +274,8 @@ th:first-child(2), td:first-child(2) {
 							<table class="table table-hover table-bordered">
 								<thead>
 									<tr>
-										<th scope="col" class="tabletop"><input
-											class="form-check-input" type="checkbox"></th>
+									<th></th>
 										<th scope="col" class="tabletop">수임처</th>
-										<th scope="col" class="tabletop">대표자명</th>
 										<th scope="col" class="tabletop">귀속년월</th>
 										<th scope="col" class="tabletop">종합소득금액</th>
 										<th scope="col" class="tabletop">결정세액</th>
@@ -288,25 +291,30 @@ th:first-child(2), td:first-child(2) {
 
 
 								<tbody>
-									<c:forEach items="${list}" var="business">
-										<tr>
-											<td></td>
-											<td><c:out value="${business.bizname}" /></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-									</c:forEach>
-									
+										<c:forEach items="${list}" var="business">
+											<tr>
+												<td></td>
+												<td><c:out value="${business.bizname}" /> </td>
+										</c:forEach>
+										
+										<input type='hidden' id='bizno' name='bizno' value='<c:out value="${business.bizno}"/>'>
+
+										<c:forEach items="${values}" var="salestest">
+											<td><c:out value="${salestest}" /></td>
+										</c:forEach>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									</tr>
+
+
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>수임처 더존학원</td>
-										<td>전대장</td>
+										<!-- 										<td>전대장</td> -->
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
@@ -319,7 +327,7 @@ th:first-child(2), td:first-child(2) {
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>수임처 더존학원더긴제목</td>
-										<td>안깃헙</td>
+										<!-- 										<td>안깃헙</td> -->
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
@@ -332,7 +340,7 @@ th:first-child(2), td:first-child(2) {
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>세무사학원</td>
-										<td>정디비</td>
+										<!-- 										<td>정디비</td> -->
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
@@ -345,7 +353,7 @@ th:first-child(2), td:first-child(2) {
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
 										<td>맛있는 카페</td>
-										<td>강대표</td>
+										<!-- 										<td>강대표</td> -->
 										<td>2023.04</td>
 										<td>25999412</td>
 										<td>1624812</td>
@@ -357,6 +365,8 @@ th:first-child(2), td:first-child(2) {
 									</tr>
 								</tbody>
 							</table>
+
+
 
 							<button type="button" class="btn btn-primary">확인</button>
 							<button type="button" class="btn btn-secondary">취소</button>
@@ -391,4 +401,27 @@ th:first-child(2), td:first-child(2) {
 	<!-- End #main -->
 	<%@include file="../common/footer.jsp"%>
 </body>
+<script type="text/javascript">
+	$(document).ready(
+			
+			$("#submitYear").on("click", "#bizno", function(){
+				$.ajax({
+					type : 'post',
+					url : '/info/infoTA',
+					data : JSON.stringify(infoData),
+					contentType : "application/json; charset=utf-8",
+					success : function(result, status, xhr) {
+						if (callback) {
+							callback(result);
+						}
+					},
+					error : function(xhr, status, er) {
+						if (error) {
+							error(er);
+						}
+					}
+				});
+			});
+			
+</script>
 </html>

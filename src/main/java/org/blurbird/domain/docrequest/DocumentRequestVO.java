@@ -3,6 +3,7 @@ package org.blurbird.domain.docrequest;
 import java.util.Date;
 
 import org.blurbird.domain.MemberVO;
+import org.blurbird.domain.UsersVO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class DocumentRequestVO {
 	private String purpose;
 	private String status;
 	private String count;
+	private String doctype;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date wishdate;
@@ -29,8 +31,7 @@ public class DocumentRequestVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date doctagetdate;
 	
-	private String doctype;
-	
 	private MemberVO member;
 	private DrStateVO drstate;
+	private UsersVO user;
 }
