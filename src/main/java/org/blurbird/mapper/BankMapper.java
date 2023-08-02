@@ -43,10 +43,7 @@ public interface BankMapper {
 	public void registerSlip(DetailSlipVO slip);
 	// 분개내역 수정
 	public int modifySlip(DetailSlipVO slip);
-	
-	// 전표 삭제
-	public int removeSlip(String bhno);
-	
+
 	// 전표 상태 변경
 	public int modifySlipState(@Param("bhno") String bhno, @Param("bhstateno") String bhstateno);
 	

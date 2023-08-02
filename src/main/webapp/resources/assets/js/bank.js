@@ -25,6 +25,7 @@ $(function(){
             
            historySlipRequest(search);
         });
+
  
 		// 전표 내역 중 분개내역조회 버튼 클릭 시 조회
 		$("#right").on("click", "#detailslipshow", function(){
@@ -47,6 +48,121 @@ $(function(){
 		    }
 			
 		});
+		
+		// 분개내역 수정 후 저장 시 ajax 호출
+		$("#bottom").on("click", "#modifyslipbtn", function(){
+			 	let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
+
+			    // detailSlips 배열에 필요한 데이터를 넣어준다.
+			    $('.detailsliptable tbody tr').each(function() {
+			    	
+			        let detailSlip = {
+			            bankslipno: $(this).find('[name="bankslipno"]').val(),
+			            bhno: $(this).find('[name="bhno"]').val(),
+			            sortno: $(this).find('[name="sortno"]').val(),
+			            accountno: $(this).find('[name="accountno"]').val(),
+			            accountname: $(this).find('[name="accountname"]').val(),
+			            // -나 ,부분 빼고 int로 변경
+			            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '')),
+			            source: $(this).find('[name="source"]').val(),
+			            summary: $(this).find('[name="summary"]').val()
+			        };
+
+			        detailSlipList.push(detailSlip);
+			    });
+
+			    // AJAX로 업데이트 요청을 보낸다.
+			    updateDetailSlips(detailSlipList);
+			    
+			    alert("저장이 완료되었습니다.");
+			    
+			    // 다시 화면 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+	            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
+		});
+		
+
+		// 분개전표 수정
+		function updateDetailSlips(detailSlipList) {
+		    $.ajax({
+		        type: "POST",
+		        contentType: "application/json;charset=UTF-8",
+		        url: "/bank/updateDetailSlips",
+		        data: JSON.stringify(detailSlipList),
+		        dataType: "json",
+		        success: function(response) {
+		            // 성공적으로 업데이트가 완료되면 안내
+		            alert(response);
+		        }
+		    });
+		}
+	
+		
+		
+		// 분개전표 내용 입력 후 저장 시 입력 처리 후 다시 화면으로
+		$("#bottom").on("click", "#insertSlipBtn", function(){
+
+			let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
+
+		    // detailSlips 배열에 필요한 데이터를 넣어준다.
+		    $('.detailsliptable tbody tr').each(function() {
+		        let detailSlip = {
+		            bhno: $(this).find('[name="bhno"]').val(),
+		            sortno: $(this).find('[name="sortno"]').val(),
+		            accountno: $(this).find('[name="accountno"]').val(),
+		            // -나 ,부분 빼고 int로 변경
+		            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
+		            summary: $(this).find('[name="summary"]').val()
+		        };
+
+		        detailSlipList.push(detailSlip);
+		   });
+			
+			let message = '';
+			
+		    // AJAX 호출
+		    $.ajax({
+		      type: "POST",
+		      url: "/bank/insertdetailslips", // 컨트롤러의 URL
+		      contentType: "application/json", // 전송할 데이터의 타입 (JSON)
+		      data: JSON.stringify(detailSlipList), // JSON 형태로 변환하여 전송
+		      success: function (response) {
+		        message = response; // 결과 메시지를 알림으로 보여줌
+		      },
+		      error: function (xhr, status, error) {
+		        // 에러 발생 시 실행할 함수
+		        alert("Error occurred: " + error); // 에러 메시지를 알림으로 보여줌
+		      },
+		    });
+		    
+		    // insert 성공 시 알림창
+		    alert("저장되었습니다.");
+		    
+	     	let startDate = $("#startdate").val();
+            let endDate = $("#enddate").val();
+            let bizno = $("#bizno").val();
+            let bankname = $("#bankname").val();
+            
+            let search = {
+                startdate: startDate,
+                enddate: endDate,
+                bizno: bizno,
+                bankname: bankname
+            };
+            
+           historySlipRequest(search);
+	    });	
 		
 		// 확정취소 ('1001'로 상태변경)
 		$("#right").on("click", "#cancelcertainslip", function(){
@@ -366,7 +482,7 @@ $(function(){
 		    let selectedBhNos = [];
 		
 		    // 테이블의 tbody에서 체크된 체크박스를 찾아서 처리
-		    $("#nonbanktable tbody").find("input[name='bhno']").each(function() {
+		    $("#nonbanktable tbody").find("input[type='checkbox']:checked").each(function() {
 		        // 클릭한 행의 bhno 값을 가져와 배열에 추가
 		        let bhno = $(this).closest("tr").find("input[name='bhno']").val();
 		        selectedBhNos.push(bhno);
@@ -389,6 +505,18 @@ $(function(){
 		    });
 		    
 		});
+		
+		// 분개내역 resetbtn 버튼 클릭 시 리셋
+		$("#bottom").on("click", "#resetbtn", function(){
+		    // 테이블의 모든 input 요소
+			let inputs = document.querySelectorAll(".detailsliptable input[type='text']");
+		
+			// 각 input 요소의 값 비우기
+			inputs.forEach(input => {
+    			input.value = "";
+  			});
+		});
+
 		
 	
 });// windowload function
@@ -1074,8 +1202,8 @@ $(function(){
 
 	  searchstart.empty();
 	  
-	  	let str = '<form method="POST" action="/bank/updateDetailSlips">';
-		str += '<table class="table detailsliptable table-bordered">';
+	  	//let str = '<form method="POST" action="/bank/updateDetailSlips">';
+		let str = '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
 		str += '<th scope="col" class="tabletop">구분</th>';
@@ -1128,9 +1256,9 @@ $(function(){
 
 				str += '</select>';
 				str += '</td>';
-				str += '<td><button type="button" class="btn btn-outline-dark" ';
+				str += '<td class="button-and-input"><button type="button" class="btn searchaccount btn-outline-dark" ';
 				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
-				str += 'onclick="openAccountCodeModal(this)" ';
+				//str += 'onclick="openAccountCodeModal(this)" ';
 				str += 'data-btn-index="';
 				str += i;
 				str += '">';
@@ -1142,16 +1270,16 @@ $(function(){
 				str += detailSlip[i].accountname;
 				str += '"></td>';
 				
-				// 차변이면
-				if(detailSlip[i].sortno == 3){
+				// 출금, 차변이면
+				if(detailSlip[i].sortno == 3 || detailSlip[i].sortno == 2){
 					// 첫번째 amount 칸에 값 입력
 					str += '<td><input type="text" name="amount" class="intable" value="';
 					str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
 					str += '"></td>';
-					str += '<td class="cantwrite"><input type="text" name="amount" class="intable cantwrite" readonly="readonly"></td>';
+					str += '<td class="cantwrite"><input type="text" class="intable cantwrite" readonly="readonly"></td>';
 				}else{
-					// 대변이면 두번째 칸에 값 입력
-					str += '<td class="cantwrite"><input type="text" name="amount" class="intable cantwrite" readonly="readonly"></td>';
+					// 입금, 대변이면 두번째 칸에 값 입력
+					str += '<td class="cantwrite"><input type="text" class="intable cantwrite" readonly="readonly"></td>';
 					str += '<td><input type="text" name="amount" class="intable" value="';
 					str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
 					str += '"></td>';
@@ -1174,8 +1302,8 @@ $(function(){
 	  		
 	  		str += '</tbody>';
 			str += '</table>';
-	  		str += '<button type="submit" class="btn btn-outline-confirm" id="modifyslipbtn">저장</button>';
-	  		str += '<button type="reset" class="btn btn-outline-secondary">취소</button>';
+	  		str += '<button type="button" class="btn btn-outline-confirm" id="modifyslipbtn">저장</button>';
+	  		str += '<button type="button" class="btn btn-outline-secondary" id="resetbtn">취소</button>';
 	  	 }else{
 	  	 
 	  	 	// 처음 로딩됐을때, 아무것도 없을 때
@@ -1218,7 +1346,7 @@ $(function(){
 
 
 		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
-		str += '</form>';
+		//str += '</form>';
 	  
 	 
 	  searchstart.html(str);
@@ -1232,7 +1360,7 @@ $(function(){
 	  searchstart.empty();
 	  
 	  	let str = '';
-	  	str += '<form method="POST" action="/bank/insertdetailslips" id="insertDetailSlipForm">';
+	  	//str += '<form method="POST" action="/bank/insertdetailslips" id="insertDetailSlipForm">';
 		str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -1249,45 +1377,82 @@ $(function(){
 		
 		 if(detailSlip && detailSlip.length>0){
 	  		for(let i=0; i<detailSlip.length; i++){
-	  			for (let j = 0; j < 2; j++) { // 한 은행 통장 내역에 두개의 분개내역을 입력하도록 두번 반복
-		  			str += '<tr>';
-		  			str += '<input type="hidden" name="bhno" value="';
-		  			str += detailSlip[i].bhno;
-		  			str += '" />';
-					str += '<td>';
-					str += '<select class="form-select" name="sortno" aria-label="Default select example">';
-					str += '<option value="" selected>-</option>';
-					str += '<option value="1">입금</option>';
-					str += '<option value="2">출금</option>';
-					str += '<option value="3">차변</option>';
-					str += '<option value="4">대변</option>';
-					str += '</select>';
-					str += '</td>';
-					str += '<td><button type="button" class="btn btn-outline-dark" ';
-					str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
-					str += 'onclick="openAccountCodeModal(this)" ';
-					str += 'data-btn-index="';
-					str += j;   // 계정 검색 시 각 버튼에 맞게 넣을 수 있게 인덱스 추가
-					str += '">';
-					str += '<i class="ri-article-fill"></i>';
-					str += '</button><input type="text" name="accountno" class="intable" value="';
-					str += '"></td>';
-					str += '<td><input type="text" name="accountname" class="intable"></td>';
-					str += '<td><input type="text" name="amount" class="intable"></td>';
-					str += '<td><input type="text" name="amount" class="intable"></td>';
-					str += '<td><input type="text" name="source" class="intable" value="';
-					str += detailSlip[i].source;
-					str += '"></td>';
-					str += '<td><input type="text" name="summary" class="intable" value="';
-					str += '"></td>';
-					str += '</tr>';
-				}
+	  			// 한 은행 통장 내역에 두 개의 분개내역을 입력하도록 두 tr로 나누기
+	  			
+	  			// 첫번째 tr
+	  			str += '<tr>';
+	  			str += '<input type="hidden" name="bhno" value="';
+	  			str += detailSlip[i].bhno;
+	  			str += '" />';
+				str += '<td>';
+				str += '<select class="form-select" name="sortno" aria-label="Default select example">';
+				str += '<option value="1">입금</option>';
+				str += '<option value="2">출금</option>';
+				str += '<option value="3" selected>차변</option>';
+				str += '<option value="4">대변</option>';
+				str += '</select>';
+				str += '</td>';
+				str += '<td class="button-and-input"><button type="button" class="btn searchaccount btn-outline-dark" ';
+				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
+				str += 'data-btn-index="';
+				str += i;   // 계정 검색 시 각 버튼에 맞게 넣을 수 있게 인덱스 추가
+				str += '">';
+				str += '<i class="ri-article-fill"></i>';
+				str += '</button><input type="text" name="accountno" class="intable" value="';
+				str += '"></td>';
+				str += '<td><input type="text" name="accountname" class="intable"></td>';
+				// 차변
+				str += '<td><input type="text" name="amount" class="intable" value="';
+				str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
+				str += '"></td>';
+				str += '<td class="cantwrite"><input type="text" class="intable cantwrite" readonly="readonly"></td>';
+				str += '<td><input type="text" name="source" class="intable" value="';
+				str += detailSlip[i].source;
+				str += '"></td>';
+				str += '<td><input type="text" name="summary" class="intable" value="';
+				str += '"></td>';
+				str += '</tr>';
+				
+				// 두번째 tr
+	  			str += '<tr>';
+	  			str += '<input type="hidden" name="bhno" value="';
+	  			str += detailSlip[i].bhno;
+	  			str += '" />';
+				str += '<td>';
+				str += '<select class="form-select" name="sortno" aria-label="Default select example">';
+				str += '<option value="1">입금</option>';
+				str += '<option value="2">출금</option>';
+				str += '<option value="3">차변</option>';
+				str += '<option value="4" selected>대변</option>';
+				str += '</select>';
+				str += '</td>';
+				str += '<td class="button-and-input"><button type="button" class="btn searchaccount btn-outline-dark" ';
+				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
+				str += 'data-btn-index="';
+				str += i+1;   // 계정 검색 시 각 버튼에 맞게 넣을 수 있게 인덱스 추가
+				str += '">';
+				str += '<i class="ri-article-fill"></i>';
+				str += '</button><input type="text" name="accountno" class="intable" value="';
+				str += '"></td>';
+				str += '<td><input type="text" name="accountname" class="intable"></td>';
+				// 대변
+				str += '<td class="cantwrite"><input type="text" class="intable cantwrite" readonly="readonly"></td>';
+				str += '<td><input type="text" name="amount" class="intable" value="';
+				str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
+				str += '"></td>';
+				str += '<td><input type="text" name="source" class="intable" value="';
+				str += detailSlip[i].source;
+				str += '"></td>';
+				str += '<td><input type="text" name="summary" class="intable" value="';
+				str += '"></td>';
+				str += '</tr>';
+
 	  		}//end for
 	  		
 	  		str += '</tbody>';
 			str += '</table>';
 	  		str += '<button type="submit" class="btn btn-outline-confirm" id="insertSlipBtn">저장</button>';
-	  		str += '<button type="reset" class="btn btn-outline-secondary">취소</button>';
+	  		str += '<button type="reset" class="btn btn-outline-secondary" id="resetbtn">취소</button>';
 	  	 }else{
 	  	 
 	  	 	// 처음 로딩됐을때, 아무것도 없을 때
@@ -1330,7 +1495,7 @@ $(function(){
 
 
 		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
-		str += '</form>';
+		//str += '</form>';
 	  
 	 
 	  searchstart.html(str);
@@ -1388,16 +1553,16 @@ $(function(){
 	    }
 	}
 	
-	// 클릭한 버튼을 매개변수로 받음
-	// 계정과목 모달창
-	function openAccountCodeModal(btn) {
+	
+	// 계정과목 모달창 (클릭한 버튼의 인덱스를 파라미터로 받음)
+	function openAccountCodeModal(btnIndex) {
 			$.ajax({
 				url: "/receipt/accountList",
 				type: "GET",
 				dataType: "json",
 				success: function (data) {
-					// Update the content of the modal with the fetched data
 					$("#accountListModal").empty();
+					
 					let accountList = data;
 					let tableBody = $("#accountListModal");
 					$.each(data, function (index, item) {
@@ -1417,21 +1582,16 @@ $(function(){
 		                  let selectedAccountNo = $(this).find('td:first-child').text();
 		                  let selectedAccountName = $(this).find('td:nth-child(2)').text();
 		                  
-		                  // 동적 생성된 계정 조회 버튼의 인덱
-		                  //let btnIndex = $(btn).data("btn-index");
-		                  
-		                  
-		                  
-		                    // 버튼 인덱스를 이용하여 해당 버튼의 행을 선택
-					        //let targetRow = $('#nonbanktable tbody tr').eq(btnIndex);
+		                  // 버튼 인덱스를 이용하여 분개내역 테이블 내의 해당 버튼의 행을 선택
+					      let targetRow = $('.detailsliptable tbody tr').eq(btnIndex);
 					
-					        //targetRow.find('input[name="accountno"]').val(selectedAccountNo);
-					        //targetRow.find('input[name="accountname"]').val(selectedAccountName);
+					      targetRow.find('input[name="accountno"]').val(selectedAccountNo);
+					      targetRow.find('input[name="accountname"]').val(selectedAccountName);
 		                  
 
 					      // 클릭했던 버튼과 같은 td의 input들에 각각 값 넣어주기
-					      $(btn).closest('td').find('input[name="accountno"]').val(selectedAccountNo);
-					      $(btn).closest('td').next().find('input[name="accountname"]').val(selectedAccountName);
+					      //$(btn).closest('td').find('input[name="accountno"]').val(selectedAccountNo);
+					      //$(btn).closest('td').next().find('input[name="accountname"]').val(selectedAccountName);
 					
 					      // 모달 창 닫기
 					      $("#accountCode").modal("hide");
@@ -1442,7 +1602,8 @@ $(function(){
 					console.log(error);
 				}
 			});
-		}
+	}
+	
 	
 	// 계정과목 검색
 	function searchAccount() {

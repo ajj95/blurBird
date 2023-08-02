@@ -386,11 +386,33 @@ input.modaltext {
 .cantwrite{
 	background-color: #F5F5F5 !important;
 }
+.button-and-input {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.searchaccount{
+  margin-right: 4px;
+}
 
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
+		
+		// 계정 조회 버튼
+		$("#bottom").on("click", ".searchaccount", function(){
+			
+			// 버튼별로 동적 생성되는 인덱스값 가져오기: 시작 0 ~ 증가
+			let btnIndex = $(this).data("btn-index");
+			alert(btnIndex);
+			
+			openAccountCodeModal(btnIndex);
+		});
+		
+		
+		
+		
+		
 
 		// 내용확인요청 시 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
 		$("#left").on("click", "#memoplzbtn", function(){
@@ -398,125 +420,6 @@ input.modaltext {
 		});
 	
 
-		// 분개전표 내용 입력 후 저장 시 입력 처리 후 다시 화면으로
-		$("#bottom").on("click", "#insertSlipBtn", function(){
-
-			let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
-
-		    // detailSlips 배열에 필요한 데이터를 넣어준다.
-		    $('.detailsliptable tbody tr').each(function() {
-		    	alert($(this).find('[name="bhno"]').val());
-		    	alert($(this).find('[name="sortno"]').val());
-		    	alert($(this).find('[name="accountno"]').val());
-		    	alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
-		    	alert($(this).find('[name="summary"]').val());
-
-		        let detailSlip = {
-		            bhno: $(this).find('[name="bhno"]').val(),
-		            sortno: $(this).find('[name="sortno"]').val(),
-		            accountno: $(this).find('[name="accountno"]').val(),
-		            // -나 ,부분 빼고 int로 변경
-		            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
-		            summary: $(this).find('[name="summary"]').val()
-		        };
-
-		        detailSlipList.push(detailSlip);
-		   });
-			
-		    // AJAX 호출
-		    $.ajax({
-		      type: "POST",
-		      url: "/bank/insertdetailslips", // 컨트롤러의 URL
-		      contentType: "application/json", // 전송할 데이터의 타입 (JSON)
-		      data: JSON.stringify(detailSlipList), // JSON 형태로 변환하여 전송
-		      success: function (response) {
-		        alert(response.message); // 결과 메시지를 알림으로 보여줌
-		      },
-		      error: function (xhr, status, error) {
-		        // 에러 발생 시 실행할 함수
-		        alert("Error occurred: " + error); // 에러 메시지를 알림으로 보여줌
-		      },
-		    });
-			
-		    
-	     	let startDate = $("#startdate").val();
-            let endDate = $("#enddate").val();
-            let bizno = $("#bizno").val();
-            let bankname = $("#bankname").val();
-            
-            let search = {
-                startdate: startDate,
-                enddate: endDate,
-                bizno: bizno,
-                bankname: bankname
-            };
-            
-           historySlipRequest(search);
-	    });	
-		
-		// reset 시
-		
-		
-
-	
-		//------------------------------- 다시 볼거 --------------------------------------
-
-		// 분개내역 수정 후 저장 시 ajax 호출
-		$("#bottom").on("click", "#modifyslipbtn", function(){
-			 	let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
-
-			    // detailSlips 배열에 필요한 데이터를 넣어준다.
-			    $('.detailsliptable tbody tr').each(function() {
-			    	alert($(this).find('[name="bankslipno"]').val());
-			    	alert($(this).find('[name="bhno"]').val());
-			    	alert($(this).find('[name="sortno"]').val());
-			    	alert($(this).find('[name="accountno"]').val());
-			    	alert($(this).find('[name="accountname"]').val());
-			    	alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
-			    	alert($(this).find('[name="source"]').val());
-			    	alert($(this).find('[name="summary"]').val());
-			    	
-			        let detailSlip = {
-			            bankslipno: $(this).find('[name="bankslipno"]').val(),
-			            bhno: $(this).find('[name="bhno"]').val(),
-			            sortno: $(this).find('[name="sortno"]').val(),
-			            accountno: $(this).find('[name="accountno"]').val(),
-			            accountname: $(this).find('[name="accountname"]').val(),
-			            // -나 ,부분 빼고 int로 변경
-			            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
-			            source: $(this).find('[name="source"]').val(),
-			            summary: $(this).find('[name="summary"]').val()
-			        };
-
-			        detailSlipList.push(detailSlip);
-			    });
-
-			    // AJAX로 업데이트 요청을 보낸다.
-			    updateDetailSlips(detailSlipList);
-		});
-		
-
-		// 분개전표 수정
-		function updateDetailSlips(detailSlipList) {
-		    $.ajax({
-		        type: "POST",
-		        contentType: "application/json;charset=UTF-8",
-		        //beforeSend: function (xhr) {
-		        //    xhr.setRequestHeader("Content-type","application/json");
-		       // },
-		        url: "/bank/updateDetailSlips",
-		        data: JSON.stringify(detailSlipList),
-		        dataType: "json",
-		        success: function(response) {
-		            // 성공적으로 업데이트가 완료되면 안내
-		            alert(response);
-		        },
-		        error: function(xhr, status, error) {
-		            alert("저장에 실패하였습니다.");
-		        }
-		    });
-		}
-	
 		
 	});
 </script>
