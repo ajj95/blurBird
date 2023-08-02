@@ -61,13 +61,22 @@ public class InfoMapperTests {
 //		log.info("사업소득금액: " + (totalSales - (totalCOGS + totalOperExpense)));
 //	}
 	
+//	@Test
+//	public void testGSfA() {
+//		InfoData infoData = new InfoData();
+//		infoData.setBizno("10001");
+//		infoData.setYear("2023");
+//		mapper.getSalesfromAuto(infoData);
+//		log.info(mapper.getSalesfromAuto(infoData));
+//	}
+	
 	@Test
-	public void testGSfA() {
-		InfoData infoData = new InfoData();
-		infoData.setBizno("10001");
-		infoData.setYear("2023");
-		mapper.getSalesfromAuto(infoData);
-		log.info(mapper.getSalesfromAuto(infoData));
+	public void test() {
+		InfoData info = new InfoData();
+		info.setBizno("10001");
+		info.setYear("2023");
+		log.info("매출 가져오기: " + mapper.getSalesfromAuto(info));
+		log.info("bizname 가져오기: " + mapper.getListBusiness().get(0).getBizname());
 	}
 
 }

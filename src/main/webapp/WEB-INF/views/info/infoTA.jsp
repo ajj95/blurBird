@@ -236,7 +236,7 @@ th:first-child(2), td:first-child(2) {
 						<!-- 신고현황 바 위의 정보 -->
 						<div class="barInfo">
 							<div>국세청 신고현황</div>
-							<div class="percentage">00%</div>
+							<div class="percentage">20%</div>
 						</div>
 
 						<!-- 전체 건수 나타내는 신고현황 바(막대기) -->
@@ -274,7 +274,7 @@ th:first-child(2), td:first-child(2) {
 							<table class="table table-hover table-bordered">
 								<thead>
 									<tr>
-									<th></th>
+										<th></th>
 										<th scope="col" class="tabletop">수임처</th>
 										<th scope="col" class="tabletop">귀속년월</th>
 										<th scope="col" class="tabletop">종합소득금액</th>
@@ -291,25 +291,23 @@ th:first-child(2), td:first-child(2) {
 
 
 								<tbody>
-										<c:forEach items="${list}" var="business">
-											<tr>
-												<td></td>
-												<td><c:out value="${business.bizname}" /> </td>
-										</c:forEach>
-										
-										<input type='hidden' id='bizno' name='bizno' value='<c:out value="${business.bizno}"/>'>
+									<c:forEach items="${list}" var="infoData">
+										<tr>
+											<td></td>
+											<td><c:out value="${infoData.bizname}" /></td>
 
-										<c:forEach items="${values}" var="salestest">
-											<td><c:out value="${salestest}" /></td>
-										</c:forEach>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									</tr>
 
+
+											<td><c:out value="${infoData.bizincome}" /></td>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+									</c:forEach>
 
 									<tr>
 										<td><input class="form-check-input" type="checkbox"></td>
@@ -406,9 +404,9 @@ th:first-child(2), td:first-child(2) {
 			
 			$("#submitYear").on("click", "#bizno", function(){
 				$.ajax({
-					type : 'post',
-					url : '/info/infoTA',
-					data : JSON.stringify(infoData),
+					type : 'get',
+					url : '/info/infoList',
+					data : JSON.stringify({bizno:bizno, year:year}),
 					contentType : "application/json; charset=utf-8",
 					success : function(result, status, xhr) {
 						if (callback) {
@@ -421,6 +419,9 @@ th:first-child(2), td:first-child(2) {
 						}
 					}
 				});
+				
+				
+				
 			});
 			
 </script>

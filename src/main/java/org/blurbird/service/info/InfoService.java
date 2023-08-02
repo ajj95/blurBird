@@ -13,4 +13,6 @@ public interface InfoService {
 //	public List<IncomeSVO> getISElements(Long bizno, String year);
 	
 	public Long getSalesfromAuto(InfoData infoData);
+	
+	public List<InfoData> getList(InfoData infoData);
 }

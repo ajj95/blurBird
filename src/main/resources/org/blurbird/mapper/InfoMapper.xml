@@ -9,6 +9,11 @@
 		resultType="org.blurbird.domain.bank.BusinessVO">
 		select * from business
 	</select>
+	
+<!-- 	<select id="getBizName" resultType="org.blurbird.domain.info.InfoData"
+		parameterType="org.blurbird.domain.info.InfoData">
+		select bizname from business where bizno=#{bizno}
+	</select> -->
 
 	<!-- 손익계산서 항목 -->
 	<!-- 매출(총 수입금액) -->

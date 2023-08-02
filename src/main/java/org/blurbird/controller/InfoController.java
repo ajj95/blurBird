@@ -32,12 +32,15 @@ public class InfoController {
 	
 	@PostMapping("/infoTA")
 	public void getInfoTA(Model model, InfoData infoData) {
-		log.info(infoData.getBizno());
-		log.info(infoData.getYear());
-		model.addAttribute("list", service.getListBusiness());
-		log.info("model1: " + model);
-		model.addAttribute("values", service.getSalesfromAuto(infoData));
-		log.info("model2: " + model);
+		try {
+			log.info(service.getList(infoData));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("list", service.getList(infoData));
+		
+		
 	}
 	
 	@GetMapping("/infoCO")

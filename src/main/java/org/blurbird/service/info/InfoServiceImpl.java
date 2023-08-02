@@ -104,6 +104,32 @@ public class InfoServiceImpl implements InfoService {
 		return mapper.getSalesfromAuto(infoData);
 	}
 
+	@Override
+	public List<InfoData> getList(InfoData infoData) {
+		List<InfoData> infoList = new ArrayList<InfoData>();
+		List<BusinessVO> bizList = mapper.getListBusiness();
+		
+		
+		for(int i=0; i<bizList.size(); i++) {
+			InfoData info = new InfoData();
+			info.setBizno(mapper.getListBusiness().get(i).getBizno());
+			info.setYear(infoData.getYear());
+			info.setBizname(mapper.getListBusiness().get(i).getBizname());
+			
+			if (mapper.getSalesfromAuto(info) == null) {
+			    // null일 경우에 0으로 설정
+				info.setBizincome("0");
+			} else {
+				info.setBizincome(Long.toString(mapper.getSalesfromAuto(info)));
+			}
+			
+			infoList.add(info);
+		}
+		
+		
+		return infoList;
+	}
+
 	
 
 }
