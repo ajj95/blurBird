@@ -127,8 +127,12 @@
 						vertical-align: middle;
 						margin-right: 5px;
 					}
+					.selected {
+  					  --bs-table-bg : #f0f0f0;
+					}
 				</style>
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 			</head>
 
 			<body>
@@ -242,16 +246,16 @@
 														<label for="inputDate" class="col-form-label labeltitle">수신
 															일시</label>
 														<div class="line">
-															<input type="date" id="startdate"
+															<input type="date" id="startDate"
 																class="form-control">~&nbsp;<input type="date"
-																id="enddate" class="form-control">
+																id="endDate" class="form-control">
 														</div>
 													</div>
 													<div class="listconditionbtn">
-														<button type="button" class="btn btn-secondary">조회</button>
+														<button type="button" class="searchButton btn btn-secondary">조회</button>
 													</div>
 												</div>
-												<table class="table table-hover table-bordered">
+												<table class="receiptTable table table-hover table-bordered">
 													<thead>
 														<tr>
 															<th scope="col" class="tabletop">No.</th>
@@ -261,7 +265,7 @@
 															<th scope="col" class="tabletop">메모</th>
 														</tr>
 													</thead>
-													<tbody>
+													<tbody id="searchResults">
 														<tr>
 															<td><input class="form-check-input" type="radio"
 																	name="flexRadioDefault" id="flexRadioDefault1"></td>
@@ -345,7 +349,7 @@
 																	data-bs-toggle="collapse"
 																	data-bs-target="#collapseExample"
 																	aria-expanded="false"
-																	aria-controls="collapseExample"  type="checkbox">
+																	aria-controls="collapseExample" type="checkbox">
 															</td>
 															<td><input type="text" class="form-control"></td>
 															<td><select class="form-select">
@@ -375,7 +379,13 @@
 															<th scope="col" class="tabletop">거래처</th>
 															<th scope="col" class="tabletop">구분</th>
 															<th scope="col" class="tabletop" colspan="2">적요</th>
-															<th scope="col" class="tabletop" colspan="2">계정과목</th>
+															<th scope="col" class="tabletop" colspan="2">
+																<button type="button"
+																	class="accountCheck btn btn-outline-dark"
+																	data-bs-toggle="modal"
+																	data-bs-target="#accountCode">
+																	계정과목  <i class="bi bi-info-circle"></i></button>
+															</th>
 															<th scope="col" class="tabletop">차변(출금)</th>
 															<th scope="col" class="tabletop">대변(입금)</th>
 														</tr>
@@ -383,17 +393,11 @@
 													<tbody>
 														<tr>
 															<td><input class="form-check-input " type="checkbox"></td>
-															<td><input type="text" class="form-control"></td>
+															<td></td>
 															<td></td>
 															<td colspan="2"></td>
-															<td>
-																<button type="button" class="btn btn-outline-dark"
-																	data-bs-toggle="modal" data-bs-target="#accountCode"
-																	onclick="openAccountCodeModal()">
-																	<i class="ri-article-fill"></i>
-																</button>
-															</td>
-															<td class ="accountCodeName">현금</td>
+															<td class="accountCodeNo">101</td>
+															<td class="accountCodeName">현금</td>
 															<td></td>
 															<td></td>
 														</tr>
@@ -492,7 +496,7 @@
 									<div class="modal-header">
 										<h1 class="modal-title fs-5" id="exampleModalLabel">계정과목
 											코드도움</h1>
-										<button type="button" class="btn-close" data-bs-dismiss="modal"
+										<button type="button" class=" btn-close" data-bs-dismiss="modal"
 											aria-label="Close"></button>
 									</div>
 									<div class="modal-body">
@@ -511,13 +515,13 @@
 										<div class="input-group mb-3">
 											<input type="text" class="valueToAccount form-control" placeholder="계정코드 입력"
 												aria-label="accontInfo" aria-describedby="button-addon2">
-											<button class="search-account btn btn-outline-secondary" type="button"
-												id="button-addon2" onclick="searchAccount()">찾기</button>
+											<button class="searchAccount btn btn-outline-secondary" type="button"
+												id="button-addon2">찾기</button>
 										</div>
+										<button type="button" class="okay btn btn-primary"
+											data-bs-dismiss="modal">확인</button>
 										<button type="button" class="btn btn-secondary"
-											data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save
-											changes</button>
+											data-bs-dismiss="modal">닫기</button>
 									</div>
 								</div>
 							</div>
@@ -527,55 +531,57 @@
 					<!-- End section dashboard -->
 				</main>
 				<script>
-					function searchAccount() {
-						$.ajax({
-						    url: "/receipt/accountList",
-						    type: "GET",
-						    dataType: "json",
-						    success: function (data) {
-						      const accountList = data; // Ajax 성공 시 데이터를 accountList에 할당합니다.
-						      const searchTerm = $('.valueToAccount').val().trim();
-						      // 데이터를 검색어를 기준으로 필터링합니다.
-						      const filteredAccounts = accountList.filter((account) => {
-						        return (
-						          account.accountName.includes(searchTerm) || account.accountNo.includes(searchTerm)
-						        );
-						      });
-						      // 검색 결과를 표시합니다.
-						      const accountListModal = $('#accountListModal');
-						      accountListModal.empty();
+					let btnLocation;
+					let accountNo;
+					let accountName;
+					
+					$('.searchButton').on('click', function() {
+					      let startDate = $('#startDate').val();
+					      let endDate = $('#endDate').val();
+					      let requestData = {
+					        startDate: startDate,
+					        endDate: endDate
+					      };
 
-						      if (filteredAccounts.length === 0) {
-						        // 일치하는 결과가 없는 경우
-						        accountListModal.append('<tr><td colspan="2">일치하는 계정과목이 없습니다.</td></tr>');
-						      } else {
-						        // 일치하는 결과가 있는 경우
-						        filteredAccounts.forEach(account => {
-						          const row = $('<tr>');
-						          row.append('<td>' + account.accountNo + '</td><td>' + account.accountName + '</td>');
-						          accountListModal.append(row);
-						        });
-						        $('#accountListModal tr').dblclick(function () {
-				                    let selectedAccountNo = $(this).find('td:first-child').text();
-				                    let selectedAccountName = $(this).find('td:nth-child(2)').text();
-				                    // 이제 선택한 값에 대해 원하는 처리를 하면 됩니다.
-				                    // 예: 선택한 값을 특정 input 요소에 넣기
-				                    $('#someInput').val(selectedAccountNo);
-				                    $('#someOtherInput').val(selectedAccountName);
+					      $.ajax({
+					        type: 'get',
+					        url: '/receipt/dateSearch',
+					        data: requestData,
+					        success: function(response) {
+					          // 검색 결과 처리
+					          console.log('검색 결과:', response);
+					          // 여기서 필요한 로직을 추가하여 검색 결과를 화면에 표시하거나 처리합니다.
+					          // 테이블에 검색 결과를 동적으로 추가
+					          let tbody = $('#searchResults');
+					          tbody.empty(); // 이전 결과를 지우기 위해 tbody 내용을 비웁니다.
+					          $.each(response,function(index, item){
+						            let row = $('<tr>');
+						            row.append('<td><input class="selectRadiobtn form-check-input" type="radio" name="flexRadioDefault"></td>');
+						            row.append('<td>'+item.purpose+'</td>')
+						            row.append('<td><select class="form-select"><option value="1" selected>적합</option><option value="2">부적합</option>	</select></td>');
+						            row.append('<td>');
+						            row.append('<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"	data-bs-target="#exampleModal">	<i class="ri-article-fill"></i></button>	</td>');
+						            // 필요한 만큼 필드를 추가하여 데이터를 출력합니다.
+						            tbody.append(row); // 행을 테이블에 추가합니다.
+					          });
+					        },
+					        error: function(xhr, status, error) {
+					          console.error('에러 발생:', error);
+					        }
+					      });
 
-				                    // 모달 창 닫기
-				                    $("#accountCode").modal("hide");
-				                });
-						      }
-						    },
-						    error: function (xhr, status, error) {
-						      // 에러 처리
-						      console.log("Error:", error);
-						    },
-						  });
-					}
-					function openAccountCodeModal() {
-						// Use Ajax to fetch accountList
+					      console.log("시작 날짜:", startDate);
+					      console.log("마지막 날짜:", endDate);
+					    });
+					
+					$(document).on('click','.listconditionbtn',function(){
+						
+					})
+					
+					$(document).on('click', '.accountCheck', function () {
+						btnLocation = $(this);
+						accountNo = btnLocation.closest("table").find("tbody > tr > td.accountCodeNo");
+						accountName = btnLocation.closest("table").find("tbody > tr > td.accountCodeName");
 						$.ajax({
 							url: "/receipt/accountList",
 							type: "GET",
@@ -594,25 +600,84 @@
 								});
 								$("#accountCode").modal("show");
 								// Show the modal
-								 $('#accountListModal tr').dblclick(function () {
-					                    let selectedAccountNo = $(this).find('td:first-child').text();
-					                    let selectedAccountName = $(this).find('td:nth-child(2)').text();
-					                    // 이제 선택한 값에 대해 원하는 처리를 하면 됩니다.
-					                    // 예: 선택한 값을 특정 input 요소에 넣기
-					                    $('#someInput').val(selectedAccountNo);
-					                    $('#someOtherInput').val(selectedAccountName);
-										
-					                    // 모달 창 닫기
-					                    $("#accountCode").modal("hide");
-					                });
-								
+									$('#accountListModal tr').on('click',function(){
+										$('#accountListModal tr.selected').removeClass('selected');
+										$(this).addClass('selected');
+										let selectedAccountNo = $(this).find('td:first-child').text();
+										let selectedAccountName = $(this).find('td:nth-child(2)').text();
+										console.log(selectedAccountNo);
+										console.log(selectedAccountName);
+									});
+								$('#accountListModal tr').dblclick(function () {
+									let selectedAccountNo = $(this).find('td:first-child').text();
+									let selectedAccountName = $(this).find('td:nth-child(2)').text();
+									// 이제 선택한 값에 대해 원하는 처리를 하면 됩니다.
+									// 예: 선택한 값을 특정 input 요소에 넣기
+									accountNo.text(selectedAccountNo);
+									accountName.text(selectedAccountName);
+									// 모달 창 닫기
+									$("#accountCode").modal("hide");
+								});
 							},
 							error: function (xhr, status, error) {
 								console.log(error);
 							}
 						});
-					}
+					})
+					$(document).on('click', '.searchAccount', function () {
+						$.ajax({
+							url: "/receipt/accountList",
+							type: "GET",
+							dataType: "json",
+							success: function (data) {
+								const accountList = data; // Ajax 성공 시 데이터를 accountList에 할당합니다.
+								const searchTerm = $('.valueToAccount').val().trim();
+								// 데이터를 검색어를 기준으로 필터링합니다.
+								const filteredAccounts = accountList.filter((account) => {
+									return (
+										account.accountName.includes(searchTerm) || account.accountNo.includes(searchTerm)
+									);
+								});
+								// 검색 결과를 표시합니다.
+								const accountListModal = $('#accountListModal');
+								accountListModal.empty();
 
+								if (filteredAccounts.length === 0) {
+									// 일치하는 결과가 없는 경우
+									accountListModal.append('<tr><td colspan="2">일치하는 계정과목이 없습니다.</td></tr>');
+								} else {
+									// 일치하는 결과가 있는 경우
+									filteredAccounts.forEach(account => {
+										const row = $('<tr>');
+										row.append('<td>' + account.accountNo + '</td><td>' + account.accountName + '</td>');
+										accountListModal.append(row);
+									});
+									$('#accountListModal tr').on('click',function(){
+										$('#accountListModal tr.selected').removeClass('selected');
+										$(this).addClass('selected');
+										let selectedAccountNo = $(this).find('td:first-child').text();
+										let selectedAccountName = $(this).find('td:nth-child(2)').text();
+										console.log(selectedAccountNo);
+										console.log(selectedAccountName);
+									});
+									$('#accountListModal tr').dblclick(function () {
+										let selectedAccountNo = $(this).find('td:first-child').text();
+										let selectedAccountName = $(this).find('td:nth-child(2)').text();
+										// 이제 선택한 값에 대해 원하는 처리를 하면 됩니다.
+										// 예: 선택한 값을 특정 input 요소에 넣기
+										accountNo.text(selectedAccountNo);
+										accountName.text(selectedAccountName);
+										// 모달 창 닫기
+										$("#accountCode").modal("hide");
+									});
+								}
+							},
+							error: function (xhr, status, error) {
+								// 에러 처리
+								console.log("Error:", error);
+							},
+						});
+					})
 				</script>
 				<!-- End #main -->
 				<%@include file="../common/footer.jsp" %>

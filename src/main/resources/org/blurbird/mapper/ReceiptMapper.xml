@@ -8,7 +8,7 @@
 		select * from account where accountno=#{accountNo}
 	</select>
 	
-	<select id="getList" resultType="org.blurbird.domain.receipt.AccountVO">
+	<select id="getAccountList" resultType="org.blurbird.domain.receipt.AccountVO">
 	<![CDATA[
 	select * 
 	from account
@@ -17,6 +17,13 @@
 	]]>
 	</select>
 	
+	<select id="getReceiptList" resultType="org.blurbird.domain.receipt.ReceiptRequestVO">
+	<![CDATA[
+	select * 
+	from receiptrequest
+	where reqdate between  #{startDate} and #{endDate}
+	]]>
+	</select>
 	
 
 </mapper>
