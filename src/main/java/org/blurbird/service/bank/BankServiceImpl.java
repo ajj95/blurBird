@@ -96,5 +96,23 @@ public class BankServiceImpl implements BankService {
 		return mapper.removeSlipCount();
 	}
 
+	// 전표 상태 수정
+	@Override
+	public boolean modifySlipState(String bhno, String bhstateno) {
+		return mapper.modifySlipState(bhno, bhstateno)==1;
+	}
+
+	// 원하는 통장내역 조회
+	@Override
+	public List<BankHistoryVO> getBankHistoryDetail(List<String> bhnos) {
+	    return mapper.getBankHistoryDetail(bhnos);
+	}
+
+	// 분개전표 등록
+	@Override
+	public void registerDetailSlip(DetailSlipVO detailSlip) {
+		mapper.registerSlip(detailSlip);
+	}
+
 
 }

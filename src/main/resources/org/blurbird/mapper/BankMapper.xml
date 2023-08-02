@@ -72,6 +72,16 @@
 	    ORDER BY BANKSLIPNO DESC
 	</select>
 	
+	<!-- 원하는 통장내역 조회 -->
+	<select id="getBankHistoryDetail" resultType="org.blurbird.domain.bank.BankHistoryVO">
+		SELECT BHNO, ACCOUNTNUMBER, BHDATE, SOURCE, AMOUNT, MEMO, SORTNO
+		FROM BANKHISTORY
+		WHERE BHNO IN
+		<foreach item="item" collection="list" open="(" separator="," close=")">
+        	#{item}
+    	</foreach>
+	</select>
+	
 	<!-- 전표내역 확정가능 or 확정 or 제외 or 삭제 -->
 	<select id="getBankSlipListState" resultType="org.blurbird.domain.bank.BankSlipVO"
 				parameterType="org.blurbird.domain.bank.BankSearchDTO">
@@ -139,8 +149,8 @@
 
 	<!-- 분개내역 등록 -->
 	<insert id="registerSlip" parameterType="org.blurbird.domain.bank.DetailSlipVO">
-		INSERT INTO BANKSLIP VALUES(SEQ_BANKSLIP.NEXTVAL
-		, #{bhno}, ${sortno}, #{accountno}, #{amount}, #{summary})
+		INSERT INTO BANKSLIP 
+		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, #{sortno}, #{accountno}, #{amount}, #{summary})
 	</insert>
 	
 	<!-- 분개내역 수정 -->
@@ -151,6 +161,10 @@
 		<!-- , ACCOUNTNO=#{accountno} -->
 	</update>
 
+	<!-- 상태 변경 -->
+	<update id="modifySlipState">
+		UPDATE BANKHISTORY SET BHSTATENO=#{bhstateno} WHERE BHNO = #{bhno}
+	</update>
 
 
 </mapper>

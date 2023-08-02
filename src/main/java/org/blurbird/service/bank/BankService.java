@@ -15,6 +15,8 @@ public interface BankService {
 	public List<BankHistoryVO> getBankHistoryListNone(BankSearchDTO search);
 	// 통장내역 전표연결 조회
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search);
+	// 원하는 통장내역 조회
+	public List<BankHistoryVO> getBankHistoryDetail(List<String> bhnos);
 	
 	// 전표내역 조회
 	public List<BankSlipVO> getBankSlipList(BankSearchDTO search);
@@ -31,11 +33,17 @@ public interface BankService {
 	// 예상잔액, 차액
 	public TotalDTO getTotalSum();
 	
-	// 분개내역 조회
+	// 분개 내역 조회
 	public List<DetailSlipVO> getDetailSlip(String bhno);
+	
+	// 분개 내역 입력
+	public void registerDetailSlip(DetailSlipVO detailSlip);
 	
 	// 분개 내역 수정
 	public int modifySlip(DetailSlipVO detailSlip);
+	
+	// 전표 상태 변경
+	public boolean modifySlipState(String bhno, String bhstateno);
 	
 	
 }

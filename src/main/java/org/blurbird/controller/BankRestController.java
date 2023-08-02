@@ -76,8 +76,46 @@ public class BankRestController {
         return ResponseEntity.ok(detailSlip);
     }
     
+    
+    // 전표 상태 수정 요청 처리 -> String 각각이 아니라 Map으로 넘김
+    @PostMapping("/modifySlipState")
+    public ResponseEntity<String> modifySlipState(@RequestBody Map<String, String> requestBody) {
+        try {
+            String bhno = requestBody.get("bhno");
+            String bhstateno = requestBody.get("bhstateno");
+        	
+            boolean check = service.modifySlipState(bhno, bhstateno);
+            log.info("return값: " + check);
+            
+            if (check) {
+                return ResponseEntity.ok("전표 상태가 수정되었습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("전표 상태 수정에 실패하였습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("전표 상태 수정 중 오류가 발생하였습니다.");
+        }
+    }
+    
+    // 선택한 통장 내역 분개 전표에 보여주기
+    @PostMapping("/getBankHistoryDetail")
+    public ResponseEntity<List<BankHistoryVO>> getBankHistoryDetail(@RequestBody List<String> bhnos) {
+        try {
+            List<BankHistoryVO> bankHistoryDetailList = service.getBankHistoryDetail(bhnos);
+            return ResponseEntity.ok(bankHistoryDetailList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    
+    //-------------------------------------------여기서부터 문제--------------------------------------
+    
     // 저장 클릭 시 분개전표 수정처리
-    @PostMapping("/updateDetailSlips")
+    //@PostMapping("/updateDetailSlips", consum)
+    //@RequestMapping(value="/updateDetailSlips", method=RequestMethod.POST, consumes="application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
+    @PostMapping(value="/updateDetailSlips", consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateDetailSlips(@RequestBody List<DetailSlipVO> detailSlipList) {
         try {
         	int check = 0;
@@ -104,7 +142,28 @@ public class BankRestController {
             // 업데이트 실패 시, 에러 메시지를 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트에 실패하였습니다.");
         }
+    }// end updateDetailSlips
+    
+    
+    
+    
+    
+    
+    // 입력 일반전표 저장
+    @PostMapping("/insertdetailslips")
+    public ResponseEntity<?> insertDetailsLips(@RequestBody List<DetailSlipVO> detailSlipVOList) {
+    	Map<String, Object> result = new HashMap<>();
+    	
+    	for (DetailSlipVO detailSlipVO : detailSlipVOList) {
+            service.registerDetailSlip(detailSlipVO);
+        }
+    	
+    	result.put("message", "Saved successfully!");
+        
+        return ResponseEntity.ok(result);
     }
     
-
+    
+    
 }
+    

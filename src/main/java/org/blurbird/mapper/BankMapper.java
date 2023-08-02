@@ -2,6 +2,7 @@ package org.blurbird.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
@@ -16,6 +17,9 @@ public interface BankMapper {
 	public List<BankHistoryVO> getBankHistoryListNone(BankSearchDTO search);
 	// 통장내역 전표 연결 조회
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search);
+	// 원하는 통장내역 조회
+	public List<BankHistoryVO> getBankHistoryDetail(List<String> bhnos);
+	
 	
 	// 전표내역 조회
 	public List<BankSlipVO> getBankSlipList(BankSearchDTO search);
@@ -42,6 +46,9 @@ public interface BankMapper {
 	
 	// 전표 삭제
 	public int removeSlip(String bhno);
+	
+	// 전표 상태 변경
+	public int modifySlipState(@Param("bhno") String bhno, @Param("bhstateno") String bhstateno);
 	
 	
 }

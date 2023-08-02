@@ -26,7 +26,7 @@ $(function(){
            historySlipRequest(search);
         });
  
-		// 분개내역조회 버튼 클릭 시 조회
+		// 전표 내역 중 분개내역조회 버튼 클릭 시 조회
 		$("#right").on("click", "#detailslipshow", function(){
 			// bhno 가지고 bankslip 테이블에서 2행 조회
 			
@@ -47,8 +47,349 @@ $(function(){
 		    }
 			
 		});
-	
+		
+		// 확정취소 ('1001'로 상태변경)
+		$("#right").on("click", "#cancelcertainslip", function(){
+			// 체크된 체크박스를 찾아서 처리
+			 $("#pills-certain").find("input[type='checkbox']:checked").each(function() {
+			    
+				// 클릭한 행의 bhno
+			    let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+			    let bhstateno = '1001';
+				
+			    // 서버에 POST 요청 보내기
+			    $.ajax({
+			      type: "POST",
+			      url: "/bank/modifySlipState",
+			      contentType: "application/json;charset=UTF-8",
+			      data: JSON.stringify({bhno: bhno, bhstateno: bhstateno}),
+			      dataType: "json",
+			      success: function(response) {
+			    	 let message = response.message;
+			    	 console.log(message);
+			         alert(message);
+			      },
+		            error: function(xhr, status, error) {
+		                console.log("Error:", xhr.responseText);
+		                //alert("전표 상태 수정에 실패하였습니다.");
+		            }
+			    });//end ajax
+			    
+			    alert("전표 상태 변경이 완료되었습니다.");
+			    
+			    // 상태 수정 이후 다시 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+	            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
 
+			 });
+		});
+		
+		// 확정 ('1002'로 상태변경)
+		$("#right").on("click", "#certainslip", function(){
+			// 체크된 체크박스를 찾아서 처리
+			 $("#pills-can").find("input[type='checkbox']:checked").each(function() {
+			    
+				// 클릭한 행의 bhno
+			    let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+			    let bhstateno = '1002';
+				
+			    // 서버에 POST 요청 보내기
+			    $.ajax({
+			      type: "POST",
+			      url: "/bank/modifySlipState",
+			      contentType: "application/json;charset=UTF-8",
+			      data: JSON.stringify({bhno: bhno, bhstateno: bhstateno}),
+			      dataType: "json",
+			      success: function(response) {
+			    	 let message = response.message;
+			    	 console.log(message);
+			         alert(message);
+			      },
+		            error: function(xhr, status, error) {
+		                console.log("Error:", xhr.responseText);
+		                //alert("전표 상태 수정에 실패하였습니다.");
+		            }
+			    });//end ajax
+			    
+			    alert("전표 상태 변경이 완료되었습니다.");
+			    
+			    // 상태 수정 이후 다시 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+	            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
+
+			 });
+		});
+		
+		// 제외 ('1004'로 상태변경)
+		$("#right").on("click", "#exceptslip", function(){
+			// 체크된 체크박스를 찾아서 처리
+			// 확정 가능 탭에서
+			 $("#pills-can").find("input[type='checkbox']:checked").each(function() {
+			    
+				// 클릭한 행의 bhno
+			    let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+			    let bhstateno = '1004';
+				
+			    // 서버에 POST 요청 보내기
+			    $.ajax({
+			      type: "POST",
+			      url: "/bank/modifySlipState",
+			      contentType: "application/json;charset=UTF-8",
+			      data: JSON.stringify({bhno: bhno, bhstateno: bhstateno}),
+			      dataType: "json",
+			      success: function(response) {
+			    	 let message = response.message;
+			    	 console.log(message);
+			         alert(message);
+			      },
+		            error: function(xhr, status, error) {
+		                console.log("Error:", xhr.responseText);
+		                //alert("전표 상태 수정에 실패하였습니다.");
+		            }
+			    });//end ajax
+			    
+			    alert("전표 상태 변경이 완료되었습니다.");
+			    
+			    // 상태 수정 이후 다시 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+	            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
+
+			 });
+		});//end 제외
+		
+		// 삭제 ('1005'로 상태변경)
+		$("#right").on("click", "#removeslip", function(){
+			// 체크된 체크박스를 찾아서 처리
+			// 확정 가능 탭에서
+			 $("#pills-can").find("input[type='checkbox']:checked").each(function() {
+			    
+				// 클릭한 행의 bhno
+			    let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+			    let bhstateno = '1005';
+				
+			    // 서버에 POST 요청 보내기
+			    $.ajax({
+			      type: "POST",
+			      url: "/bank/modifySlipState",
+			      contentType: "application/json;charset=UTF-8",
+			      data: JSON.stringify({bhno: bhno, bhstateno: bhstateno}),
+			      dataType: "json",
+			      success: function(response) {
+			    	 let message = response.message;
+			    	 console.log(message);
+			         alert(message);
+			      },
+		            error: function(xhr, status, error) {
+		                console.log("Error:", xhr.responseText);
+		                //alert("전표 상태 수정에 실패하였습니다.");
+		            }
+			    });//end ajax
+			    
+			    alert("전표 상태 변경이 완료되었습니다.");
+			    
+			    // 상태 수정 이후 다시 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+	            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
+
+			 });
+		});//end 삭제
+	
+		// 제외취소 ('1001'로 상태변경)
+		$("#right").on("click", "#cancelexceptslip", function(){
+			// 체크된 체크박스를 찾아서 처리
+			// 확정 가능 탭에서
+			 $("#pills-except").find("input[type='checkbox']:checked").each(function() {
+			    
+				// 클릭한 행의 bhno
+			    let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+			    let bhstateno = '1001';
+				
+			    // 서버에 POST 요청 보내기
+			    $.ajax({
+			      type: "POST",
+			      url: "/bank/modifySlipState",
+			      contentType: "application/json;charset=UTF-8",
+			      data: JSON.stringify({bhno: bhno, bhstateno: bhstateno}),
+			      dataType: "json",
+			      success: function(response) {
+			    	 let message = response.message;
+			    	 console.log(message);
+			         alert(message);
+			      },
+		            error: function(xhr, status, error) {
+		                console.log("Error:", xhr.responseText);
+		                //alert("전표 상태 수정에 실패하였습니다.");
+		            }
+			    });//end ajax
+			    
+			    alert("전표 상태 변경이 완료되었습니다.");
+			    
+			    // 상태 수정 이후 다시 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+	            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
+
+			 });
+		});//end 제외취소
+
+		// 삭제취소 ('1001'로 상태변경)
+		$("#right").on("click", "#cancelremoveslip", function(){
+			// 체크된 체크박스를 찾아서 처리
+			// 확정 가능 탭에서
+			 $("#pills-remove").find("input[type='checkbox']:checked").each(function() {
+			    
+				// 클릭한 행의 bhno
+			    let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+			    let bhstateno = '1001';
+				
+			    // 서버에 POST 요청 보내기
+			    $.ajax({
+			      type: "POST",
+			      url: "/bank/modifySlipState",
+			      contentType: "application/json;charset=UTF-8",
+			      data: JSON.stringify({bhno: bhno, bhstateno: bhstateno}),
+			      dataType: "json",
+			      success: function(response) {
+			    	 let message = response.message;
+			    	 console.log(message);
+			         alert(message);
+			      },
+		            error: function(xhr, status, error) {
+		                console.log("Error:", xhr.responseText);
+		                //alert("전표 상태 수정에 실패하였습니다.");
+		            }
+			    });//end ajax
+			    
+			    alert("전표 상태 변경이 완료되었습니다.");
+			    
+			    // 상태 수정 이후 다시 랜더링
+			    let startDate = $("#startdate").val();
+	            let endDate = $("#enddate").val();
+	            let bizno = $("#bizno").val();
+	            let bankname = $("#bankname").val();
+	            
+		            let search = {
+	                startdate: startDate,
+	                enddate: endDate,
+	                bizno: bizno,
+	                bankname: bankname
+	            };
+	            
+	           historySlipRequest(search);
+
+			 });
+		});//end 삭제취소
+		
+		// select 구분 선택 시 해당하지 않는 td는 readonly로 변경하고 회색처리
+	    $("#bottom").on("change", "select[name='sortno']", function(){
+	        // 선택된 select 요소를 넘겨줌
+	        handleSelectChange(this);
+	    });
+
+		// 통장 내역의 연결 전표 중 분개내역조회시
+		$("#left").on("click", "#watchslipbtn", function(){
+			// 체크된 체크박스 값을 저장할 배열
+			let selectedBhnoList = [];
+			
+			// 각 체크박스를 순회하면서 체크된 체크박스의 bhno 값을 배열에 저장
+		    $('.form-check-input:checked').each(function() {
+		      let bhnoValue = $(this).closest('tr').find('[name="bhno"]').val();
+		      if (bhnoValue) {
+		        selectedBhnoList.push(bhnoValue);
+		      }
+		    });
+			
+		    // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 페이지로 이동
+		    if (selectedBhnoList.length > 0) {
+		    	getDetailSlip(selectedBhnoList);
+		    }
+			
+		});
+	
+		// 통장내역 전표 입력 버튼 클릭 시 거래처 가져오기
+		$("#left").on("click", "#bankslipplzbtn", function(){
+		    // 체크된 체크박스의 bhno 값을 저장할 배열
+		    let selectedBhNos = [];
+		
+		    // 테이블의 tbody에서 체크된 체크박스를 찾아서 처리
+		    $("#nonbanktable tbody").find("input[name='bhno']").each(function() {
+		        // 클릭한 행의 bhno 값을 가져와 배열에 추가
+		        let bhno = $(this).closest("tr").find("input[name='bhno']").val();
+		        selectedBhNos.push(bhno);
+		    });
+		
+		    // bhno 들을 서버에 전달해서 분개내역 테이블의 각 행에 bhno(hidden), 거래처명 전달
+		    $.ajax({
+		        type: "POST",
+		        url: "/bank/getBankHistoryDetail",
+		        contentType: "application/json;charset=UTF-8",
+		        data: JSON.stringify(selectedBhNos), // 선택된 bhno 배열을 JSON으로 변환하여 전송
+		        dataType: "json",
+		        success: function(response) {
+		        	// BankHistoryVO 리스트를 받아서 create 분개내역테이블 생성
+		        	createBankToSlipTable(response);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error("Error while fetching data from server.");
+		        }
+		    });
+		    
+		});
+		
 	
 });// windowload function
 
@@ -161,6 +502,9 @@ $(function(){
 	if(data && data.length >0){
 		for (let i = 0; i < data.length; i++) {
       	str +='<tr>';
+      	str += '<input type="hidden" name="bhno" value="';
+	    str += data[i].bhno;
+	    str += '">';
  	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
  	  	str +='<td>';
  	  	str += formatDate(data[i].bhdate);
@@ -232,6 +576,9 @@ $(function(){
 	for (let i = 0; i < data.length; i++) {
 		if(data[i].bhstatename=='미연결'){
 	      	str +='<tr>';
+	      	str += '<input type="hidden" name="bhno" value="';
+	      	str += data[i].bhno;
+	      	str += '">';
 	 	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
 	 	  	str +='<td>';
 	 	  	str +=formatDate(data[i].bhdate);
@@ -270,7 +617,6 @@ $(function(){
 	str += '</table>';
 	str += '<button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small">전표입력</button>';
 	str += '<button type="button" id="memoplzbtn" class="btn btn-primary btn-small">내용확인요청</button>';
-	str += '<button type="button" class="btn btn-outline-secondary">입력제외</button>';
 	str += '</div>';
 	
 	// 연결
@@ -305,6 +651,9 @@ $(function(){
 	for (let i = 0; i < data.length; i++) {
 		if(data[i].bhstatename=='확정가능' || data[i].bhstatename=='확정'){
 	      	str +='<tr>';
+	      	str += '<input type="hidden" name="bhno" value="';
+	      	str += data[i].bhno;
+	      	str += '">';
 	 	  	str +='<td><input class="form-check-input" type="checkbox"></td>';
 	 	  	str +='<td>';
 	 	  	str +=formatDate(data[i].bhdate);
@@ -583,8 +932,6 @@ $(function(){
 	str +='</tbody></table>';
 	str += '<button type="button" id="cancelcertainslip" class="btn btn-light">확정취소</button>';
 	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
-	str += '<button type="button" id="exceptslip" class="btn btn-light">제외</button>';
-	str += '<button type="button" id="removeslip" class="btn btn-light">삭제</button>';
 	str += '</div>';
 	
 	// 제외
@@ -647,6 +994,7 @@ $(function(){
 	str += '</tr>';
 	str +='</tbody></table>';
 	str += '<button type="button" id="cancelexceptslip" class="btn btn-light">제외취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
 	str += '</div>';
 	
 	// 삭제
@@ -709,6 +1057,7 @@ $(function(){
 	str += '</tr>';
 	str +='</tbody></table>';
 	str += '<button type="button" id="cancelremoveslip" class="btn btn-light">삭제취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
 	str += '</div>';
 	str += '</div>';
 	  
@@ -719,14 +1068,13 @@ $(function(){
 
 
 	
-	// 처음 로딩 시 분개내역 조회 테이블 생성 함수
+	// 처음 로딩 or 분개내역이 있는 경우 분개내역 조회 테이블 생성 함수
 	function createDetailSlipTable(detailSlip) {
 	  let searchstart = $('.bottom');
 
 	  searchstart.empty();
 	  
-	  	let str = '';
-	  	str += '<form method="POST" action="/bank/updateDetailSlips">';
+	  	let str = '<form method="POST" action="/bank/updateDetailSlips">';
 		str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -746,10 +1094,10 @@ $(function(){
 	  			str += '<tr>';
 	  			str += '<input type="hidden" name="bankslipno" value="';
 	  			str += detailSlip[i].bankslipno;
-	  			str += '" />';
+	  			str += '"/>';
 	  			str += '<input type="hidden" name="bhno" value="';
 	  			str += detailSlip[i].bhno;
-	  			str += '" />';
+	  			str += '"/>';
 				str += '<td>';
 				str += '<select class="form-select" name="sortno" aria-label="Default select example">';
 				
@@ -780,7 +1128,12 @@ $(function(){
 
 				str += '</select>';
 				str += '</td>';
-				str += '<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#accountCode" onclick="openAccountCodeModal(this)">';
+				str += '<td><button type="button" class="btn btn-outline-dark" ';
+				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
+				str += 'onclick="openAccountCodeModal(this)" ';
+				str += 'data-btn-index="';
+				str += i;
+				str += '">';
 				str += '<i class="ri-article-fill"></i>';
 				str += '</button><input type="text" name="accountno" class="intable" value="';
 				str += detailSlip[i].accountno;
@@ -871,10 +1224,119 @@ $(function(){
 	  searchstart.html(str);
 	}
 
+	
+	// 통장내역을 분개전표로 가져오기
+	function createBankToSlipTable(detailSlip) {
+	  let searchstart = $('.bottom');
 
-	// 분개내역조회 클릭 시 내용 생성 함수
-	//		              <button type="button" class="btn btn-outline-confirm">저장</button>
-	//	              <button type="button" class="btn btn-outline-secondary">취소</button>
+	  searchstart.empty();
+	  
+	  	let str = '';
+	  	str += '<form method="POST" action="/bank/insertdetailslips" id="insertDetailSlipForm">';
+		str += '<table class="table detailsliptable table-bordered">';
+		str += '<thead>';
+		str += '<tr>';
+		str += '<th scope="col" class="tabletop">구분</th>';
+		str += '<th colspan="2" scope="col" class="tabletop">계정과목</th>';
+		str += '<th scope="col" class="tabletop">차변</th>';
+		str += '<th scope="col" class="tabletop">대변</th>';
+		str += '<th scope="col" class="tabletop">거래처명</th>';
+		str += '<th scope="col" class="tabletop">적요</th>';
+		str += '</tr>';
+		str += '</thead>';
+		str += '<tbody>';
+		
+		
+		 if(detailSlip && detailSlip.length>0){
+	  		for(let i=0; i<detailSlip.length; i++){
+	  			for (let j = 0; j < 2; j++) { // 한 은행 통장 내역에 두개의 분개내역을 입력하도록 두번 반복
+		  			str += '<tr>';
+		  			str += '<input type="hidden" name="bhno" value="';
+		  			str += detailSlip[i].bhno;
+		  			str += '" />';
+					str += '<td>';
+					str += '<select class="form-select" name="sortno" aria-label="Default select example">';
+					str += '<option value="" selected>-</option>';
+					str += '<option value="1">입금</option>';
+					str += '<option value="2">출금</option>';
+					str += '<option value="3">차변</option>';
+					str += '<option value="4">대변</option>';
+					str += '</select>';
+					str += '</td>';
+					str += '<td><button type="button" class="btn btn-outline-dark" ';
+					str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
+					str += 'onclick="openAccountCodeModal(this)" ';
+					str += 'data-btn-index="';
+					str += j;   // 계정 검색 시 각 버튼에 맞게 넣을 수 있게 인덱스 추가
+					str += '">';
+					str += '<i class="ri-article-fill"></i>';
+					str += '</button><input type="text" name="accountno" class="intable" value="';
+					str += '"></td>';
+					str += '<td><input type="text" name="accountname" class="intable"></td>';
+					str += '<td><input type="text" name="amount" class="intable"></td>';
+					str += '<td><input type="text" name="amount" class="intable"></td>';
+					str += '<td><input type="text" name="source" class="intable" value="';
+					str += detailSlip[i].source;
+					str += '"></td>';
+					str += '<td><input type="text" name="summary" class="intable" value="';
+					str += '"></td>';
+					str += '</tr>';
+				}
+	  		}//end for
+	  		
+	  		str += '</tbody>';
+			str += '</table>';
+	  		str += '<button type="submit" class="btn btn-outline-confirm" id="insertSlipBtn">저장</button>';
+	  		str += '<button type="reset" class="btn btn-outline-secondary">취소</button>';
+	  	 }else{
+	  	 
+	  	 	// 처음 로딩됐을때, 아무것도 없을 때
+	  	 	str += '<tr>';
+			str += '<td>';
+			str += '<select class="form-select" name="sortno"aria-label="Default select example">';
+			str += '<option value="1">입금</option>';
+			str += '<option value="2">출금</option>';
+			str += '<option value="3" selected>차변</option>';
+			str += '<option value="4">대변</option>';
+			str += '</select>';
+			str += '</td>';
+			str += '<td><input type="text" name="accountno" class="intable"></td>';
+			str += '<td><input type="text" name="accountname" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="source" class="intable"></td>';
+			str += '<td><input type="text" name="summary" class="intable"></td>';
+			str += '</tr>';
+			str += '<tr>';
+			str += '<td>';
+			str += '<select class="form-select" name="sortno" aria-label="Default select example">';
+			str += '<option selected>차변</option>';
+			str += '<option value="1">입금</option>';
+			str += '<option value="2">출금</option>';
+			str += '<option value="3">차변</option>';
+			str += '<option value="4" selected>대변</option>';
+			str += '</select>';
+			str += '</td>';
+			str += '<td><input type="text" name="accountno" class="intable"></td>';
+			str += '<td><input type="text" name="accountname" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="amount" class="intable"></td>';
+			str += '<td><input type="text" name="source" class="intable"></td>';
+			str += '<td><input type="text" name="summary" class="intable"></td>';
+			str += '</tr>';
+			str += '</tbody>';
+			str += '</table>';
+	  	 }
+
+
+		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
+		str += '</form>';
+	  
+	 
+	  searchstart.html(str);
+	}// end 통장내역을 분개전표로 가져오기
+	
+
 
 
 	function formatDate(dateString) {
@@ -892,7 +1354,42 @@ $(function(){
   		
 	}
 	
+	// 분개 구분 선택 시 차변 대변 입력창 변경
+	function handleSelectChange(selectElement) {
+	    // 선택된 option의 value 값을 가져옴
+	    let selectedValue = selectElement.value;
+	    
+	    // 부모 tr 요소를 찾음
+	    let trElement = $(selectElement).closest("tr");
+	    
+	    // 첫번째 input, 4번째 td를 가져옴
+	    let firstInput = trElement.find("input[name='amount']").eq(0);
+	    let firstTd = trElement.children("td").eq(3);
+	    
+	    // 두번째 input 요소를 가져옴
+	    let secondInput = trElement.find("input[name='amount']").eq(1);
+	    let secondTd = trElement.children("td").eq(4);
+	    
+	    // 입금or대변 -> 첫번째 칸 비활성화, 출금or차변 -> 두번째 칸 비활성화
+	    if (selectedValue == "1" || selectedValue == "4") {
+	        firstInput.prop("readonly", true);
+	        firstInput.addClass("cantwrite");
+	        firstTd.addClass("cantwrite");
+	        secondInput.prop("readonly", false);
+	        secondInput.removeClass("cantwrite");
+	        secondTd.removeClass("cantwrite");
+	    } else if (selectedValue == "2" || selectedValue == "3") {
+	        firstInput.prop("readonly", false);
+	        firstInput.removeClass("cantwrite");
+	        firstTd.removeClass("cantwrite");
+	        secondInput.prop("readonly", true);
+	        secondInput.addClass("cantwrite");
+	        secondTd.addClass("cantwrite");
+	    }
+	}
+	
 	// 클릭한 버튼을 매개변수로 받음
+	// 계정과목 모달창
 	function openAccountCodeModal(btn) {
 			$.ajax({
 				url: "/receipt/accountList",
@@ -910,9 +1407,6 @@ $(function(){
 							+ item.accountName + "</td>";
 						$('#accountListModal').append(temp);
 					});
-
-					// 모달을 열 때, 클릭한 버튼 객체를 모달 내에서 활용하기 위해 data() 메소드를 사용하여 저장
-      				//$("#accountCode").data('clickedButton', btn);
       				
 					// 모달을 열 때, 모달을 열기 위해 클릭했던 버튼을 기억하기 위해(모달 id)
 					// + 클릭 버튼 객체를 가져오기 위해
@@ -922,15 +1416,22 @@ $(function(){
 					    
 		                  let selectedAccountNo = $(this).find('td:first-child').text();
 		                  let selectedAccountName = $(this).find('td:nth-child(2)').text();
-					      
-					      // this= 더블클릭한 tr
-					      //let selectedAccountInfo = $(this).data('accountInfo');
-					      //let selectedAccountNo = selectedAccountInfo.accountNo;
-					      //let selectedAccountName = selectedAccountInfo.accountName;
+		                  
+		                  // 동적 생성된 계정 조회 버튼의 인덱
+		                  //let btnIndex = $(btn).data("btn-index");
+		                  
+		                  
+		                  
+		                    // 버튼 인덱스를 이용하여 해당 버튼의 행을 선택
+					        //let targetRow = $('#nonbanktable tbody tr').eq(btnIndex);
 					
-					      // 클릭했던 버튼과 같은 tr의 input들에 각각 값 넣어주기
-					      $(btn).closest('tr').find('input[name="accountno"]').val(selectedAccountNo);
-					      $(btn).closest('tr').find('input[name="accountname"]').val(selectedAccountName);
+					        //targetRow.find('input[name="accountno"]').val(selectedAccountNo);
+					        //targetRow.find('input[name="accountname"]').val(selectedAccountName);
+		                  
+
+					      // 클릭했던 버튼과 같은 td의 input들에 각각 값 넣어주기
+					      $(btn).closest('td').find('input[name="accountno"]').val(selectedAccountNo);
+					      $(btn).closest('td').next().find('input[name="accountname"]').val(selectedAccountName);
 					
 					      // 모달 창 닫기
 					      $("#accountCode").modal("hide");
@@ -942,7 +1443,8 @@ $(function(){
 				}
 			});
 		}
-		
+	
+	// 계정과목 검색
 	function searchAccount() {
 			$.ajax({
 			    url: "/receipt/accountList",
@@ -992,4 +1494,6 @@ $(function(){
 			    },
 			  });
 		}
+		
+		
 

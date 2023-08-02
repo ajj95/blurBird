@@ -91,7 +91,7 @@ public class BankMapperTests {
 		mapper.getDetailSlip("10009").forEach(slip -> log.info(slip));
 	}
 	*/
-	
+	/*
 	@Test
 	public void modifySlipTest() {
 		DetailSlipVO slip = new DetailSlipVO();
@@ -103,7 +103,12 @@ public class BankMapperTests {
 		slip.setSource("거래처변경");
 		log.info(mapper.modifySlip(slip));
 	}
-	
+	*/
+	@Test
+	public void modifySlipStateTest() {
+
+		log.info(mapper.modifySlipState("10010", "1002"));
+	}
 	
 	
 	

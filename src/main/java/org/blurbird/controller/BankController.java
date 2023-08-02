@@ -25,6 +25,11 @@ public class BankController {
 	public void bankta() {
 	}
 	
+	// 수임사 통장관리 메뉴 이동
+	@GetMapping("/bankco")
+	public void bankco() {
+	}
+	
 	
 	@PostMapping("/bankta")
 	public void searchbank(Model model, BankSearchDTO search) {
