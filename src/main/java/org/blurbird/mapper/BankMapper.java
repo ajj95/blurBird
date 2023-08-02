@@ -2,27 +2,53 @@ package org.blurbird.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.TotalDTO;
 
 public interface BankMapper {
 	
-	// ÅëÀå³»¿ª ÀüÃ¼ Á¶È¸
+	// í†µì¥ë‚´ì—­ ì¡°íšŒ
 	public List<BankHistoryVO> getBankHistoryList(BankSearchDTO search);
-	// ÅëÀå³»¿ª ÀüÇ¥ ¹Ì¿¬°á Á¶È¸
+	// í†µì¥ë‚´ì—­ ì „í‘œ ë¯¸ì—°ê²° ì¡°íšŒ
 	public List<BankHistoryVO> getBankHistoryListNone(BankSearchDTO search);
-	// ÅëÀå³»¿ª ÀüÇ¥ ¿¬°á Á¶È¸
+	// í†µì¥ë‚´ì—­ ì „í‘œ ì—°ê²° ì¡°íšŒ
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search);
+	// ì›í•˜ëŠ” í†µì¥ë‚´ì—­ ì¡°íšŒ
+	public List<BankHistoryVO> getBankHistoryDetail(List<String> bhnos);
 	
-	// ÀüÇ¥³»¿ª ÀüÃ¼ Á¶È¸
+	
+	// ì „í‘œë‚´ì—­ ì¡°íšŒ
 	public List<BankSlipVO> getBankSlipList(BankSearchDTO search);
-	// ÀüÇ¥³»¿ª °¡´ÉorÈ®Á¤orÁ¦¿Üor»èÁ¦ Á¶È¸
+	// ì „í‘œë‚´ì—­ ìƒíƒœë³„ ì¡°íšŒ
 	public List<BankSlipVO> getBankSlipListState(BankSearchDTO search);
 	
-	// ºĞ°³³»¿ª Á¶È¸
-	public List<DetailSlipVO> getDetailSlip(int bhno);
+	// ì „í‘œë‚´ì—­ ìƒíƒœë³„ ê°œìˆ˜
+	public int allSlipCount();
+	public int canSlipCount();
+	public int confirmSlipCount();
+	public int exceptSlipCount();
+	public int removeSlipCount();
+	
+	
+	// ì˜ˆìƒì”ì•¡, ì°¨ì•¡ ì¡°íšŒ
+	public TotalDTO getTotalSum();
+	
+	// ë¶„ê°œë‚´ì—­ ì¡°íšŒ
+	public List<DetailSlipVO> getDetailSlip(String bhno);
+	// ë¶„ê°œë‚´ì—­ ë“±ë¡
+	public void registerSlip(DetailSlipVO slip);
+	// ë¶„ê°œë‚´ì—­ ìˆ˜ì •
+	public int modifySlip(DetailSlipVO slip);
+	
+	// ì „í‘œ ì‚­ì œ
+	public int removeSlip(String bhno);
+	
+	// ì „í‘œ ìƒíƒœ ë³€ê²½
+	public int modifySlipState(@Param("bhno") String bhno, @Param("bhstateno") String bhstateno);
 	
 	
 }

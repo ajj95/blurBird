@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankSlipVO {
-	private String bhno;				// ÅëÀå³»¿ª ¹øÈ£
-	private String source;			// °Å·¡Ã³
-	private String summary;		// ÀüÇ¥Àû¿ä
-	private String accountname;  // »ó´ë°èÁ¤
-	private String bhstatename;  // ÀüÇ¥»óÅÂ
-	private int sum;				   // ¿¹»óÀÜ¾×
+	private String bhno;				// ì€í–‰ë‚´ì—­ ë²ˆí˜¸
+	private String source;			// ê±°ë˜ì²˜(ì…/ì¶œê¸ˆì²˜)
+	private String summary;		// ì „í‘œì ìš”
+	private String accountname;  // ê³„ì •ëª…
+	private String bhstatename;  // ì „í‘œìƒíƒœëª…
+	private int sum;				   // ì˜ˆìƒì”ì•¡
+	private int amount;				
 }

@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BankSearchDTO {
-
-	private String startdate;
-	private String enddate;
-	private String bizno;
-	private String bankname;
-	private String bhstateno;    
+public class TotalDTO {
+	private int totalsum;
+	private int diffsum;
 }
