@@ -1,5 +1,7 @@
 package org.blurbird.domain.info;
 
+import java.util.ArrayList;
+
 import lombok.Data;
 
 @Data
@@ -7,10 +9,12 @@ public class InfoData {
 
 	private String bizno;
 	private String year;
-	@Override
-	public String toString() {
-		return "InfoData [bizno=" + bizno + ", year=" + year + "]";
-	}
+	
+	
+	private String bizname;
+	private String bizincome;
+	private String tax;
+	private String transdate;
 	
 	
 }

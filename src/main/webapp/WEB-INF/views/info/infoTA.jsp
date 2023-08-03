@@ -3,15 +3,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/taheader.jsp"%>
+
 <!DOCTYPE html>
 <html>
 <head>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <meta charset="UTF-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
 <title>infota</title>
 <meta content="" name="description">
 <meta content="" name="keywords">
+
 <style>
 .pagetitle {
 	margin-top: 8px;
@@ -52,12 +55,12 @@ th, td {
 
 th:first-child, td:first-child {
 	/* 첫 번째 열 넓이 */
-	width: 35px;
+	width: 350px;
 }
 
 th:first-child(2), td:first-child(2) {
 	/* 두번째 열 넓이 */
-	width: 350px;
+	
 }
 
 .tabletop {
@@ -106,9 +109,60 @@ th:first-child(2), td:first-child(2) {
 	border: 0.5px;
 }
 </style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#submitYear").on("click", function(e) {
+			e.preventDefault(); // 폼 제출 방지
+
+			var year = $("input[name='year']").val(); // 선택된 년도 값을 가져옴
+			var biznoList = $("input[name='bizno']").map(function() {
+				return $(this).val();
+			}).get(); // bizno 값을 배열로 가져옴
+			//             console.log(biznoList);
+
+			processBizno(biznoList, 0, year);
+		});
+
+		function processBizno(biznoList, index, year) {
+			if (index >= biznoList.length) {
+				// 처리가 끝났을 때
+				//                 console.log("Processing completed.");
+				return;
+			}
+
+			var biznoValue = biznoList[index];
+			//             console.log("Processing bizno: " + biznoValue);
+
+			$.ajax({
+				type : "post",
+				url : "/info/infoTA",
+				data : {
+					"bizno" : biznoValue,
+					"year" : year
+				},
+				success : function(data) {
+					// 받은 데이터에 대한 추가 처리 또는 페이지 업데이트를 여기에서 수행합니다.
+
+					// 다음 bizno 처리를 위해 재귀 호출
+					processBizno(biznoList, index + 1, year);
+				},
+				error : function(xhr, status, error) {
+					console.error(error);
+					// 다음 bizno 처리를 위해 재귀 호출
+					processBizno(biznoList, index + 1, year);
+				}
+			});
+		}
+	});
+</script>
+
+
+
+
 </head>
 
 <body>
+
 	<!-- ======= Sidebar ======= -->
 	<aside id="sidebar" class="sidebar">
 		<ul class="sidebar-nav" id="sidebar-nav">
@@ -184,9 +238,9 @@ th:first-child(2), td:first-child(2) {
 						role="tablist">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="home-tab"
-								data-bs-toggle="tab" data-bs-target="#bordered-contact"
+								data-bs-toggle="tab" data-bs-target="#bordered-home"
 								type="button" role="tab" aria-controls="home"
-								aria-selected="true">원천세</button>
+								aria-selected="true">종합소득세</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
@@ -194,49 +248,48 @@ th:first-child(2), td:first-child(2) {
 								aria-controls="profile" aria-selected="false">부가가치세</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-								data-bs-target="#bordered-contact" type="button" role="tab"
-								aria-controls="contact" aria-selected="false">사업장현황</button>
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-profile" type="button" role="tab"
+								aria-controls="profile" aria-selected="false">사업장현황</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-								data-bs-target="#bordered-contact" type="button" role="tab"
-								aria-controls="contact" aria-selected="false">법인세</button>
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-profile" type="button" role="tab"
+								aria-controls="profile" aria-selected="false">법인세</button>
+						</li>
+						<li class="nav-item active" role="presentation">
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-profile" type="button" role="tab"
+								aria-controls="profile" aria-selected="false">원천세</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-								data-bs-target="#bordered-home" type="button" role="tab"
-								aria-controls="contact" aria-selected="false">종합소득세</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-								data-bs-target="#bordered-contact" type="button" role="tab"
-								aria-controls="contact" aria-selected="false">지방소득세</button>
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#bordered-profile" type="button" role="tab"
+								aria-controls="profile" aria-selected="false">지방소득세</button>
 						</li>
 						</li>
 					</ul>
 
 					<!-- 지급년월/연월선택 캘린더 -->
-					<div>
-						<form class="selectYear" action="/info/infoTA" method="post">
-							<br> <span>조회 희망 월</span>
-							<!-- 연월 선택 캘린더 -->
-							<div class="selectMonth">
-								<input type="number" name="year" placeholder="2023"
-									value='<c:out value="${year}"/>' min="1900" max="2100"></input>
-								<button type="submit" id="submitYear">조회</button>
-							</div>
-						</form>
+					<form class="selectYear" action="/info/infoTA" method="post">
+						<span>조회 년도</span>
+						<!-- 연월 선택 캘린더 -->
+						<div class="selectMonth">
+							<input type="number" name="year" placeholder="2023"
+								value='<c:out value="${year}"/>' min="1900" max="2100"></input>
+							<button type="submit" id="submitYear">조회</button>
+						</div>
+					</form>
 
-						<br>
-					</div>
+					<br>
+
 
 					<!-- 신고현황 -->
 					<div>
 						<!-- 신고현황 바 위의 정보 -->
 						<div class="barInfo">
 							<div>국세청 신고현황</div>
-							<div class="percentage">00%</div>
+							<div class="percentage">20%</div>
 						</div>
 
 						<!-- 전체 건수 나타내는 신고현황 바(막대기) -->
@@ -253,7 +306,7 @@ th:first-child(2), td:first-child(2) {
 								<div class="bar undeclared">
 									<dl class="desc">
 										<dt>
-											미신고 <em>5</em>건
+											미신고 <em>4</em>건
 										</dt>
 									</dl>
 								</div>
@@ -274,7 +327,6 @@ th:first-child(2), td:first-child(2) {
 							<table class="table table-hover table-bordered">
 								<thead>
 									<tr>
-									<th></th>
 										<th scope="col" class="tabletop">수임처</th>
 										<th scope="col" class="tabletop">귀속년월</th>
 										<th scope="col" class="tabletop">종합소득금액</th>
@@ -287,23 +339,21 @@ th:first-child(2), td:first-child(2) {
 									</tr>
 								</thead>
 
-
-
-
 								<tbody>
-										<c:forEach items="${list}" var="business">
-											<tr>
-												<td></td>
-												<td><c:out value="${business.bizname}" /> </td>
-										</c:forEach>
+									<c:forEach items="${listCO}" var="business">
+									
+										<tr>
+											<td><c:out value="${business.bizname}" /> <input
+												type="hidden" name="bizno"
+												value="<c:out value='${business.bizno}' />"></td>
+									</c:forEach>
+									<c:forEach items="${list}" var="infoData                                              ">
+										<td><c:out value="${infoData.year}" /></td>
 										
-										<input type='hidden' id='bizno' name='bizno' value='<c:out value="${business.bizno}"/>'>
-
-										<c:forEach items="${values}" var="salestest">
-											<td><c:out value="${salestest}" /></td>
-										</c:forEach>
-									<td></td>
-									<td></td>
+										<td><c:out value="${infoData.bizincome}" /></td>
+										<td><c:out value="${infoData.tax}" /></td>
+									
+									</c:forEach>
 									<td></td>
 									<td></td>
 									<td></td>
@@ -312,7 +362,6 @@ th:first-child(2), td:first-child(2) {
 
 
 									<tr>
-										<td><input class="form-check-input" type="checkbox"></td>
 										<td>수임처 더존학원</td>
 										<!-- 										<td>전대장</td> -->
 										<td>2023.04</td>
@@ -325,7 +374,6 @@ th:first-child(2), td:first-child(2) {
 										<td><button type="button">신고서작성</button></td>
 									</tr>
 									<tr>
-										<td><input class="form-check-input" type="checkbox"></td>
 										<td>수임처 더존학원더긴제목</td>
 										<!-- 										<td>안깃헙</td> -->
 										<td>2023.04</td>
@@ -338,7 +386,6 @@ th:first-child(2), td:first-child(2) {
 										<td><button type="button">신고서작성</button></td>
 									</tr>
 									<tr>
-										<td><input class="form-check-input" type="checkbox"></td>
 										<td>세무사학원</td>
 										<!-- 										<td>정디비</td> -->
 										<td>2023.04</td>
@@ -351,7 +398,6 @@ th:first-child(2), td:first-child(2) {
 										<td><button type="button">신고서작성</button></td>
 									</tr>
 									<tr>
-										<td><input class="form-check-input" type="checkbox"></td>
 										<td>맛있는 카페</td>
 										<!-- 										<td>강대표</td> -->
 										<td>2023.04</td>
@@ -370,24 +416,16 @@ th:first-child(2), td:first-child(2) {
 
 							<button type="button" class="btn btn-primary">확인</button>
 							<button type="button" class="btn btn-secondary">취소</button>
-							<button type="button" class="btn btn-success">Success</button>
-							<button type="button" class="btn btn-danger">Danger</button>
-							<button type="button" class="btn btn-warning">Warning</button>
-							<button type="button" class="btn btn-info">Info</button>
-							<button type="button" class="btn btn-dark">Dark</button>
+
 						</div>
+
 						<div class="tab-pane fade" id="bordered-profile" role="tabpanel"
-							aria-labelledby="profile-tab">Nesciunt totam et.
-							Consequuntur magnam aliquid eos nulla dolor iure eos quia.
-							Accusantium distinctio omnis et atque fugiat. Itaque doloremque
-							aliquid sint quasi quia distinctio similique. Voluptate nihil
-							recusandae mollitia dolores. Ut laboriosam voluptatum dicta.</div>
+							aria-labelledby="profile-tab">
+							<h2>페이지를 제작 중입니다.</h2>
+						</div>
+
 						<div class="tab-pane fade" id="bordered-contact" role="tabpanel"
-							aria-labelledby="contact-tab">Saepe animi et soluta ad odit
-							soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium
-							quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus
-							impedit molestias nostrum veniam. Qui amet ipsum iure.
-							Dignissimos fuga tempore dolor.</div>
+							aria-labelledby="contact-tab"></div>
 					</div>
 					<!-- End Bordered Tabs -->
 
@@ -400,28 +438,8 @@ th:first-child(2), td:first-child(2) {
 	</main>
 	<!-- End #main -->
 	<%@include file="../common/footer.jsp"%>
+
+
 </body>
-<script type="text/javascript">
-	$(document).ready(
-			
-			$("#submitYear").on("click", "#bizno", function(){
-				$.ajax({
-					type : 'post',
-					url : '/info/infoTA',
-					data : JSON.stringify(infoData),
-					contentType : "application/json; charset=utf-8",
-					success : function(result, status, xhr) {
-						if (callback) {
-							callback(result);
-						}
-					},
-					error : function(xhr, status, er) {
-						if (error) {
-							error(er);
-						}
-					}
-				});
-			});
-			
-</script>
+
 </html>

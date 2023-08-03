@@ -10,7 +10,7 @@ public interface InfoService {
 
 	public List<BusinessVO> getListBusiness();
 	
-//	public List<IncomeSVO> getISElements(Long bizno, String year);
+	public IncomeSVO getISByBiz(InfoData infoData);
 	
-	public Long getSalesfromAuto(InfoData infoData);
+	public List<InfoData> getList(InfoData infoData);
 }
