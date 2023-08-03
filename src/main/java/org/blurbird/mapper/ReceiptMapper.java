@@ -11,4 +11,5 @@ import org.blurbird.domain.receipt.ReceiptRequestVO;
 public interface ReceiptMapper {
 	public List<AccountVO> getAccountList();
 	public List<ReceiptRequestVO> getReceiptList(DateRange dateRange);
+	public String getImgResource(String recreqno);
 }

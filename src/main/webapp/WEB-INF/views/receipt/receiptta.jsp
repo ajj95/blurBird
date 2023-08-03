@@ -8,7 +8,7 @@
 				<meta charset="UTF-8">
 				<meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-				<title>infota</title>
+				<title>ReceiptTA</title>
 				<meta content="" name="description">
 				<meta content="" name="keywords">
 				<style>
@@ -210,7 +210,7 @@
 								<div class="left">
 									<!--Start div left  -->
 									<div>
-										<img src="../resources/upload/receipt1.jpg" alt="receipt"
+										<img src="/resources/upload/apple-touch-icon.png" alt="receipt"
 											class="img-fluid custom-image">
 									</div>
 								</div>
@@ -266,40 +266,6 @@
 														</tr>
 													</thead>
 													<tbody id="searchResults">
-														<tr>
-															<td><input class="form-check-input" type="radio"
-																	name="flexRadioDefault" id="flexRadioDefault1"></td>
-															<td>퀵서비스</td>
-															<td><select class="form-select">
-																	<option value="1" selected>적합</option>
-																	<option value="2">부적합</option>
-																</select></td>
-															<td>몰?루</td>
-															<td>
-																<button type="button" class="btn btn-outline-dark"
-																	data-bs-toggle="modal"
-																	data-bs-target="#exampleModal">
-																	<i class="ri-article-fill"></i>
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td><input class="form-check-input" type="radio"
-																	name="flexRadioDefault" id="flexRadioDefault1"></td>
-															<td>밥값</td>
-															<td><select class="form-select">
-																	<option value="1" selected>적합</option>
-																	<option value="2">부적합</option>
-																</select></td>
-															<td>아!루</td>
-															<td>
-																<button type="submit" class="btn btn-outline-dark"
-																	data-bs-toggle="modal"
-																	data-bs-target="#exampleModal">
-																	<i class="ri-article-fill"></i>
-																</button>
-															</td>
-														</tr>
 
 													</tbody>
 												</table>
@@ -338,8 +304,6 @@
 															<th scope="col" class="tabletop">공급가액</th>
 															<th scope="col" class="tabletop">세액</th>
 															<th scope="col" class="tabletop">합계</th>
-															<th scope="col" class="tabletop">분개</th>
-															<th scope="col" class="tabletop">전표반영</th>
 															<th scope="col" class="tabletop">메모</th>
 														</tr>
 													</thead>
@@ -360,8 +324,6 @@
 															<td><input type="text" class="form-control"></td>
 															<td>퀵서비스</td>
 															<td><input type="text" class="form-control"></td>
-															<td></td>
-															<td></td>
 															<td></td>
 															<td></td>
 															<td><button type="button" class="btn btn-outline-dark"
@@ -542,22 +504,18 @@
 					        startDate: startDate,
 					        endDate: endDate
 					      };
-
 					      $.ajax({
 					        type: 'get',
 					        url: '/receipt/dateSearch',
 					        data: requestData,
+					        dataType: 'json', //이게 누락되네
 					        success: function(response) {
-					          // 검색 결과 처리
-					          console.log('검색 결과:', response);
-					          // 여기서 필요한 로직을 추가하여 검색 결과를 화면에 표시하거나 처리합니다.
-					          // 테이블에 검색 결과를 동적으로 추가
 					          let tbody = $('#searchResults');
 					          tbody.empty(); // 이전 결과를 지우기 위해 tbody 내용을 비웁니다.
-					          $.each(response,function(index, item){
+					          $.each(response,function(index,item){
 						            let row = $('<tr>');
-						            row.append('<td><input class="selectRadiobtn form-check-input" type="radio" name="flexRadioDefault"></td>');
-						            row.append('<td>'+item.purpose+'</td>')
+						            row.append('<td><input class="selectRadiobtn form-check-input" type="radio" name="flexRadioDefault"><span hidden>'+item.recreqno+'</span></td>');
+						            row.append('<td>'+item.purpose+'</td>');
 						            row.append('<td><select class="form-select"><option value="1" selected>적합</option><option value="2">부적합</option>	</select></td>');
 						            row.append('<td>');
 						            row.append('<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"	data-bs-target="#exampleModal">	<i class="ri-article-fill"></i></button>	</td>');
@@ -574,9 +532,6 @@
 					      console.log("마지막 날짜:", endDate);
 					    });
 					
-					$(document).on('click','.listconditionbtn',function(){
-						
-					})
 					
 					$(document).on('click', '.accountCheck', function () {
 						btnLocation = $(this);
@@ -677,6 +632,25 @@
 								console.log("Error:", error);
 							},
 						});
+					})
+					$(document).on('change','.selectRadiobtn',function(){
+						let radioBtnLocation = $(this);
+						let recreqno = radioBtnLocation.next().text();
+						$.ajax({
+							url: "/receipt/imgSearch",
+							type: "POST",
+							data:{"recreqno":recreqno},
+							dataType:"json",
+							success: function (data) {
+								const receiptImage = data;
+								const ImgPath = '/resources/upload/'+receiptImage;
+								$('#main > section > div.card > div > div.left > div > img').attr('src',ImgPath);
+							},
+							error: function (xhr, status, error) {
+								// 에러 처리
+								console.log("Error:", error);
+							},
+						})
 					})
 				</script>
 				<!-- End #main -->

@@ -36,8 +36,11 @@ public class testMappers {
 		 * try { log.info(ds.getConnection()); } catch (SQLException e) { // TODO
 		 * Auto-generated catch block e.printStackTrace(); }
 		 */
-		DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
-		log.info(mapper.getReceiptList(dr));
+		/*
+		 * DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
+		 * log.info(mapper.getReceiptList(dr));
+		 */
+		log.info(mapper.getImgResource("5"));
 	}
 
 }
