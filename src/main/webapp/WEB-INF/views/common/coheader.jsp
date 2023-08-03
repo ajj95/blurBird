@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -184,8 +186,198 @@
 	 margin-left: 5px;
   }
   </style>
-</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	
+$(function(){
+		
+		// 로그인한 사용자의 메시지 요청
+		function fetchMessageList() {
+			// 로그인한 사용자의 userno
+			let receiver = '4';
+			
+	        $.ajax({
+	            type: "GET",
+	            url: "/bank/getMessageList",
+	            dataType: "json",
+	            data: { receiver: receiver },
+	            success: function(response) {
+	                let list = response.messageList;
+	                let count = response.unreadMessageCount; 
+	                createMessageList(list, count);
+	            },
+	            error: function(xhr, status, error) {
+	                console.error(error);
+	            }
+	        });
+	    }
 
+	    // 페이지 로드 시, 메시지 목록 가져오기
+	    fetchMessageList();
+		
+});
+
+	function formatNumberWithCommas(number) {
+			return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+	function createMessageList(list, count){
+			
+		let start = $('#makeMessage');
+	  	start.empty();
+		  	
+		let str = '';
+		str += '<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">';
+		str += '<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">';
+		str += '<i class="bi bi-chat-left-text"></i>';
+		if(count==0){
+			str += '<span class="badge bg-success badge-number"></span>';
+		}else{
+			str += '<span class="badge bg-success badge-number">';
+			str += count;
+			str += '</span>';
+		}
+		str += '</a>'; // end messages icon
+		
+		str += '<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">';
+		str += '<li class="dropdown-header">';
+		str += count;
+		str += '개의 새로운 메시지가 있습니다.';
+		str += '<a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">모두 보기</span></a>';
+		str += '</li>';
+		str += '<li>';
+		str += '<hr class="dropdown-divider">';
+		str += '</li>';
+		
+		if(list && list.length >0){
+			for (let i = 0; i < list.length; i++) {
+				str += '<li class="message-item">';
+				str += '<a href="#">';
+				str += '<div>';
+				str += '<input type="hidden" class="messageno" value="';
+				str += list[i].messageno;
+				str += '">';
+				str += '<h4>';
+				str += list[i].sendername;
+				str += '</h4>';
+				str += '<p>';
+				str += list[i].message;
+				str += '</p>';
+				str += '<p>';
+				str += list[i].bhmdate.split(".")[0];   //소수점 이하 숫자 제거
+				str += '</p>';
+				str += '</div>';
+				str += '</a>';
+				str += '</li>';
+				str += '<li>';
+				str += '<hr class="dropdown-divider">';
+				str += '</li>';
+			}//end for
+			
+			str += '<li class="dropdown-footer">';
+			str += '<a href="#">모두 보기</a>';
+			str += '</li>';
+		}//end if
+
+		str += '</ul>';
+		
+		start.html(str);
+	}// 메시지 출력
+
+
+$(function(){
+	
+	// 메시지 부분 클릭시
+	$("#makeMessage").on("click", ".message-item", function(){
+		
+		// 클릭한 li의 messageno 가져오기
+		let messageno = $(this).find(".messageno").val();
+		
+		// 메시지 상태변경(확인) + 통장내역 가져와서 모달에 넣기
+		 $.ajax({
+	            type: "GET",
+	            url: "/bank/getBHfromMessageno",
+	            dataType: "json",
+	            data: { messageno: messageno },
+	            success: function(response) {
+	                let bh = response.bankhistory;
+	                
+	                // 모달 내용 채우기
+	                $('#msg_bhno').val(bh.bhno);
+	                $('#msg_bankname').val(bh.bankname);
+	                $('#msg_accountnumber').val(bh.accountnumber);
+	                $('#msg_bhdate').val(bh.bhdate);
+	                $('#msg_source').val(bh.source);
+	                $('#msg_amount').val(formatNumberWithCommas(bh.amount));
+	                
+	            },
+	            error: function(xhr, status, error) {
+	                console.error(error);
+	            }
+	     });
+		
+         // 모달 열기
+         $('#readMessage').modal('show');
+	});
+	
+	// 모달에서 메모 입력 후 저장시
+	$("#sendbhmemobtn").on("click", function(){
+		
+		
+	});
+	
+});
+
+	
+</script>
+</head>
+    <!-- 메시지 클릭 시 모달 -->
+    <div class="modal fade" id="readMessage" tabindex="-1">
+       <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title"><strong>메시지 확인</strong></h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           	<div class="modal-body">
+           		<div class="modaltable">
+           			<div class="tabletitle">통장내역</div>
+           			<input type="hidden" id="msg_bhno">
+            		<table>
+               		<tr>
+               			<td class="modalintitle">은행</td>
+               			<td><input type="text" id="msg_bankname" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">계좌</td>
+               			<td><input type="text" id="msg_accountnumber" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">일자</td>
+               			<td><input type="text" id="msg_bhdate" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">적요</td>
+               			<td><input type="text" id="msg_source" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">금액</td>
+               			<td><input type="text" id="msg_amount" class="intable" readonly></td>
+               		</tr>
+               	</table>
+           		</div>
+              <div>
+              	<label class="labeltitle2">메모입력</label>
+              	<input type="text" id="insert_bhmessage" class="modaltext" placeholder="메모를 입력해주세요."/>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" id="sendbhmemobtn">확인</button>
+            </div>
+         </div>
+       </div>
+      </div><!-- End 모달-->
 <body>
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -238,8 +430,9 @@
               <li><a href="#">홈택스인증서관리</a></li>
               <li><a href="#">청구/수금설정</a></li>
             </ul>
-          </i>
-      </nav><!-- .navbar -->
+          </li>
+      </ul>
+   </nav><!-- .navbar -->
       
     <!-- Saerch Bar -->
     <div class="search-bar">
@@ -261,7 +454,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number"></span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
@@ -332,70 +525,8 @@
 
         </li><!-- End Notification Nav -->
 
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
+		<!-- ajax 동적 생성 부분 -->
+        <li class="nav-item dropdown" id="makeMessage">
         </li><!-- End Messages Nav -->
 
         <li class="nav-item dropdown pe-3">

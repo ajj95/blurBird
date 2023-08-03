@@ -15,6 +15,9 @@
   #main{
   	margin-left: 0px !important;
   }
+  #footer{
+  	margin-left: 0 !important;
+  }
   .pagetitle{
   	margin-top: 8px;
   }
@@ -135,7 +138,7 @@
     float: left;
     width: 49%; 
     box-sizing: border-box;
-    height: 400px;
+    height: 600px;
     overflow: auto;
     margin-bottom: 20px;
   }
@@ -146,7 +149,7 @@
     width: 49%; 
     box-sizing: border-box;
 	flex-wrap: wrap;
-	height: 400px;
+	height: 600px;
     overflow: auto;
     margin-bottom: 20px;
   }
@@ -377,7 +380,7 @@
 .modaltable td:first-child,
 .modaltable td:nth-child(3),
 .modaltable td:nth-child(5){
-	width: 50px;
+	width: 60px;
 	font-weight: bold;
 	text-align: left;
 }
