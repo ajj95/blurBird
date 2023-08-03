@@ -47,21 +47,29 @@ public class InfoServiceTests {
 //		log.info(service.getSalesfromAuto(info));
 //	}
 	
+//	@Test
+//	public void test() {
+//		InfoData info = new InfoData();
+//		info.setBizno("10001");
+//		info.setYear("2023");
+//		
+//		log.info("info엔 들어갔네: " + info.getBizno());
+//		log.info("메서드만 실행시키면 뭐가 찍히니?: " + service.getList(info));
+//		log.info("실행시킨 메서드 문자열로 바꾸기: " + service.getList(info).get(0).getBizincome());
+//		
+//
+//		info.setBizname(mapper.getListBusiness().get(0).getBizname());
+//		info.setBizincome(Long.toString(mapper.getSalesfromAuto(info)));
+//		
+//		log.info("이게 info2 객체다~!!!! : " + info);
+//	}
+	
 	@Test
 	public void test() {
 		InfoData info = new InfoData();
-		info.setBizno("10001");
 		info.setYear("2023");
 		
-		log.info("info엔 들어갔네: " + info.getBizno());
-		log.info("메서드만 실행시키면 뭐가 찍히니?: " + service.getList(info));
-		log.info("실행시킨 메서드 문자열로 바꾸기: " + service.getList(info).get(0).getBizincome());
-		
-
-		info.setBizname(mapper.getListBusiness().get(0).getBizname());
-		info.setBizincome(Long.toString(mapper.getSalesfromAuto(info)));
-		
-		log.info("이게 info2 객체다~!!!! : " + info);
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getISByBiz(info));
 	}
 	
 
