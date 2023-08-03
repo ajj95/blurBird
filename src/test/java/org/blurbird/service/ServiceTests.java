@@ -27,8 +27,9 @@ public class ServiceTests {
 	@Test
 	public void test() throws Exception{
 //		service.read("451");
-		DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
-		service.getReceiptList(dr);
+//		DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
+//		service.getReceiptList(dr);
+		service.getImgPath("5");
 	}
 
 }
