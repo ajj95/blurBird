@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.blurbird.domain.MemberVO;
 import org.blurbird.domain.UsersVO;
+import org.blurbird.domain.bank.BusinessVO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -34,4 +35,5 @@ public class DocumentRequestVO {
 	private MemberVO member;
 	private DrStateVO drstate;
 	private UsersVO user;
+	private BusinessVO business;
 }

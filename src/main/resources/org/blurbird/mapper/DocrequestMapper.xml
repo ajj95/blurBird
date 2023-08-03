@@ -57,6 +57,16 @@
     <result property="docreqno" column="docreqno" />
 </resultMap>
 
+<!-- businessResultMap: ResultMap for BusinessVO -->
+<resultMap id="businessResultMap" type="org.blurbird.domain.bank.BusinessVO">
+    <result property="bizno" column="bizno" />
+    <result property="bizname" column="bizname" />
+    <result property="businesslicense" column="businesslicense" />
+    <result property="bizaddress" column="bizaddress" />
+    <result property="bistel" column="bistel" />
+    <result property="indusrty" column="industry" />
+</resultMap>
+
 <!-- DocumentRequestList 를위한 resultMap -->
 <resultMap id="DocumentRequestListResultMap" type="org.blurbird.domain.docrequest.DocumentRequestVO">
     <!-- DocumentRequestVO의 id, property 매핑 -->
@@ -78,17 +88,34 @@
     <association property="drstate" resultMap="DrStateResultMap">
         <result column="drstatename" property="drstatename" />
     </association>
+    <association property="business" resultMap="businessResultMap">
+    </association>
 </resultMap>
 
 	<!--  getDocrequest 전체 -->
 <select id="getDocrequestList" resultMap="DocumentRequestListResultMap">
     <![CDATA[
-        SELECT dr.docreqno, membername, doctype, count, wishdate, purpose, drstatename
+        SELECT *
         FROM documentrequest dr
         INNER JOIN users u ON dr.userno = u.userno
         INNER JOIN member m ON u.memberno = m.memberno
         INNER JOIN docreqhistory drh ON dr.docreqno = drh.docreqno
         INNER JOIN drstate ds ON drh.drstateno = ds.drstateno
+        INNER JOIN business bs ON u.bizno = bs.bizno
+        WHERE dr.docreqno > 0
+    ]]>
+</select>
+
+<select id="getDocrequestread" resultMap="DocumentRequestListResultMap" parameterType="String">
+    <![CDATA[
+        SELECT *
+        FROM documentrequest dr
+        INNER JOIN users u ON dr.userno = u.userno
+        INNER JOIN member m ON u.memberno = m.memberno
+        INNER JOIN docreqhistory drh ON dr.docreqno = drh.docreqno
+        INNER JOIN drstate ds ON drh.drstateno = ds.drstateno
+        INNER JOIN business bs ON u.bizno = bs.bizno
+        WHERE dr.docreqno = #{docreqno}
     ]]>
 </select>
 
@@ -102,9 +129,14 @@
 	VALUES (docreqhis_SEQ.nextval, '1', DOCREQNO_SEQ.CURRVAL, sysdate)
 </insert>
 
-<insert id="issuance" parameterType="org.blurbird.domain.docrequest.DocReqHistoryVO">
+<insert id="issuance" parameterType="String">
 	INSERT INTO docreqhistory (historyno, drstateno, docreqno, receivingdate)
 	VALUES (docreqhis_SEQ.nextval, '3', #{docreqno}, sysdate)
+</insert>
+
+<insert id="received" parameterType="String">
+	INSERT INTO docreqhistory (historyno, drstateno, docreqno, receivingdate)
+	VALUES (docreqhis_SEQ.nextval, '4', #{docreqno}, sysdate)
 </insert>
 
 
