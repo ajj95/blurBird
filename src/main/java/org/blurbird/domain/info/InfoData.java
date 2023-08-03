@@ -1,5 +1,7 @@
 package org.blurbird.domain.info;
 
+import java.util.ArrayList;
+
 import lombok.Data;
 
 @Data

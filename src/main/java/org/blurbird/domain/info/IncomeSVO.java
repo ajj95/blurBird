@@ -9,6 +9,8 @@ import lombok.Data;
 @Component
 public class IncomeSVO {
 	
+	private String bizno;
+	
 	private Long salesfromautoslip;
 	private Long salesfrombankslip;
 	private Long totalsales;
