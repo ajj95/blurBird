@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -39,11 +40,15 @@ public class InfoController {
 	
 	
 	@PostMapping("/infoTA")
-	public void getInfoList(Model model, InfoData infoData) {
+	public @ResponseBody List<InfoData> getInfoList(Model model, InfoData infoData) {
 	
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getList(infoData));
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@aa" + infoData.getBizno());
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@aa" + infoData.getYear());
+//		log.info("#################################" + service.getList(infoData));
+//		log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + service.getISByBiz(infoData));
 		
-		model.addAttribute("list", service.getList(infoData));
+		
+		return service.getList(infoData);
 
 	}
 	

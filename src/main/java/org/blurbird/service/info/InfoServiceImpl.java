@@ -128,13 +128,13 @@ public class InfoServiceImpl implements InfoService {
 		IncomeSVO iS = this.getISByBiz(infoData);
 		List<InfoData> infoList = new ArrayList<InfoData>();
 
-			if (infoData.getBizno().equals(iS.getBizno())) {
-				infoData.setBizname(mapper.getBizName(infoData).getBizname());
-				infoData.setBizincome(Long.toString(iS.getBusinessIncome()));
-				infoData.setTax(Long.toString(iS.getTax()));
+		infoData.setBizno(iS.getBizno());
+		infoData.setYear(infoData.getYear());
+		infoData.setBizname(mapper.getBizName(infoData).getBizname());
+		infoData.setBizincome(Long.toString(iS.getBusinessIncome()));
+		infoData.setTax(Long.toString(iS.getTax()));
 
-				infoList.add(infoData);
-			}
+		infoList.add(infoData);
 
 		return infoList;
 	}

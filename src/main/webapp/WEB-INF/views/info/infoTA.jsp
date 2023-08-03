@@ -113,25 +113,26 @@ th:first-child(2), td:first-child(2) {
 	$(document).ready(function() {
 		$("#submitYear").on("click", function(e) {
 			e.preventDefault(); // 폼 제출 방지
+			
 
 			var year = $("input[name='year']").val(); // 선택된 년도 값을 가져옴
 			var biznoList = $("input[name='bizno']").map(function() {
 				return $(this).val();
 			}).get(); // bizno 값을 배열로 가져옴
 			//             console.log(biznoList);
-
+			$('#maketd').empty();
 			processBizno(biznoList, 0, year);
 		});
 
 		function processBizno(biznoList, index, year) {
 			if (index >= biznoList.length) {
 				// 처리가 끝났을 때
-				//                 console.log("Processing completed.");
+				console.log("Processing completed.");
 				return;
 			}
 
 			var biznoValue = biznoList[index];
-			//             console.log("Processing bizno: " + biznoValue);
+			console.log("Processing bizno: " + biznoValue);
 
 			$.ajax({
 				type : "post",
@@ -140,10 +141,34 @@ th:first-child(2), td:first-child(2) {
 					"bizno" : biznoValue,
 					"year" : year
 				},
+
+				dataType : 'json',
 				success : function(data) {
 					// 받은 데이터에 대한 추가 처리 또는 페이지 업데이트를 여기에서 수행합니다.
-
 					// 다음 bizno 처리를 위해 재귀 호출
+					console.log(data);
+					
+					var arr = data;
+					console.log(arr);
+
+					$('#maketd').each(function(index) {
+						let html = '<tr>';
+						html += '<td>' + arr[index].bizname + '</td>';
+						html += '<td>' + arr[index].year + '</td>';
+						html += '<td>' + arr[index].bizincome + '</td>';
+						html += '<td>' + arr[index].tax + '</td>';
+						html += '</tr>';
+						$(this).append(html);
+					});
+
+					// 					$.each(arr, function(index, item) {
+					// 						let html = '<td>' + item.year + '</td>';
+					// 						html += '<td>' + item.bizincome + '</td>';
+					// 						html += '<td>' + item.tax + '</td>';
+					// 						html += '</tr>';
+					// 						$('#nameCO').append(html);
+					// 					});
+
 					processBizno(biznoList, index + 1, year);
 				},
 				error : function(xhr, status, error) {
@@ -339,76 +364,14 @@ th:first-child(2), td:first-child(2) {
 									</tr>
 								</thead>
 
-								<tbody>
+								<tbody id="maketd">
 									<c:forEach items="${listCO}" var="business">
-									
-										<tr>
+										<tr class='${business.bizno}'>
 											<td><c:out value="${business.bizname}" /> <input
 												type="hidden" name="bizno"
 												value="<c:out value='${business.bizno}' />"></td>
+										</tr>
 									</c:forEach>
-									<c:forEach items="${list}" var="infoData                                              ">
-										<td><c:out value="${infoData.year}" /></td>
-										
-										<td><c:out value="${infoData.bizincome}" /></td>
-										<td><c:out value="${infoData.tax}" /></td>
-									
-									</c:forEach>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									</tr>
-
-
-									<tr>
-										<td>수임처 더존학원</td>
-										<!-- 										<td>전대장</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
-									<tr>
-										<td>수임처 더존학원더긴제목</td>
-										<!-- 										<td>안깃헙</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
-									<tr>
-										<td>세무사학원</td>
-										<!-- 										<td>정디비</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
-									<tr>
-										<td>맛있는 카페</td>
-										<!-- 										<td>강대표</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
 								</tbody>
 							</table>
 
