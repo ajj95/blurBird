@@ -64,10 +64,9 @@
   .banktable td:nth-child(2) {
     width: 80px; /* 두 번째 열 넓이 */
   }
-
+  .banktable td:nth-child(5),
   .banktable td:nth-child(6),
-  .banktable td:nth-child(4),
-  .banktable td:nth-child(5) {
+  .banktable td:nth-child(7) {
     text-align: right;
   }
   .banktable th:last-child,
@@ -386,60 +385,86 @@ input.modaltext {
 .cantwrite{
 	background-color: #F5F5F5 !important;
 }
-
+.button-and-input {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.searchaccount{
+  margin-right: 4px;
+}
+.modalintitle{
+  margin-right: 10px;
+}
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
-
-		// 내용확인요청 시 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$("#left").on("click", "#memoplzbtn", function(){
-			$("#memoplzmodal").modal('show');
+		
+		// 계정 조회 버튼
+		$("#bottom").on("click", ".searchaccount", function(){
+			
+			// 버튼별로 동적 생성되는 인덱스값 가져오기: 시작 0 ~ 증가
+			let btnIndex = $(this).data("btn-index");
+			alert("버튼인덱스: " + btnIndex);
+			
+			openAccountCodeModal(btnIndex);
 		});
-	
+		
+		
+	  // 내용확인 모달 창에서 저장 클릭 시 메시지 insert
+	  // 꼭 e.preventDefault를 해야 submit이 실행되지 않아 새로고침X -> ajax로 다시 랜더링 가능
+	  $("#sendmessagebtn").on("click", function(){
+		  
+		 // 선택된 tr의 bhno 가져오기
+	     let tableRows = document.querySelectorAll("#nonbanktable tbody tr");
+		 let selectedRow = null;
+		 
+		 for (const row of tableRows) {
+		    const checkbox = row.querySelector("input[type='checkbox']");
+		    if (checkbox.checked) {
+		      selectedRow = row;
+		      break;
+		    }
+		 }
 
-		// 분개전표 내용 입력 후 저장 시 입력 처리 후 다시 화면으로
-		$("#bottom").on("click", "#insertSlipBtn", function(){
+		   if (!selectedRow) {
+		   	  return;
+		   }
+		   
+		  // bhno, message 가져오기
+		  let bhno = selectedRow.querySelector("input[name='bhno']").value;
+		  let message = document.getElementById("message").value;
+		  let receiver = '4';
+		  let sender = '3';
+		  
 
-			let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
+		  let dataToSend = {
+		        bhno: bhno,
+		        message: message,
+		        receiver: receiver,
+		        sender: sender
+		   };
 
-		    // detailSlips 배열에 필요한 데이터를 넣어준다.
-		    $('.detailsliptable tbody tr').each(function() {
-		    	alert($(this).find('[name="bhno"]').val());
-		    	alert($(this).find('[name="sortno"]').val());
-		    	alert($(this).find('[name="accountno"]').val());
-		    	alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
-		    	alert($(this).find('[name="summary"]').val());
-
-		        let detailSlip = {
-		            bhno: $(this).find('[name="bhno"]').val(),
-		            sortno: $(this).find('[name="sortno"]').val(),
-		            accountno: $(this).find('[name="accountno"]').val(),
-		            // -나 ,부분 빼고 int로 변경
-		            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
-		            summary: $(this).find('[name="summary"]').val()
-		        };
-
-		        detailSlipList.push(detailSlip);
-		   });
-			
-		    // AJAX 호출
 		    $.ajax({
-		      type: "POST",
-		      url: "/bank/insertdetailslips", // 컨트롤러의 URL
-		      contentType: "application/json", // 전송할 데이터의 타입 (JSON)
-		      data: JSON.stringify(detailSlipList), // JSON 형태로 변환하여 전송
-		      success: function (response) {
-		        alert(response.message); // 결과 메시지를 알림으로 보여줌
-		      },
-		      error: function (xhr, status, error) {
-		        // 에러 발생 시 실행할 함수
-		        alert("Error occurred: " + error); // 에러 메시지를 알림으로 보여줌
-		      },
+		        type: "POST",
+		        url: "/bank/requestmessage",
+		        contentType: "application/json;charset=UTF-8",
+			    data: JSON.stringify(dataToSend),
+			    dataType: "json",
+		        success: function(response) {
+		        	alert(response);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error(error);
+		        }
 		    });
-			
 		    
-	     	let startDate = $("#startdate").val();
+		   
+		    // 모달 닫기
+			$("#memoplzmodal").modal("hide");
+		    
+		    // 다시 기존 화면 랜더링
+		    let startDate = $("#startdate").val();
             let endDate = $("#enddate").val();
             let bizno = $("#bizno").val();
             let bankname = $("#bankname").val();
@@ -452,71 +477,9 @@ input.modaltext {
             };
             
            historySlipRequest(search);
-	    });	
-		
-		// reset 시
-		
-		
+		  
+	  });
 
-	
-		//------------------------------- 다시 볼거 --------------------------------------
-
-		// 분개내역 수정 후 저장 시 ajax 호출
-		$("#bottom").on("click", "#modifyslipbtn", function(){
-			 	let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
-
-			    // detailSlips 배열에 필요한 데이터를 넣어준다.
-			    $('.detailsliptable tbody tr').each(function() {
-			    	alert($(this).find('[name="bankslipno"]').val());
-			    	alert($(this).find('[name="bhno"]').val());
-			    	alert($(this).find('[name="sortno"]').val());
-			    	alert($(this).find('[name="accountno"]').val());
-			    	alert($(this).find('[name="accountname"]').val());
-			    	alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
-			    	alert($(this).find('[name="source"]').val());
-			    	alert($(this).find('[name="summary"]').val());
-			    	
-			        let detailSlip = {
-			            bankslipno: $(this).find('[name="bankslipno"]').val(),
-			            bhno: $(this).find('[name="bhno"]').val(),
-			            sortno: $(this).find('[name="sortno"]').val(),
-			            accountno: $(this).find('[name="accountno"]').val(),
-			            accountname: $(this).find('[name="accountname"]').val(),
-			            // -나 ,부분 빼고 int로 변경
-			            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
-			            source: $(this).find('[name="source"]').val(),
-			            summary: $(this).find('[name="summary"]').val()
-			        };
-
-			        detailSlipList.push(detailSlip);
-			    });
-
-			    // AJAX로 업데이트 요청을 보낸다.
-			    updateDetailSlips(detailSlipList);
-		});
-		
-
-		// 분개전표 수정
-		function updateDetailSlips(detailSlipList) {
-		    $.ajax({
-		        type: "POST",
-		        contentType: "application/json;charset=UTF-8",
-		        //beforeSend: function (xhr) {
-		        //    xhr.setRequestHeader("Content-type","application/json");
-		       // },
-		        url: "/bank/updateDetailSlips",
-		        data: JSON.stringify(detailSlipList),
-		        dataType: "json",
-		        success: function(response) {
-		            // 성공적으로 업데이트가 완료되면 안내
-		            alert(response);
-		        },
-		        error: function(xhr, status, error) {
-		            alert("저장에 실패하였습니다.");
-		        }
-		    });
-		}
-	
 		
 	});
 </script>
@@ -681,31 +644,33 @@ input.modaltext {
                       <h5 class="modal-title"><strong>내용 확인 요청</strong></h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="">
 	                   	<div class="modal-body">
 	                   		<div class="modaltable">
 	                   			<div class="tabletitle">통장내역</div>
 		                   		<table>
 		                      		<tr>
-		                      			<td>일자</td>
-		                      			<td><input type="text" name="text" class="intable" value="04-29" readonly></td>
-		                      			<td>내용</td>
-		                      			<td><input type="text" name="text" class="intable" value="(주)거래처" readonly></td>
-		                      			<td>금액</td>
-		                      			<td><input type="text" name="text" class="intable" value="14,000,000" readonly></td>
+		                      			<td class="modalintitle">일자</td>
+		                      			<td><input type="text" id="bhdateinmodal" class="intable" readonly></td>
+		                      		</tr>
+		                      		<tr>
+		                      			<td class="modalintitle">내용</td>
+		                      			<td><input type="text" id="sourceinmodal" class="intable" readonly></td>
+		                      		</tr>
+		                      		<tr>
+		                      			<td class="modalintitle">금액</td>
+		                      			<td><input type="text" id="amountinmodal" class="intable" readonly></td>
 		                      		</tr>
 		                      	</table>
 	                   		</div>
 	                      <div>
 	                      	<label class="labeltitle2">문의 내용</label>
-	                      	<input type="text" class="modaltext" value="거래내용 확인 부탁드립니다."/>
+	                      	<input type="text" id="message" class="modaltext" value="거래내용 확인 부탁드립니다."/>
 	                      </div>
 	                    </div>
 	                    <div class="modal-footer">
 	                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-	                      <button type="submit" class="btn btn-primary">확인</button>
+	                      <button type="button" class="btn btn-primary" id="sendmessagebtn">확인</button>
 	                    </div>
-                    </form>
                   </div>
                 </div>
               </div><!-- End Vertically centered Modal-->

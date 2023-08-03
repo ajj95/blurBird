@@ -18,9 +18,22 @@
 <script type="text/javascript">
 	// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
 	$(function() {
+		
 		$("#request").on("click", function() {
 			$("#requestmodal").modal('show');
 		});
+		
+		
+		$(".request").on("click", function() {
+			var buttonValue2 = $(this).data("value");
+			$("#buttonValue2").val(buttonValue2);
+			$("#requestmodal2").modal('show');
+		});
+		
+		$(".request2").on("click", function() {
+			$("#requestmodal3").modal('show');
+		});
+		
 	});
 </script>
 
@@ -50,6 +63,19 @@ table.total {
 .modal { 
 	--bs-modal-width: 750px;
 }
+
+.modal2 { 
+	--bs-modal-footer-border-width: none;
+}
+
+.card-title2 {
+    font-size: 24px;
+}
+
+.fade:not(.show) {
+    display: none;
+}
+
 </style>
 
 </head>
@@ -153,8 +179,8 @@ table.total {
 									<c:forEach items="${list}" var="docreq">
 									<c:if test="${docreq.drstate.drstatename eq '발급신청' || docreq.drstate.drstatename eq '발급대기'}">
 										<tr>
-											<th scope="row"><c:out
-													value="${docreq.member.membername}" /></th>
+											<td scope="row"><c:out
+													value="${docreq.member.membername}" /></td>
 
 											<td><b><c:out value="${docreq.doctype}" /></b>[<c:out
 													value="${docreq.count}" />]</td>
@@ -190,8 +216,8 @@ table.total {
 								<c:forEach items="${list}" var="docreq">
 									<c:if test="${docreq.drstate.drstatename eq '발급완료' || docreq.drstate.drstatename eq '수신완료'}">
 										<tr>
-											<th scope="row"><c:out
-													value="${docreq.member.membername}" /></th>
+											<td scope="row"><c:out
+													value="${docreq.member.membername}" /></td>
 	
 											<td><b><c:out value="${docreq.doctype}" /></b>[<c:out
 													value="${docreq.count}" />]</td>
@@ -200,8 +226,14 @@ table.total {
 													value="${docreq.wishdate}" /></td>
 	
 											<td><c:out value="${docreq.purpose}" /></td>
-	
-											<td><c:out value="${docreq.drstate.drstatename}" /></td>
+											
+											<c:if test="${docreq.drstate.drstatename eq '발급완료'}">
+												<td><button type="button" class="btn btn-outline-primary request" data-value="<c:out value='${docreq.docreqno}' />" >수신하기</button></td>
+											</c:if>
+											
+											<c:if test="${docreq.drstate.drstatename eq '수신완료'}">
+												<td><button type="button" class="btn btn-primary request2" >수신완료</button></td>
+											</c:if>
 										</tr>
 	            					</c:if>
 								</c:forEach>
@@ -256,7 +288,7 @@ table.total {
 												<option value="간이과세적용신청.포기신고서">간이과세적용신청.포기신고서</option>
 												<option value="면세적용신청.포기신고서">면세적용신청.포기신고서</option>
 												<option value="부가세과표.면세수입금액 확인">부가세과표.면세수입금액 확인</option>
-												<option value="제무재표등 확인</">제무재표등 확인</option>
+												<option value="제무재표등 확인">제무재표등 확인</option>
 												<option value="납세증명서">납세증명서</option>
 												<option value="원천징수이행상황신고서 확인">원천징수이행상황신고서 확인</option>
 												<option value="소득금액확인">소득금액확인</option>
@@ -342,18 +374,15 @@ table.total {
 											주민(법인)<br>등록번호<br>공개 여부
 										</legend>
 										<div class="col-sm-10">
-											<div class="form-check">
-												<input class="form-check-input" type="radio"
-													 id="gridRadios1" value="option1"
-													checked=""> 
-													<label class="form-check-label"
-													for="gridRadios1"> 공개 </label>
-											</div>
-											<div class="form-check">
-												<input class="form-check-input" type="radio"
-													 id="gridRadios2" value="option2">
-												<label class="form-check-label" for="gridRadios2">
-													비공개 </label>
+											<div class="col-sm-10">
+											  <div class="form-check">
+											    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked=""> 
+											    <label class="form-check-label" for="gridRadios1"> 공개 </label>
+											  </div>
+											  <div class="form-check">
+											    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+											    <label class="form-check-label" for="gridRadios2"> 비공개 </label>
+											  </div>
 											</div>
 											<div>
 												<strong style="color: #4154f1;">(비공개시 출력 예 :
@@ -376,6 +405,84 @@ table.total {
 			</div>
 		</div>
 		<!-- End Vertically centered Modal-->
+		
+				<!-- 수신하기 동작 시 등장하는 모달 -->
+		<div class="modal fade modal2" id="requestmodal2" tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							<strong>민원서류 수신확인</strong>
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<form role="form" action="/docrequest/received" method="post">
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+						<div class="modal-body">
+							<div class="modaltable">
+								<div class="card-body">
+									<h5 class="card-title card-title2">요청하신 민원서류를 수신하시겠습니까?</h5>
+
+									<!-- General Form Elements -->
+									
+									<input type="hidden" id="buttonValue2" name="docreqno">
+									
+			
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-bs-dismiss="modal">취소</button>
+										<button type="submit" class="btn btn-primary">확인</button>
+									</div>
+									
+
+								</div>
+							</div>
+						</div>
+					</form>
+					<!-- End General Form Elements -->
+				</div>
+			</div>
+		</div>
+		<!-- End Vertically centered Modal-->
+		
+		<!-- 수신하기 동작 시 등장하는 모달 -->
+		<div class="modal fade modal2" id="requestmodal3" tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">
+							<strong>민원서류 수신확인</strong>
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+						<div class="modal-body">
+							<div class="modaltable">
+								<div class="card-body">
+									<h5 class="card-title card-title2">요청서류</h5>
+									
+									<div style="display: flex; justify-content: center;">
+										<img src="/resources/upload/localtax.PNG" style="max-width: 100%; height: auto;">
+									</div>
+									
+									<div class="modal-footer">
+										<button type="button" class="btn btn-primary request2"
+											data-bs-dismiss="modal">닫기</button>
+									</div>
+									
+
+								</div>
+							</div>
+						</div>
+					<!-- End General Form Elements -->
+				</div>
+			</div>
+		</div>
+		<!-- End Vertically centered Modal-->
+		
+		
 
 	</main>
 	<!-- End #main -->
