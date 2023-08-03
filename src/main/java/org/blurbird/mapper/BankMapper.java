@@ -10,6 +10,7 @@ import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
 import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
+import org.blurbird.domain.common.BusinessVO;
 
 public interface BankMapper {
 	
@@ -56,9 +57,9 @@ public interface BankMapper {
 	// 키워드 전체 조회
 	public List<KeywordDTO> getListKeyword();
 	// 차변 입력
-	public void registerDebt(@Param("bhno") String bhno, @Param("accountno") String accountno, @Param("amount") int amount);
+	public void registerDebt(@Param("bhno") String bhno, @Param("debtaccountno") String debtaccountno, @Param("amount") int amount);
 	// 대변 입력
-	public void registerCredit(@Param("bhno") String bhno, @Param("accountno") String accountno, @Param("amount") int amount);
+	public void registerCredit(@Param("bhno") String bhno, @Param("creditaccountno") String creditaccountno, @Param("amount") int amount);
 	
 	// 확인 안한 메시지 개수
 	public int uncheckedMessageCount(String receiver);
@@ -68,5 +69,6 @@ public interface BankMapper {
 	public BankHistoryVO getBhFromMessage(String messageno);
 	// 메시지 읽음 처리
 	public int modifyMessageState(String messageno);
+	
 	
 }

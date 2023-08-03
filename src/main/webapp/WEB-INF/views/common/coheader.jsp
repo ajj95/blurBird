@@ -322,9 +322,42 @@ $(function(){
 	
 	// 모달에서 메모 입력 후 저장시
 	$("#sendbhmemobtn").on("click", function(){
+		// hidden으로 되어있는 bhno 가져오기
+		let msg_bhno = $("#msg_bhno").val();
+		// 금액 가져오기
+		let msg_amount = $("#msg_amount").val();
+		// 입력한 메모 가져오기
+		let memo = $("#insert_bhmessage").val();
 		
+        let datas = {
+                bhno: msg_bhno,
+                amount: msg_amount,
+                memo: memo,
+       };
 		
-	});
+		// 통장내역번호, 메모로 해야하는 일들
+		$.ajax({
+	            type: "GET",
+	            url: "/bank/sendMemo",
+	            dataType: "json",
+	            data: datas,
+	            success: function(response) {
+	               alert(response);
+	            },
+	            error: function(xhr, status, error) {
+	                console.error(error);
+	            }
+	     });
+		
+		alert("메모가 저장되었습니다.");
+		
+		// 모달 닫기
+        $('#readMessage').modal('hide');
+		
+     	// 페이지 로드 시, 메시지 목록 다시 가져오기
+	    fetchMessageList();
+		
+	});//end click sendbhmemobtn
 	
 });
 

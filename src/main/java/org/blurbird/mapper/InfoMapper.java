@@ -2,7 +2,7 @@ package org.blurbird.mapper;
 
 import java.util.List;
 
-import org.blurbird.domain.bank.BusinessVO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.FinancialSVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;

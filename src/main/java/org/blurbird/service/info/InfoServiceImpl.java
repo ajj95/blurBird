@@ -3,7 +3,7 @@ package org.blurbird.service.info;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blurbird.domain.bank.BusinessVO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
 import org.blurbird.mapper.InfoMapper;
@@ -24,7 +24,7 @@ public class InfoServiceImpl implements InfoService {
 	
 	@Override
 	public List<BusinessVO> getListBusiness() {
-			log.info("¼öÀÓ»ç ¸ñ·Ï °¡Á®¿À±â");
+			log.info("ï¿½ï¿½ï¿½Ó»ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		return mapper.getListBusiness();
 	}
 
@@ -72,7 +72,7 @@ public class InfoServiceImpl implements InfoService {
 	 * 
 	 * vo.setBusinessIncome(totalSales - (totalCOGS + totalOperExpense));
 	 * 
-	 * log.info("======================================="); log.info("»ç¾÷¼Òµæ±Ý¾×: " +
+	 * log.info("======================================="); log.info("ï¿½ï¿½ï¿½ï¿½Òµï¿½Ý¾ï¿½: " +
 	 * vo.getBusinessIncome());
 	 * 
 	 * 
