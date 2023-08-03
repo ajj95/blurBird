@@ -18,9 +18,42 @@
 <script type="text/javascript">
 	// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
 	$(function() {
+		
 		$(".request").on("click", function() {
+			
+			var buttonValue = $(this).data("value");
+			$("#buttonValue").val(buttonValue);
+			
 			$("#requestmodal").modal('show');
+			
+			    $.ajax({
+			      type: "POST", // 혹은 "GET" 등 HTTP 요청 메서드를 선택
+			      url: "/docrequest/modal", // 요청을 처리할 서버의 URL
+			      data: { docreqno: buttonValue }, // 서버로 전달할 데이터
+			      dataType:"json",
+			      success: function(response) {
+			        // 요청이 성공적으로 처리되었을 때 실행할 콜백 함수
+			        // 서버로부터 받은 응답은 response 매개변수로 접근 가능
+			        console.log("서버 응답: ", response);
+			        console.log("서버 응답: ", response.userno);
+			        $("#bizname").val(response.business.bizname);
+			        $("#businesslicense").val(response.business.businesslicense);
+			        $("#membername").val(response.member.membername);
+			        $("#ssn").val(response.member.ssn);
+			        $("#bistel").val(response.business.bistel);
+			        $("#indusrty").val(response.business.indusrty);
+			        $("#bizaddress").val(response.business.bizaddress);
+			        $("#doctype").val(response.doctype);
+			        $("#count").val(response.count);
+			        $("#purpose").val(response.purpose);
+			      },
+			      error: function(xhr, status, error) {
+			        // 요청이 실패했을 때 실행할 콜백 함수
+			        console.log("에러 발생: ", error);
+			      }
+			   });
 		});
+		
 	});
 </script>
 
@@ -59,6 +92,11 @@ table.total {
 	flex: 0 0 auto;
 	width: 33.333333%;
 }
+
+.fade:not(.show) {
+    display: none;
+}
+
 </style>
 
 </head>
@@ -69,13 +107,6 @@ table.total {
 
 		<ul class="sidebar-nav" id="sidebar-nav">
 
-			<button type="button" class="btn btn-outline-primary docbtn">민원서류
-				신청하기</button>
-
-			<br>
-			<br>
-			<li class="nav-item-divider"></li>
-			<!-- 회색 선 추가 -->
 			<br>
 			<li class="nav-item"><a class="nav-link " href="#"> <i
 					class="bi bi-grid"></i> <span>전체민원서류</span>
@@ -162,8 +193,8 @@ table.total {
 									<c:forEach items="${list}" var="docreq">
 										<c:if test="${docreq.drstate.drstatename eq '발급신청'}">
 											<tr>
-												<th scope="row"><c:out
-														value="${docreq.member.membername}" /></th>
+												<td scope="row"><c:out
+														value="${docreq.member.membername}" /></td>
 
 												<td><b><c:out value="${docreq.doctype}" /></b>[<c:out
 														value="${docreq.count}" />]</td>
@@ -200,8 +231,8 @@ table.total {
 									<c:if
 										test="${docreq.drstate.drstatename eq '발급완료' || docreq.drstate.drstatename eq '수신완료' || docreq.drstate.drstatename eq '발급대기'}">
 										<tr>
-											<th scope="row"><c:out
-													value="${docreq.member.membername}" /></th>
+											<td scope="row"><c:out
+													value="${docreq.member.membername}" /></td>
 
 											<td><b><c:out value="${docreq.doctype}" /></b>[<c:out
 													value="${docreq.count}" />]</td>
@@ -247,74 +278,78 @@ table.total {
 									<h5 class="card-title">신청내역 상세조회</h5>
 
 									<!-- General Form Elements -->
-									<input type="hidden" value="1" name="docreqno">
+									
+									<input type="hidden" id="buttonValue" name="docreqno">
+									
+									
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">상호</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="그린테크소프트"
-												readonly="readonly" name="bizname">
+										
+											<input type="text" class="form-control" id="bizname"
+												readonly="readonly" >
 										</div>
 										<label for="inputText" class="col-sm-2 col-form-label">사업자등록<br>번호
 										</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="654-98-71234"
-												readonly="readonly" name="businesslicense">
+											<input type="text" class="form-control" id="businesslicense"
+												readonly="readonly" >
 										</div>
 									</div>
 
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">성명</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="박길동"
-												readonly="readonly" name="membername">
+											<input type="text" class="form-control" id="membername"
+												readonly="readonly" >
 										</div>
 										<label for="inputText" class="col-sm-2 col-form-label">주민(법인)<br>번호
 										</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="박길동"
-												readonly="readonly" name="member.membername">
+											<input type="text" class="form-control" id="ssn"
+												readonly="readonly" >
 										</div>
 									</div>
 
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">전화번호</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="02-945-2324"
-												readonly="readonly" name="bistel">
+											<input type="text" class="form-control" id="bistel"
+												readonly="readonly" >
 										</div>
 										<label for="inputText" class="col-sm-2 col-form-label">업종</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="IT"
-												readonly="readonly" name="industry">
+											<input type="text" class="form-control" id="indusrty"
+												readonly="readonly" >
 										</div>
 									</div>
 
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">사업장소재지</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" value="서울특별시 강남구 역삼동 123-45번지"
-												readonly="readonly" name="bizaddress">
+											<input type="text" class="form-control" id="bizaddress"
+												readonly="readonly" ">
 										</div>
 									</div>
 
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">신청서류</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" value="납세증명서"
-												readonly="readonly" name="doctype">
+											<input type="text" class="form-control" id="doctype"
+												readonly="readonly" >
 										</div>
 									</div>
 
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">수량</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="1부"
-												readonly="readonly" name="count">
+											<input type="text" class="form-control" id="count"
+												readonly="readonly" >
 										</div>
 										<label for="inputText" class="col-sm-2 col-form-label">용도</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" value="공공기관 제출용"
-												readonly="readonly" name="purpose">
+											<input type="text" class="form-control" id="purpose"
+												readonly="readonly" >
 										</div>
 									</div>
 
@@ -323,6 +358,7 @@ table.total {
 											data-bs-dismiss="modal">취소</button>
 										<button type="submit" class="btn btn-primary">발급</button>
 									</div>
+									
 
 								</div>
 							</div>

@@ -2,6 +2,11 @@ package org.blurbird.service;
 
 import static org.junit.Assert.*;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+
+import org.blurbird.domain.receipt.DateRange;
 import org.blurbird.service.receipt.ReceiptService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +27,9 @@ public class ServiceTests {
 	@Test
 	public void test() throws Exception{
 //		service.read("451");
-		service.getList();
+//		DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
+//		service.getReceiptList(dr);
+		service.getImgPath("5");
 	}
 
 }

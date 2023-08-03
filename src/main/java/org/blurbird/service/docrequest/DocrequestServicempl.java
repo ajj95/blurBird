@@ -29,8 +29,17 @@ public class DocrequestServicempl implements DocrequestService {
 		mapper.createstate();
 	}
 
-	public void issuance() {
-		mapper.issuance();
+	public void issuance(String docreqno) {
+		mapper.issuance(docreqno);
 	}
+	
+	public void received(String docreqno) {
+		mapper.received(docreqno);
+	}
+	
+	public DocumentRequestVO getDocrequestread(String docreqno) {
+		return mapper.getDocrequestread(docreqno);
+	}
+	
 
 }

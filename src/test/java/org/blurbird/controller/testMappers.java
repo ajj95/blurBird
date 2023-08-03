@@ -3,10 +3,14 @@ package org.blurbird.controller;
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import javax.sql.DataSource;
 
+import org.blurbird.domain.receipt.DateRange;
 import org.blurbird.mapper.ReceiptMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +36,11 @@ public class testMappers {
 		 * try { log.info(ds.getConnection()); } catch (SQLException e) { // TODO
 		 * Auto-generated catch block e.printStackTrace(); }
 		 */
-		log.info(mapper.getAccountName("412"));
+		/*
+		 * DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
+		 * log.info(mapper.getReceiptList(dr));
+		 */
+		log.info(mapper.getImgResource("5"));
 	}
 
 }

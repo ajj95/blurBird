@@ -13,5 +13,5 @@ public class BankSearchDTO {
 	private String enddate;
 	private String bizno;
 	private String bankname;
-	private String bhstateno;    // slip조회시 가능, 확정, 제외, 삭제 유형
+	private String bhstateno;    
 }

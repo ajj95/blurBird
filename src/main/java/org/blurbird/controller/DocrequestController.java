@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.AllArgsConstructor;
@@ -48,12 +49,31 @@ public class DocrequestController {
 	}
 	
 	@PostMapping("/issuance")
-	public String issuance() {
+	public String issuance(@RequestParam("docreqno") String docreqno) {
 		log.info("issuance");
+		log.info(docreqno);
+		service.issuance(docreqno);
+		
 		return "redirect:/docrequest/docrequestTA";
 	}
 	
 	
+	@PostMapping("/received")
+	public String received(@RequestParam("docreqno") String docreqno) {
+		log.info("received");
+		log.info(docreqno);
+		service.received(docreqno);
 	
+		return "redirect:/docrequest/docrequestCO";
+	}
+	
+	@PostMapping("/modal")
+	@ResponseBody
+    public DocumentRequestVO handleAjaxRequest(@RequestParam("docreqno") String docreqno) {
+		
+		log.info(service.getDocrequestread(docreqno));
+		
+        return service.getDocrequestread(docreqno);
+    }
 	
 }

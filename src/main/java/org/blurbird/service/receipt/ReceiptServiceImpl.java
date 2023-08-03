@@ -1,8 +1,11 @@
 package org.blurbird.service.receipt;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.blurbird.domain.receipt.AccountVO;
+import org.blurbird.domain.receipt.DateRange;
+import org.blurbird.domain.receipt.ReceiptRequestVO;
 import org.blurbird.mapper.ReceiptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +22,20 @@ public class ReceiptServiceImpl implements ReceiptService {
 	private ReceiptMapper mapper;
 	
 	@Override
-	public AccountVO read(String AcocuntNo) {
-		log.info("read.....");
-		return mapper.getAccountName(AcocuntNo);
+	public List<AccountVO> getAccountList() {
+		log.info("getAccountList.....");
+		return mapper.getAccountList();
 	}
 
 	@Override
-	public List<AccountVO> getList() {
-		log.info("getList.....");
-		return mapper.getList();
+	public List<ReceiptRequestVO> getReceiptList(DateRange dateRange) {
+		log.info("getReceiptList....");
+		return mapper.getReceiptList(dateRange);
+	}
+
+	@Override
+	public String getImgPath(String recreqno) {
+		log.info("getImgPath....");
+		return mapper.getImgResource(recreqno);
 	}
 }

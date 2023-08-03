@@ -3,12 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.blurbird.mapper.ReceiptMapper">
-	
-	<select id="getAccountName" resultType="org.blurbird.domain.receipt.AccountVO">
+
+	<select id="getAccountName"
+		resultType="org.blurbird.domain.receipt.AccountVO">
 		select * from account where accountno=#{accountNo}
 	</select>
-	
-	<select id="getList" resultType="org.blurbird.domain.receipt.AccountVO">
+
+	<select id="getAccountList"
+		resultType="org.blurbird.domain.receipt.AccountVO">
 	<![CDATA[
 	select * 
 	from account
@@ -16,7 +18,23 @@
 	order by accountno
 	]]>
 	</select>
-	
-	
+
+	<select id="getReceiptList"
+		resultType="org.blurbird.domain.receipt.ReceiptRequestVO">
+	<![CDATA[
+	select * 
+	from receiptrequest
+	where reqdate between  #{startDate} and #{endDate}
+	]]>
+	</select>
+
+	<select id="getImgResource"
+		resultType="String">
+		<![CDATA[
+		select receiptpath
+		from receiptrequest
+		where recreqno = #{recreqno}
+		]]>
+	</select>
 
 </mapper>

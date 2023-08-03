@@ -15,11 +15,11 @@
   #main{
   	margin-left: 0px !important;
   }
-  .pagetitle{
-  	margin-top: 8px;
-  }
   #footer{
   	margin-left: 0 !important;
+  }
+  .pagetitle{
+  	margin-top: 8px;
   }
   .intable{
   	width: 100%;
@@ -56,23 +56,46 @@
     text-align: center; /* 글자를 가운데로 정렬 */
     vertical-align: middle; /* 세로 중앙 정렬 */
   }
-  
-  .banktable td:nth-child(3),
+  .banktable th:first-child,
+  .banktable td:first-child{
+    width: 80px; /* 첫 번째 열 넓이 */
+  }
+  .banksliptable th:first-child,
+  .banksliptable td:first-child{
+    width: 150px; /* 첫 번째 열 넓이 */
+  }
+  .banktable th:nth-child(2),
+  .banktable td:nth-child(2) {
+    width: 150px; /* 두 번째 열 넓이 */
+  }
+
+  .banktable td:nth-child(6),
   .banktable td:nth-child(4),
   .banktable td:nth-child(5) {
     text-align: right;
-  }
-  .banktable th:first-child,
-  .banktable td:first-child{
-    width: 100px;
   }
   .banktable th:last-child,
   .banktable td:last-child {
     width: 45px; 
   }
+  
+  .detailsliptable th:first-child,
+  .detailsliptable td:first-child{
+    width: 130px;
+  }
+  .detailsliptable th:nth-child(2),
+  .detailsliptable td:nth-child(2){
+    width: 230px;
+  }
+  .detailsliptable td:nth-child(4),
+  .detailsliptable td:nth-child(5){
+    text-align: right;
+    width: 230px;
+  }
   .detailsliptable td:last-child{
     text-align: left;
-  } 
+  }
+
   .tabletop{
   	background-color: #F5F5F5 !important;
   }
@@ -115,17 +138,42 @@
     float: left;
     width: 49%; 
     box-sizing: border-box;
+    height: 600px;
     overflow: auto;
+    margin-bottom: 20px;
   }
 
-  .right {
-    float: right;
+  
+  .right{
+  	float: right;
     width: 49%; 
     box-sizing: border-box;
 	flex-wrap: wrap;
+	height: 600px;
     overflow: auto;
+    margin-bottom: 20px;
   }
-	
+
+  .totallist{
+  	display: flex;
+  }
+  
+  .totalname{
+  	margin-right: 150px;
+  }
+  
+  .totalsum{
+  	margin-right: 50px;
+  }
+  
+  .diffsum{
+  	color: red;
+  }
+  
+  .totalname{
+  	font-weight: bold;
+  }
+
 	.button-container {
 	  display: flex;
 	  flex-grow: 1;
@@ -172,26 +220,52 @@
   background-color: #fcfdfd;
   border-color: #DCDCDC;
 }
-.btn-outline-secondary {
+
+.howmany{
+	font-wieght: bold;
+	margin-left: 10px;
+	display: inline;
+}
+.button-text {
+    display: inline;
+}
+.right .nav {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.right .nav-item {
+    flex: 1;
+}
+#pills-all-tab {
   color: #8592a3;
-  border-color: #8592a3;
   background: transparent;
 }
-.btn-outline-secondary:hover {
-  color: #8592a3;
-  background-color: white;
-  border-color: #788393;
+#pills-all-tab:hover {
+  color: black;
+  background-color: #F5F5F5;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+}
+#pills-all-tab.active {
+  color: black;
+  background-color: #F5F5F5;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
 }
 
-.btn-outline-success {
+#pills-can-tab {
   color: #198754;
   border-color: #198754;
   background: transparent;
 }
-.btn-outline-success:hover {
+#pills-can-tab:hover {
   color: #198754;
-  background-color: white;
+  background-color: #F0FFF0;
+  border-color: #198754;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4);
+}
+#pills-can-tab.active {
+  color: #198754;
+  background-color: #F0FFF0;
   border-color: #198754;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4);
 }
@@ -207,25 +281,37 @@
   border-color: #03b0d4;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(3, 195, 236, 0.4);
 }
-.btn-outline-confirm{
+#pills-certain-tab{
     color: #4169E1;
     border-color: #4169E1;
     background: transparent;
 }
-.btn-outline-confirm:hover{
-  color: #4169E1;
-  background-color: white;
+#pills-certain-tab:hover{
+  color: white;
+  background-color: #4169E1;
   border-color: #4169E1;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
 }
-.btn-outline-warning {
+#pills-certain-tab.active{
+  color: white;
+  background-color: #4169E1;
+  border-color: #4169E1;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+}
+#pills-except-tab {
   color: #ffab00;
-  border-color: #ffab00;
+  border-color: #e69a00;
   background: transparent;
 }
-.btn-outline-warning:hover {
-  color: #ffab00;
-  background-color: white;
+#pills-except-tab:hover {
+  color: black;
+  background-color: #FFE4B5;
+  border-color: #e69a00;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 171, 0, 0.4);
+}
+#pills-except-tab.active {
+  color: black;
+  background-color: #FFE4B5;
   border-color: #e69a00;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 171, 0, 0.4);
 }
@@ -241,17 +327,23 @@
   box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 62, 29, 0.4);
 }
 
-.btn-outline-dark {
-  color: #233446;
-  border-color: #233446;
-  background: transparent;
-}
-.btn-outline-dark:hover {
+#pills-remove-tab {
   color: #233446;
   background-color: white;
   border-color: #202f3f;
+}
+#pills-remove-tab:hover {
+  color: white;
+  background-color: #696969;
+  border-color: #202f3f;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(35, 52, 70, 0.4);
 /*   transform: translateY(-1px); */
+}
+#pills-remove-tab.active{
+  color: white;
+  background-color: 	#696969;
+  border-color: #202f3f;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(35, 52, 70, 0.4);
 }
 
 .btn-outline-gray {
@@ -288,24 +380,24 @@
 .modaltable td:first-child,
 .modaltable td:nth-child(3),
 .modaltable td:nth-child(5){
-	width: 50px;
+	width: 60px;
 	font-weight: bold;
 	text-align: left;
 }
 input.modaltext {
 	width: 363px;
 }
-
-.modal-backdrop {
-  /* display: block; 검은색레이어*/
-  display: none;
+.cantwrite{
+	background-color: #F5F5F5 !important;
 }
+
 </style>
+<script src="../resources/assets/js/bankco.js"></script>
 <script type="text/javascript">
 	$(function(){
 		
 		// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$(".memolink").on("click", function(){
+		$("#left").on("click", ".memolink", function(){
 			$("#memoinsert").modal('show');
 		});
 		
@@ -314,7 +406,7 @@ input.modaltext {
 </head>
 
 <body>
-  <main id="main" class="main">
+<main id="main" class="main">
     <div class="pagetitle">
       <h1>통장정리</h1>
     </div><!-- End Page Title --><br>
@@ -322,317 +414,80 @@ input.modaltext {
      <div class="card">
             <div class="card-body">	
              <br>
-			<div class="listcondition">
-                 <div class="line">
-		            <label for="inputDate" class="col-form-label labeltitle">일자</label>
-		         	<div class="line">
-		            	<input type="date" id="startdate" class="form-control">~&nbsp;<input type="date" id="enddate" class="form-control">
-		            </div>
-		         </div>
-                 <div class="line">
-                 		<label class="labeltitle">은행&nbsp;&nbsp;</label>
-						<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-				          전체거래처
-				        </button>
-	                      <ul class="dropdown-menu">
-	                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-	                      </ul>
-                		</div>
-                		<div class="line">
-                 		<label class="labeltitle">조회내용&nbsp;&nbsp;</label>
-	                     <div class="line">
-		                    <div class="form-check">
-		                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-		                      <label class="form-check-label" for="gridRadios1">
-		                        전체
-		                      </label>
-		                    </div>
-		                    <div class="form-check">
-		                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-		                      <label class="form-check-label" for="gridRadios2">
-		                        입금
-		                      </label>
-		                    </div>
-		                    <div class="form-check">
-		                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios" value="option">
-		                      <label class="form-check-label" for="gridRadios3">
-		                        출금
-		                      </label>
-		                    </div>
-                  		 </div>
-                	</div>
-                 	<div class="listconditionbtn">
-                 		<button type="button" class="btn btn-secondary">조회</button>
-                 	</div>
-                 </div>
+              <!-- Bordered Tabs -->
+              <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home" aria-selected="true">통장내역</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">통장비교</button>
+                </li>
+              </ul>
+              <div class="tab-content pt-2" id="borderedTabContent">
+              	<!-- 탭1 -->
+                <div class="tab-pane fade show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
+                 	
+                 	<!-- 검색조건 form -->
+                 	<form action="/bank/getHistoryAndSlip" method="post">
+	                 	<div class="listcondition">
+	                 		<div class="line">
+			                  <label for="inputDate" class="col-form-label labeltitle">일자</label>
+			                  <div class="line">
+			                    <input type="date" id="startdate" name="startdate" class="form-control">
+			                    ~&nbsp;<input type="date" id="enddate" name="enddate" class="form-control">
+			                  </div>
+			                </div>
+	                 		<div class="line">
+	                 			<label class="labeltitle">은행&nbsp;&nbsp;</label>
+								<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					              전체거래처
+					            </button>
+			                      <ul class="dropdown-menu">
+			                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
+			                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
+			                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
+			                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
+			                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
+			                      </ul>
+	                 		</div>
+	                 		<div class="line">
+		                 		<label class="labeltitle">조회내용&nbsp;&nbsp;</label>
+			                     <div class="line">
+				                    <div class="form-check">
+				                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+				                      <label class="form-check-label" for="gridRadios1">
+				                        전체
+				                      </label>
+				                    </div>
+				                    <div class="form-check">
+				                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+				                      <label class="form-check-label" for="gridRadios2">
+				                        입금
+				                      </label>
+				                    </div>
+				                    <div class="form-check">
+				                      <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios" value="option">
+				                      <label class="form-check-label" for="gridRadios3">
+				                        출금
+				                      </label>
+				                    </div>
+		                  		 </div>
+	                 		</div>
+	                 		<div class="listconditionbtn">
+	                 			<button type="button" id="searchHistorySlip" class="btn btn-secondary">조회</button>
+	                 		</div>
+	                 	</div>
+	                 	<input type="hidden" name="bizno" id="bizno" value="10001">
+	                 	<input type="hidden" name="bankname" id="bankname" value="신한은행">
+	                 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                 	</form>
 
-               	<div class="left">
-               		<!-- 통장내역 -->
-	              <ul class="nav nav-tabs" id="myTab" role="tablist">
-	                <li class="nav-item" role="presentation">
-	                  <button class="nav-link active" id="allbanklist-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">전체</button>
-	                </li>
-	                <li class="nav-item" role="presentation">
-	                  <button class="nav-link" id="nonbanklist-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">전표미연결</button>
-	                </li>
-	                <li class="nav-item" role="presentation">
-	                  <button class="nav-link" id="connbanklist-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">전표연결</button>
-	                </li>
-	              </ul>
-	              <div class="tab-content pt-2" id="myTabContent">
-	                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="allbanklist-tab">
-	                	<!-- 전체 -->
-	                	 <div class="banklogo">
-						 	<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">
-						 	<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-	                        신한은행
-	                      </button>
-	                      <ul class="dropdown-menu">
-	                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-	                      </ul>
-						 </div>
-		                <table id="allbanktable" class="banktable table table-hover table-bordered">
-			                <thead>
-			                  <tr>
-			                    <th scope="col" class="tabletop">날짜</th>
-			                    <th scope="col" class="tabletop">적요</th>
-			                    <th scope="col" class="tabletop">입금액</th>
-			                    <th scope="col" class="tabletop">출금액</th>
-			                    <th scope="col" class="tabletop">잔액</th>
-			                    <th scope="col" class="tabletop">메모</th>
-			                  </tr>
-			                </thead>
-			                <tbody>
-			                  <tr>
-			                    <td>04-01</td>
-			                    <td>(주)회사</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                    <td>04-02</td>
-			                    <td>(주)회사</td>
-			                    <td>14,5000,000</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                    <td>04-03</td>
-			                     <td>(주)회사</td>
-			                    <td>14,5000,000</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                  	<td class="total"><strong>합계</strong></td>
-			                  	<td class="total"></td>
-			                  	<td class="total">67,515,870</td>
-			                  	<td class="total">82,015,850</td>
-			                  	<td class="total">0</td>
-			                  	<td class="total"></td>
-			                  </tr>
-			                </tbody>
-		              </table>         	
-	                </div><!-- End 전체 탭 -->
-	                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="nonbanklist-tab">
-						<!-- 미연결 -->
-						 <div class="banklogo">
-						 	<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">
-						 	<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-	                        신한은행
-	                      </button>
-	                      <ul class="dropdown-menu">
-	                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-	                      </ul>
-						 </div>
-		                <table id="nonbanktable" class="banktable table table-hover table-bordered">
-			                <thead>
-			                  <tr>
-			                    <th scope="col" class="tabletop">날짜</th>
-			                    <th scope="col" class="tabletop">적요</th>
-			                    <th scope="col" class="tabletop">입금액</th>
-			                    <th scope="col" class="tabletop">출금액</th>
-			                    <th scope="col" class="tabletop">잔액</th>
-			                    <th scope="col" class="tabletop">메모</th>
-			                  </tr>
-			                </thead>
-			                <tbody>
-			                  <tr>
-			                    <td>04-01</td>
-			                    <td>(주)회사</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                    <td>04-02</td>
-			                    <td>(주)회사</td>
-			                    <td>14,5000,000</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                    <td>04-03</td>
-			                     <td>(주)회사</td>
-			                    <td>14,5000,000</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                  	<td class="total"><strong>합계</strong></td>
-			                  	<td class="total"></td>
-			                  	<td class="total">67,515,870</td>
-			                  	<td class="total">82,015,850</td>
-			                  	<td class="total">0</td>
-			                  	<td class="total"></td>
-			                  </tr>
-			                </tbody>
-		              </table> 
-	                </div><!-- End 미연결 -->
-	                
-	                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="connbanklist-tab">
-						<!-- 연결 -->
-						 <div class="banklogo">
-						 	<img src="/resources/assets/img/shinhan.png" alt="Shinhan Bank" width="20" height="20">
-						 	<button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-	                        신한은행
-	                      </button>
-	                      <ul class="dropdown-menu">
-	                        <li><a class="dropdown-item" href="javascript:void(0);">국민은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">우리은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">농협은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">SC제일은행</a></li>
-	                        <li><a class="dropdown-item" href="javascript:void(0);">KEB하나은행</a></li>
-	                      </ul>
-						 </div>
-		                <table id="connbanktable" class="banktable table table-hover table-bordered">
-			                <thead>
-			                  <tr>
-			                    <th scope="col" class="tabletop">날짜</th>
-			                    <th scope="col" class="tabletop">적요</th>
-			                    <th scope="col" class="tabletop">입금액</th>
-			                    <th scope="col" class="tabletop">출금액</th>
-			                    <th scope="col" class="tabletop">잔액</th>
-			                    <th scope="col" class="tabletop">메모</th>
-			                  </tr>
-			                </thead>
-			                <tbody>
-			                  <tr>
-			                    <td>04-01</td>
-			                    <td>(주)회사</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td>14,5000,000</td>
-			                    <td>
-			                    	<a href=# class="memolink"><i class="ri-article-fill"></i></a>
-			                    </td>
-			                  </tr>
-			                  <tr>
-			                    <td>04-02</td>
-			                    <td>(주)회사</td>
-			                    <td>14,5000,000</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td><a href=# class="memolink"><i class="ri-article-fill"></i></a></td>
-			                  </tr>
-			                  <tr>
-			                    <td>04-03</td>
-			                     <td>(주)회사</td>
-			                    <td>14,5000,000</td>
-			                    <td></td>
-			                    <td>14,5000,000</td>
-			                    <td>
-			                    	<a href=# class="memolink"><i class="ri-article-fill"></i></a>
-			                     </td>
-			                  </tr>
-			                  <tr>
-			                  	<td class="total"><strong>합계</strong></td>
-			                  	<td class="total"></td>
-			                  	<td class="total">67,515,870</td>
-			                  	<td class="total">82,015,850</td>
-			                  	<td class="total">0</td>
-			                  	<td class="total"></td>
-			                  </tr>
-			                </tbody>
-		              </table>
-	                </div><!-- End 연결 탭 -->
-               	</div>
+			  <!-- 동적 생성 부분 -->
+              <div class="left" id="left">
               </div><!-- End div left -->
               
-              <div class="right">
-              	<!-- 전표내역 -->
-			 <div class="button-container">
-				<button type="button" class="btn btn-outline-secondary">전체   12</button>
-			    <button type="button" class="btn btn-outline-success">가능   4</button>
-			    <button type="button" class="btn btn-outline-confirm">확정   3</button>
-			    <button type="button" class="btn btn-outline-warning">제외   1</button>
-			    <button type="button" class="btn btn-outline-dark">삭제   2</button>
-			  </div>
-               <table id="" class="banksliptable table table-hover table-bordered">
-                <thead>
-                  <tr>
-                    <th scope="col" class="tabletop">거래처명</th>
-                    <th scope="col" class="tabletop">전표적요</th>
-                    <th scope="col" class="tabletop">상대계정</th>
-                    <th scope="col" class="tabletop">상태</th>
-                    <th scope="col" class="tabletop">예상잔액</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>**구리</td>
-                    <td></td>
-                    <td>(판)복리후생비</td>
-                    <td>전표확정</td>
-                    <td>35,500,000</td>
-                  </tr>
-                  <tr>
-                    <td>**스토리</td>
-                    <td></td>
-                    <td>받을어음</td>
-                    <td>전표확정</td>
-                    <td>57,500,000</td>
-                  </tr>
-                  <tr>
-                    <td>**스토리</td>
-                    <td></td>
-                    <td>(판)복리후생비</td>
-                    <td>확정가능</td>
-                    <td>35,500,000</td>
-                  </tr>
-                  <tr>
-                    <td>**구리</td>
-                    <td></td>
-                    <td>외상매출금</td>
-                    <td>삭제전표</td>
-                    <td>35,500,000</td>
-                  </tr>
-     			  <tr>
-                  	<td class="total"><strong>합계</strong></td>
-                  	<td class="total" colspan="4">잔액: 35,500,000 (차액: 35,500,000)</td>
-		          </tr>
-                </tbody>
-             </table>
-            </div><!-- end right -->
+              <div class="right" id="right">
+              </div><!-- end right -->
 
               <!-- 메모 아이콘 클릭 시 등장하는 모달 -->
               <div class="modal fade" id="memoinsert" tabindex="-1">
@@ -647,12 +502,13 @@ input.modaltext {
                     		<input type="text" class="modaltext" value=""/>
                     		<button type="submit" class="btn btn-light">확인</button>
                     	</form>
-                    </div><!-- end modal-body -->
-                  </div>
-                </div>
-              </div><!-- End Vertically centered Modal-->
+                    	</div><!-- end modal-body -->
+                  	</div>
+                	</div>
+              	</div><!-- End Vertically centered Modal-->
 
-            </div>
+            	</div>
+           </div>
        </div><!-- end card body -->
      </div><!-- end card -->
     

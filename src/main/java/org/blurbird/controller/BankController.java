@@ -20,12 +20,17 @@ public class BankController {
 
 	private BankService service;
 	
-	// ¼¼¹«»ç ÅëÀå°ü¸® È­¸éÀ¸·Î ÀÌµ¿
+	// ì„¸ë¬´ì‚¬ í†µì¥ê´€ë¦¬ ë©”ë‰´ ì´ë™
 	@GetMapping("/bankta")
 	public void bankta() {
 	}
 	
-	// ÅëÀå³»¿ª + ÀüÇ¥³»¿ª °°ÀÌ Á¶È¸
+	// ìˆ˜ì„ì‚¬ í†µì¥ê´€ë¦¬ ë©”ë‰´ ì´ë™
+	@GetMapping("/bankco")
+	public void bankco() {
+	}
+	
+	
 	@PostMapping("/bankta")
 	public void searchbank(Model model, BankSearchDTO search) {
 		model.addAttribute("bankhistorylist", service.getBankHistoryList(search));
