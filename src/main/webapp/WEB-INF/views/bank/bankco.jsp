@@ -380,7 +380,7 @@
 .modaltable td:first-child,
 .modaltable td:nth-child(3),
 .modaltable td:nth-child(5){
-	width: 50px;
+	width: 60px;
 	font-weight: bold;
 	text-align: left;
 }

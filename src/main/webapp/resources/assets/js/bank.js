@@ -517,6 +517,45 @@ $(function(){
   			});
 		});
 
+		// 내용확인요청 시 모달출력
+		$("#left").on("click", "#memoplzbtn", function(){
+			
+			 // 테이블의 tr 모두 가져오기
+			 let tableRows = document.querySelectorAll("#nonbanktable tbody tr");
+			 let selectedRow = null;
+			 
+			 for (const row of tableRows) {
+			    const checkbox = row.querySelector("input[type='checkbox']");
+			    if (checkbox.checked) {
+			      selectedRow = row;
+			      break;
+			    }
+			 }
+
+			   if (!selectedRow) {
+			   	  return;
+			   }
+
+			  // 선택한 행의 통장내역번호, 일자, 내용, 금액 가져오기
+			  let bhno = selectedRow.querySelector("input[name='bhno']").value;
+			  let bhdate = selectedRow.querySelector("td:nth-child(3)").textContent;
+			  let source = selectedRow.querySelector("td:nth-child(4)").textContent;
+			  let amount = selectedRow.querySelector(".amountin").textContent;
+
+			  // 모달창의 요소
+			  let dateInput = document.getElementById("bhdateinmodal");
+			  let sourceInput = document.getElementById("sourceinmodal");
+			  let amountInput = document.getElementById("amountinmodal");
+
+			  dateInput.value = bhdate;
+			  sourceInput.value = source;
+			  amountInput.value = amount;
+
+			  $("#memoplzmodal").modal("show");
+		});
+		
+		
+		
 		
 	
 });// windowload function
@@ -716,14 +755,14 @@ $(function(){
 	 	  	str +='</td>';
 	 	  	if(data[i].sortno==1){
 	 	  		// 입금
-	 	  		str +='<td>';
+	 	  		str +='<td class="amountin">';
 		 	  	str +=formatNumberWithCommas(data[i].amount);
 		 	  	str +='</td>';
 		 	  	str +='<td></td>';
 	 	  	}else{
 	 	  		// 출금
 	 	  		str +='<td></td>';
-	 	  		str +='<td>';
+	 	  		str +='<td class="amountin">';
 		 	  	str +=formatNumberWithCommas(data[i].amount);
 		 	  	str +='</td>';
 	 	  	}
@@ -1516,7 +1555,6 @@ $(function(){
 	
 	function formatNumberWithCommas(number) {
   		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  		
 	}
 	
 	// 분개 구분 선택 시 차변 대변 입력창 변경

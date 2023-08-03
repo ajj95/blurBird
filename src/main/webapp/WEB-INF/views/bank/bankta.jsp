@@ -64,10 +64,9 @@
   .banktable td:nth-child(2) {
     width: 80px; /* 두 번째 열 넓이 */
   }
-
+  .banktable td:nth-child(5),
   .banktable td:nth-child(6),
-  .banktable td:nth-child(4),
-  .banktable td:nth-child(5) {
+  .banktable td:nth-child(7) {
     text-align: right;
   }
   .banktable th:last-child,
@@ -393,7 +392,9 @@ input.modaltext {
 .searchaccount{
   margin-right: 4px;
 }
-
+.modalintitle{
+  margin-right: 10px;
+}
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
@@ -404,21 +405,80 @@ input.modaltext {
 			
 			// 버튼별로 동적 생성되는 인덱스값 가져오기: 시작 0 ~ 증가
 			let btnIndex = $(this).data("btn-index");
-			alert(btnIndex);
+			alert("버튼인덱스: " + btnIndex);
 			
 			openAccountCodeModal(btnIndex);
 		});
 		
 		
-		
-		
-		
+	  // 내용확인 모달 창에서 저장 클릭 시 메시지 insert
+	  // 꼭 e.preventDefault를 해야 submit이 실행되지 않아 새로고침X -> ajax로 다시 랜더링 가능
+	  $("#sendmessagebtn").on("click", function(){
+		  
+		 // 선택된 tr의 bhno 가져오기
+	     let tableRows = document.querySelectorAll("#nonbanktable tbody tr");
+		 let selectedRow = null;
+		 
+		 for (const row of tableRows) {
+		    const checkbox = row.querySelector("input[type='checkbox']");
+		    if (checkbox.checked) {
+		      selectedRow = row;
+		      break;
+		    }
+		 }
 
-		// 내용확인요청 시 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$("#left").on("click", "#memoplzbtn", function(){
-			$("#memoplzmodal").modal('show');
-		});
-	
+		   if (!selectedRow) {
+		   	  return;
+		   }
+		   
+		  // bhno, message 가져오기
+		  let bhno = selectedRow.querySelector("input[name='bhno']").value;
+		  let message = document.getElementById("message").value;
+		  let receiver = '4';
+		  let sender = '3';
+		  
+
+		  let dataToSend = {
+		        bhno: bhno,
+		        message: message,
+		        receiver: receiver,
+		        sender: sender
+		   };
+
+		    $.ajax({
+		        type: "POST",
+		        url: "/bank/requestmessage",
+		        contentType: "application/json;charset=UTF-8",
+			    data: JSON.stringify(dataToSend),
+			    dataType: "json",
+		        success: function(response) {
+		        	alert(response);
+		        },
+		        error: function(xhr, status, error) {
+		            console.error(error);
+		        }
+		    });
+		    
+		   
+		    // 모달 닫기
+			$("#memoplzmodal").modal("hide");
+		    
+		    // 다시 기존 화면 랜더링
+		    let startDate = $("#startdate").val();
+            let endDate = $("#enddate").val();
+            let bizno = $("#bizno").val();
+            let bankname = $("#bankname").val();
+            
+            let search = {
+                startdate: startDate,
+                enddate: endDate,
+                bizno: bizno,
+                bankname: bankname
+            };
+            
+           historySlipRequest(search);
+		  
+	  });
 
 		
 	});
@@ -584,31 +644,33 @@ input.modaltext {
                       <h5 class="modal-title"><strong>내용 확인 요청</strong></h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="">
 	                   	<div class="modal-body">
 	                   		<div class="modaltable">
 	                   			<div class="tabletitle">통장내역</div>
 		                   		<table>
 		                      		<tr>
-		                      			<td>일자</td>
-		                      			<td><input type="text" name="text" class="intable" value="04-29" readonly></td>
-		                      			<td>내용</td>
-		                      			<td><input type="text" name="text" class="intable" value="(주)거래처" readonly></td>
-		                      			<td>금액</td>
-		                      			<td><input type="text" name="text" class="intable" value="14,000,000" readonly></td>
+		                      			<td class="modalintitle">일자</td>
+		                      			<td><input type="text" id="bhdateinmodal" class="intable" readonly></td>
+		                      		</tr>
+		                      		<tr>
+		                      			<td class="modalintitle">내용</td>
+		                      			<td><input type="text" id="sourceinmodal" class="intable" readonly></td>
+		                      		</tr>
+		                      		<tr>
+		                      			<td class="modalintitle">금액</td>
+		                      			<td><input type="text" id="amountinmodal" class="intable" readonly></td>
 		                      		</tr>
 		                      	</table>
 	                   		</div>
 	                      <div>
 	                      	<label class="labeltitle2">문의 내용</label>
-	                      	<input type="text" class="modaltext" value="거래내용 확인 부탁드립니다."/>
+	                      	<input type="text" id="message" class="modaltext" value="거래내용 확인 부탁드립니다."/>
 	                      </div>
 	                    </div>
 	                    <div class="modal-footer">
 	                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-	                      <button type="submit" class="btn btn-primary">확인</button>
+	                      <button type="button" class="btn btn-primary" id="sendmessagebtn">확인</button>
 	                    </div>
-                    </form>
                   </div>
                 </div>
               </div><!-- End Vertically centered Modal-->

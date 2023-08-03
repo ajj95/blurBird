@@ -2,10 +2,13 @@ package org.blurbird.service.bank;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
+import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
 
 public interface BankService {
@@ -45,5 +48,23 @@ public interface BankService {
 	// 전표 상태 변경
 	public boolean modifySlipState(String bhno, String bhstateno);
 	
-	
+	// 내용확인 요청
+	public void registerMessage(String bhno, String message, String receiver, String sender);
+	// 메모 수정
+	public int modifymemo(String bhno, String memo);
+	// 키워드 전체 조회
+	public List<KeywordDTO> getListKeyword();
+	// 차변 입력
+	public void registerDebt(String bhno, String accountno, int amount);
+	// 대변 입력
+	public void registerCredit(String bhno, String accountno, int amount);
+		
+	// 확인 안한 메시지 개수
+	public int uncheckedMessageCount(String receiver);
+	// 메시지 전체 리스트
+	public List<BhMessageVO> getListMessage(String receiver);
+	// 메시지에서 통장내역 가져오기
+	public BankHistoryVO getBhFromMessage(String messageno);	
+	// 메시지 읽음 처리
+	public int modifyMessageState(String messageno);
 }
