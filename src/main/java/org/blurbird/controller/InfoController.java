@@ -1,10 +1,13 @@
 package org.blurbird.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.service.info.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,6 +53,31 @@ public class InfoController {
 		
 		return service.getList(infoData);
 
+	}
+	
+	@PostMapping("/infoTA/report")
+	public @ResponseBody ReportPaymentVO report(ReportPaymentVO reportPaymentVO) {
+		
+//		Date date = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String dateString = sdf.format(date);
+//		
+//		reportPaymentVO.setReportdate(dateString);
+		reportPaymentVO.setReportdoc("신고서이미지");
+		reportPaymentVO.setPaymentslip("납부서이미지");
+//		reportPaymentVO.setTransdate("");
+		reportPaymentVO.setStatus("납부서전송");
+		
+		service.report(reportPaymentVO);
+		log.info(service.rptfResult(reportPaymentVO));
+		return service.rptfResult(reportPaymentVO);
+	}
+	
+	@PostMapping("/infoTA/transfer")
+	public @ResponseBody ReportPaymentVO transfer(ReportPaymentVO reportPaymentVO) {
+		
+		service.transfer(reportPaymentVO);
+		return service.rptfResult(reportPaymentVO);
 	}
 	
 	@GetMapping("/infoCO")
