@@ -10,6 +10,7 @@ import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
 import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
+import org.blurbird.domain.common.BusinessVO;
 
 public interface BankService {
 	// 통장내역 전체 조회
@@ -67,4 +68,5 @@ public interface BankService {
 	public BankHistoryVO getBhFromMessage(String messageno);	
 	// 메시지 읽음 처리
 	public int modifyMessageState(String messageno);
+
 }

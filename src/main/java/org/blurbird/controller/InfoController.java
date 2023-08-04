@@ -3,7 +3,7 @@ package org.blurbird.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blurbird.domain.bank.BusinessVO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.InfoData;
 import org.blurbird.service.info.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;

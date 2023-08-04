@@ -233,13 +233,14 @@
     flex: 1;
 }
 #pills-all-tab {
+  border: 1px solid;
   color: #8592a3;
   background: transparent;
 }
 #pills-all-tab:hover {
   color: black;
   background-color: #F5F5F5;
-    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
 }
 #pills-all-tab.active {
   color: black;
@@ -248,6 +249,7 @@
 }
 
 #pills-can-tab {
+  border: 1px solid;
   color: #198754;
   border-color: #198754;
   background: transparent;
@@ -278,6 +280,7 @@
 }
 #pills-certain-tab{
     color: #4169E1;
+    border: 1px solid;
     border-color: #4169E1;
     background: transparent;
 }
@@ -295,6 +298,7 @@
 }
 #pills-except-tab {
   color: #ffab00;
+  border: 1px solid;
   border-color: #e69a00;
   background: transparent;
 }
@@ -324,6 +328,7 @@
 
 #pills-remove-tab {
   color: #233446;
+  border: 1px solid;
   background-color: white;
   border-color: #202f3f;
 }
@@ -399,6 +404,17 @@ input.modaltext {
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
+
+		// 사이드 바의 동적 생성되는 div 중
+		// 선택된 div의 거래처코드 값 가져오기
+		//- 이 부분은 import된 sidebar를 다뤄서 그런지 본문 스크립트에 작성해야한다.
+		$("#businessList").on("click", ".list-group-item", function(e){
+			e.preventDefault();
+			let bizno = $(this).find("input[name='biznoInSidebar']").val();
+			// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
+			$("#bizno").val(bizno);
+		});
+		
 		
 		// 계정 조회 버튼
 		$("#bottom").on("click", ".searchaccount", function(){
@@ -412,7 +428,6 @@ input.modaltext {
 		
 		
 	  // 내용확인 모달 창에서 저장 클릭 시 메시지 insert
-	  // 꼭 e.preventDefault를 해야 submit이 실행되지 않아 새로고침X -> ajax로 다시 랜더링 가능
 	  $("#sendmessagebtn").on("click", function(){
 		  
 		 // 선택된 tr의 bhno 가져오기
@@ -434,7 +449,7 @@ input.modaltext {
 		  // bhno, message 가져오기
 		  let bhno = selectedRow.querySelector("input[name='bhno']").value;
 		  let message = document.getElementById("message").value;
-		  let receiver = '4';
+		  let receiver = '4';   // 나중에 로그인 추가되면 수정
 		  let sender = '3';
 		  
 
@@ -452,13 +467,13 @@ input.modaltext {
 			    data: JSON.stringify(dataToSend),
 			    dataType: "json",
 		        success: function(response) {
-		        	alert(response);
 		        },
 		        error: function(xhr, status, error) {
 		            console.error(error);
 		        }
 		    });
 		    
+		    alert("내용확인을 요청하였습니다.");
 		   
 		    // 모달 닫기
 			$("#memoplzmodal").modal("hide");
@@ -484,63 +499,8 @@ input.modaltext {
 	});
 </script>
 </head>
-
 <body>
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-    <ul class="sidebar-nav" id="sidebar-nav">
-      <li class="nav-item">
-      	<div class="search-bar bizsearch">
-	      <form class="search-form d-flex align-items-center search-biz" method="POST" action="#">
-	        <input type="text" name="query" placeholder="수임기업명을 검색하세요" title="Enter search keyword">
-	        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-	      </form>
-	    </div><!-- End Search Bar -->
-
-    	<nav class="header-nav ms-auto">
-        	<ul class="d-flex align-items-center">
-		        <li class="nav-item d-block d-lg-none">
-		          <a class="nav-link nav-icon search-bar-toggle " href="#">
-		            <i class="bi bi-search"></i>
-		          </a>
-		        </li><!-- End Search Icon-->
-		     </ul>
-		 </nav>
-      <button type="button" class="btn btn-outline-primary allbtn">
-      	<i class="ri-building-line"></i> 전체수임기업</button>
-      <br><br>
-      <li class="nav-item-divider"></li> <!-- 회색 선 추가 -->
-      <br>
-      <li class="nav-item">
-      	<!-- 수임사 리스트 -->
-       	<div class="list-group">
-               <a href="#" class="list-group-item list-group-item-action">
-                 <div class="d-flex w-100 justify-content-between">
-                   <h5 class="mb-1">엣지상사</h5><i class="bi bi-bell"></i>
-                 </div>
-                 <span class="badge biztype">제조</span>
-                 <small class="text-muted">222-3333-5555</small>
-               </a>
-               <a href="#" class="list-group-item list-group-item-action">
-                 <div class="d-flex w-100 justify-content-between">
-                   <h5 class="mb-1">더존</h5><i class="bi bi-bell"></i>
-                 </div>
-                 <span class="badge biztype">IT</span>
-                 <small class="text-muted">222-3333-5555</small>
-               </a>
-               <a href="#" class="list-group-item list-group-item-action">
-                 <div class="d-flex w-100 justify-content-between">
-                   <h5 class="mb-1">대한건설</h5><i class="bi bi-bell"></i>
-                 </div>
-                 <span class="badge biztype">건설</span>
-                 <small class="text-muted">222-3333-5555</small>
-               </a>
-        </div><!-- End List group Advanced Content -->
-      </li>
-	</ul>
-
-  </aside><!-- End Sidebar-->
-  
+<%@include file="../common/searchbizsidebar.jsp"%>
   <main id="main" class="main">
     <div class="pagetitle">
       <h1>통장정리</h1>
@@ -612,7 +572,7 @@ input.modaltext {
 	                 			<button type="button" id="searchHistorySlip" class="btn btn-secondary">조회</button>
 	                 		</div>
 	                 	</div>
-	                 	<input type="hidden" name="bizno" id="bizno" value="10001">
+	                 	<input type="hidden" name="bizno" id="bizno">
 	                 	<input type="hidden" name="bankname" id="bankname" value="신한은행">
 	                 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                  	</form>
@@ -707,8 +667,8 @@ input.modaltext {
 												id="button-addon2" onclick="searchAccount()">찾기</button>
 										</div>
 										<button type="button" class="btn btn-secondary"
-											data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save
+											data-bs-dismiss="modal">닫기</button>
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">저장
 											changes</button>
 									</div>
 								</div>
