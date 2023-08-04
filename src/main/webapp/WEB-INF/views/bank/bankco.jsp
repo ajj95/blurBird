@@ -401,11 +401,26 @@ input.modaltext {
 <script type="text/javascript">
 	$(function(){
 		
-		// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$("#left").on("click", ".memolink", function(){
+		// 메모 아이콘 클릭 시 모달 출력 (입력/수정 가능하도록)
+		$("#left").on("click", ".ri-article-fill", function(){
+			// 메모 내용 가져와서 모달 input 에 넣기
+			//let closestLink = $(this).closest('a');
+			//let memo = '';
+			
+			let memo = $(this).closest('td').find('a').attr('title');
+			
+			
+			console.log("@@@@@@@@@@입력된 메모: " + memo);
+			$("#insertedMemo").val(memo);
+			
 			$("#memoinsert").modal('show');
 		});
 		
+		$("#left").on("click", "a[data-bs-toggle='tooltip']", function(){
+			alert("테스트");
+		});
+		
+
 	});
 </script>
 </head>
@@ -504,7 +519,7 @@ input.modaltext {
                     </div>
                     <div class="modal-body">
                     	<form action="">
-                    		<input type="text" class="modaltext" value=""/>
+                    		<input type="text" class="modaltext" id="insertedMemo" value=""/>
                     		<button type="submit" class="btn btn-light">확인</button>
                     	</form>
                     	</div><!-- end modal-body -->

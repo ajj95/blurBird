@@ -557,6 +557,61 @@ $(function(){
 			  $("#memoplzmodal").modal("show");
 		});
 	
+	   // 계정 조회 버튼 클릭
+		$("#bottom").on("click", ".searchaccount", function(){
+			
+			// 버튼별로 동적 생성되는 인덱스값 가져오기: 시작 0 ~ 증가
+			const btnIndex = $(this).data("btn-index");
+		
+			$.ajax({
+				url: "/receipt/accountList",
+				type: "GET",
+				dataType: "json",
+				success: function (data) {
+					$("#accountListModal").empty();
+					
+					let accountList = data;
+					let tableBody = $("#accountListModal");
+					$.each(data, function (index, item) {
+						let accountno = item.accountNo;
+						const temp = document.createElement('tr');
+						//temp.setAttribute('data-btn-index', index); // data-btn-index 속성 설정
+						temp.innerHTML = "<td>" + item.accountNo + "</td><td>"
+							+ item.accountName + "</td>";
+						$('#accountListModal').append(temp);
+					});
+      				
+      				$("#accountCode").modal("show");
+      				
+      		       // 이전에 등록된 클릭 이벤트 제거
+      		       //- 제거하지 않으면 계정검색버튼 클릭시마다 모달창에 클릭 이벤트 계속 추가, 중복됨
+      		       $("#accountListModal").off("click", "tr");
+      				
+      				// 모달 내에서 계정 클릭 시
+      				$("#accountListModal").on("click", 'tr', function(){
+      					  let selectedAccountNo = $(this).find('td:first-child').text();
+		                  let selectedAccountName = $(this).find('td:nth-child(2)').text();
+		                  
+		                  console.log("#####선택된 버튼인덱스: " + btnIndex);
+		                  console.log("#####선택된 계정코드: " + selectedAccountNo);
+		                  console.log("#####선택된 계정명: " + selectedAccountName);
+		                  
+		                  // 버튼 인덱스를 이용하여 분개내역 테이블 내의 해당 버튼의 행을 선택
+					      let targetRow = $('.detailsliptable tbody tr').eq(btnIndex);
+					
+					      targetRow.find('input[name="accountno"]').val(selectedAccountNo);
+					      targetRow.find('input[name="accountname"]').val(selectedAccountName);
+
+					      // 모달 창 닫기
+					      $("#accountCode").modal("hide");
+      				});
+				},
+				error: function (xhr, status, error) {
+					console.log(error);
+				}
+			});
+	 	 });
+	
 });// end windowload function
 
 
@@ -1241,7 +1296,8 @@ $(function(){
 
 	  searchstart.empty();
 	  
-		let str = '<table class="table detailsliptable table-bordered">';
+		let str = '';
+	    str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
 		str += '<th scope="col" class="tabletop">구분</th>';
@@ -1259,7 +1315,7 @@ $(function(){
 	  			str += '<tr>';
 	  			str += '<input type="hidden" name="bankslipno" value="';
 	  			str += detailSlip[i].bankslipno;
-	  			str += '">';
+	  			str += '" />'
 	  			str += '<input type="hidden" name="bhno" value="';
 	  			str += detailSlip[i].bhno;
 	  			str += '">';
@@ -1333,6 +1389,9 @@ $(function(){
 					str += detailSlip[i].summary;
 				}
 				str += '"></td>';
+				
+				
+				
 				str += '</tr>';
 	  		}//end for
 	  		
@@ -1586,57 +1645,7 @@ $(function(){
 	    }
 	}
 	
-	
-	// 계정과목 모달창 (클릭한 버튼의 인덱스를 파라미터로 받음)
-	function openAccountCodeModal(btnIndex) {
-			$.ajax({
-				url: "/receipt/accountList",
-				type: "GET",
-				dataType: "json",
-				success: function (data) {
-					$("#accountListModal").empty();
-					
-					let accountList = data;
-					let tableBody = $("#accountListModal");
-					$.each(data, function (index, item) {
-						let accountno = item.accountNo;
-						const temp = document.createElement('tr');
-						temp.innerHTML = "<td>" + item.accountNo + "</td><td>"
-							+ item.accountName + "</td>";
-						$('#accountListModal').append(temp);
-					});
-      				
-					// 모달을 열 때, 모달을 열기 위해 클릭했던 버튼을 기억하기 위해(모달 id)
-					// + 클릭 버튼 객체를 가져오기 위해
-					// 아래와 같이 모달을 열면서 모달 내의 더블클릭 이벤트를 처리한다.
-					$("#accountCode").modal("show").on("shown.bs.modal", function () {
-					    $(document).on("dblclick", '#accountListModal tr', function () {
-					    
-		                  let selectedAccountNo = $(this).find('td:first-child').text();
-		                  let selectedAccountName = $(this).find('td:nth-child(2)').text();
-		                  
-		                  // 버튼 인덱스를 이용하여 분개내역 테이블 내의 해당 버튼의 행을 선택
-					      let targetRow = $('.detailsliptable tbody tr').eq(btnIndex);
-					
-					      targetRow.find('input[name="accountno"]').val(selectedAccountNo);
-					      targetRow.find('input[name="accountname"]').val(selectedAccountName);
-		                  
 
-					      // 클릭했던 버튼과 같은 td의 input들에 각각 값 넣어주기
-					      //$(btn).closest('td').find('input[name="accountno"]').val(selectedAccountNo);
-					      //$(btn).closest('td').next().find('input[name="accountname"]').val(selectedAccountName);
-					
-					      // 모달 창 닫기
-					      $("#accountCode").modal("hide");
-					    });
-					  });
-				},
-				error: function (xhr, status, error) {
-					console.log(error);
-				}
-			});
-	}
-	
 	
 	// 계정과목 검색
 	function searchAccount() {
