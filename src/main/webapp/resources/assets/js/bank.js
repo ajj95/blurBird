@@ -1291,7 +1291,7 @@ $(function(){
 
 	  searchstart.empty();
 	  
-		let str = '';
+		var str = '';
 	    str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -1310,7 +1310,8 @@ $(function(){
 	  			str += '<tr>';
 	  			str += '<input type="hidden" name="bankslipno" value="';
 	  			str += detailSlip[i].bankslipno;
-	  			str += '" />'
+	  			str += '">';
+	  			str += '<input type="hidden" name="bhno" value="'+detailSlip[i].bhno+'">';
 	  			str += '<input type="hidden" name="bhno" value="';
 	  			str += detailSlip[i].bhno;
 	  			str += '">';
@@ -1346,9 +1347,7 @@ $(function(){
 				str += '</td>';
 				str += '<td class="button-and-input"><button type="button" class="btn searchaccount btn-outline-dark" ';
 				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
-				str += 'data-btn-index="';
-				str += i;
-				str += '">';
+				str += 'data-btn-index="'+ i + '">';
 				str += '<i class="ri-article-fill"></i>';
 				str += '</button><input type="text" name="accountno" class="intable" value="';
 				str += detailSlip[i].accountno;
@@ -1370,22 +1369,21 @@ $(function(){
 					str += '<td><input type="text" name="amount" class="intable" value="';
 					str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
 					str += '"></td>';
-					
 				}
 				
-				str += '<td><input type="text" name="source" class="intable" value="';
-				str += detailSlip[i].source;
-				str += '"></td>';
-				str += '<td><input type="text" name="summary" class="intable" value="';
+				str += '<td><input type="text" name="source" class="intable" value="' + detailSlip[i].source + '"></td>';
+				// 메모가 null인 경우 처리!!!
+				str += '<td><input type="text" name="summary" class="intable" value="' + (detailSlip[i].summary ? detailSlip[i].summary : '') + '"></td>';
 				
+				/*
+				이렇게 if로 하니까 이상하게 나온다.
 				if(detailSlip[i].summary==null){
 					str += '"></td>';
 				}else{
 					str += detailSlip[i].summary;
 				}
 				str += '"></td>';
-				
-				
+				*/
 				
 				str += '</tr>';
 	  		}//end for
@@ -1657,7 +1655,7 @@ $(function(){
 			          account.accountName.includes(searchTerm) || account.accountNo.includes(searchTerm)
 			        );
 			      });
-			      // 검색 결과를 표시
+			      // 검색 결과를 표시합니다.
 			      const accountListModal = $('#accountListModal');
 			      accountListModal.empty();
 
