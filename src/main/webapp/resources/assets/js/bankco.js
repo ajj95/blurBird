@@ -26,8 +26,73 @@ $(function(){
             // 수임사: 체크 불가
            historySlipRequest(search);
         });
- 
-	
+        
+        		
+		 // 메모 아이콘 클릭 시 모달 출력 (입력/수정 가능하도록)
+		$("#left").on("click", ".ri-article-fill", function(){
+			// 메모 내용, 통장내역 번호, 금액 가져와서 모달 input 에 넣기
+			let bhno = $(this).closest('tr').find('input[name="bhno"]').val();
+			let closestLink = $(this).closest('a');
+			let memo = '';
+
+			if(closestLink.length>0){
+				memo = closestLink.data('bs-original-title');
+			}
+			
+			$("#biznoInMemoModal").val(bhno);
+			$("#insertedMemo").val(memo);
+			
+			$("#memoinsert").modal('show');
+		});
+		
+		// 메모 입력 모달 창에서 저장 버튼 클릭시
+		$("#saveMemoBtn").on("click", function(){
+			let bhno = $("#biznoInMemoModal").val();
+			let memo = $("#insertedMemo").val();
+			
+	        let datas = {
+	                bhno: bhno,
+	                memo: memo,
+	       };
+			
+			// 통장내역번호, 메모로 해야하는 일들
+			$.ajax({
+		            type: "GET",
+		            url: "/bank/modifyMemo",
+		            dataType: "json",
+		            data: datas,
+		            success: function(response) {
+		               alert(response);
+		            },
+		            error: function(xhr, status, error) {
+		                console.error(error);
+		            }
+		     });
+			
+			alert("메모가 저장되었습니다.");
+			
+			// 모달 닫기
+	        $('#memoinsert').modal('hide');
+			
+			// 다시 화면 로드
+	        let startDate = $("#startdate").val();
+            let endDate = $("#enddate").val();
+            let bizno = $("#bizno").val();
+            let bankname = $("#bankname").val();
+            
+            let search = {
+                startdate: startDate,
+                enddate: endDate,
+                bizno: bizno,
+                bankname: bankname
+            };
+            
+            // 수임사: 체크 불가
+           historySlipRequest(search);
+			
+		});
+        
+      
 	
 });// windowload function
 
@@ -54,7 +119,6 @@ $(function(){
                     
                     createBankHistoryAllTable(historyList);
                     createBankSlipAllTable(slipList, total, all, can, confirmed, except, remove);
-                    createDetailSlipTable();
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
@@ -63,30 +127,7 @@ $(function(){
         }// end historySlipRequest
         
        
-        // 분개내역 조회시 호출하는 ajax 함수
-        // bhnoList: 호출하는 자바스크립트로부터 받아옴
-		function getDetailSlip(bhnoList) {
-		  // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 URL 생성
-		  if (bhnoList.length > 0) {
-		    // url 생성해서 넘겨주기
-		    let queryString = bhnoList.map(bhno => 'bhno=' + bhno).join('&');
-		    
-		    $.ajax({
-		      type: "GET",
-		      contentType: "application/json;charset=UTF-8",
-		      url: "/bank/detailslip?" + queryString,
-		      dataType: "json",
-		      success: function(response) {
-		        // 성공적으로 데이터를 받아온 후 createDetailSlipTable 함수 호출
-		        createDetailSlipTable(response);
-		      },
-		      error: function(xhr, status, error) {
-		        console.error(error);
-		      }
-		    });//end ajax
-		  }//end if
-		}
-
+       
 	// historySlipRequest ajax가 호출하는 처리 함수
 	function createBankHistoryAllTable(data){
 		
@@ -141,23 +182,22 @@ $(function(){
       	str +='<tr>';
       	str += '<input type="hidden" name="bhno" value="';
 	    str += data[i].bhno;
-	    str += '">';
  	  	str +='<td>';
  	  	str += formatDate(data[i].bhdate);
  	  	str +='</td>';
  	  	str +='<td>';
- 	  	str +=data[i].source;
+ 	  	str += data[i].source;
  	  	str +='</td>';
  	  	if(data[i].sortno==1){
  	  		// 입금
- 	  		str +='<td>';
+ 	  		str +='<td name="bhamount">';
 	 	  	str +=formatNumberWithCommas(data[i].amount);
 	 	  	str +='</td>';
 	 	  	str +='<td></td>';
  	  	}else{
  	  		// 출금
  	  		str +='<td></td>';
- 	  		str +='<td>';
+ 	  		str +='<td name="bhamount">';
 	 	  	str +=formatNumberWithCommas(data[i].amount);
 	 	  	str +='</td>';
  	  	}
@@ -222,14 +262,14 @@ $(function(){
 	 	  	str +='</td>';
 	 	  	if(data[i].sortno==1){
 	 	  		// 입금
-	 	  		str +='<td>';
+	 	  		str +='<td name="bhamount">';
 		 	  	str +=formatNumberWithCommas(data[i].amount);
 		 	  	str +='</td>';
 		 	  	str +='<td></td>';
 	 	  	}else{
 	 	  		// 출금
 	 	  		str +='<td></td>';
-	 	  		str +='<td>';
+	 	  		str +='<td name="bhamount">';
 		 	  	str +=formatNumberWithCommas(data[i].amount);
 		 	  	str +='</td>';
 	 	  	}
@@ -293,14 +333,14 @@ $(function(){
 	 	  	str +='</td>';
 	 	  	if(data[i].sortno==1){
 	 	  		// 입금
-	 	  		str +='<td>';
+	 	  		str +='<td name="bhamount">';
 		 	  	str +=formatNumberWithCommas(data[i].amount);
 		 	  	str +='</td>';
 		 	  	str +='<td></td>';
 	 	  	}else{
 	 	  		// 출금
 	 	  		str +='<td></td>';
-	 	  		str +='<td>';
+	 	  		str +='<td name="bhamount">';
 		 	  	str +=formatNumberWithCommas(data[i].amount);
 		 	  	str +='</td>';
 	 	  	}
@@ -312,7 +352,8 @@ $(function(){
 		  	}else{
 		  		 str +='<td><a href=# data-bs-toggle="tooltip" data-bs-placement="top" title="';
 		  		 str +=data[i].memo;
-		  		 str +='"><i class="ri-article-fill"></i></a></td>';
+		  		 str +='"><i class="ri-article-fill"></i></a>';
+		  		 str += '</td>';
 		  	}
 			str +='</tr>';
 	  }

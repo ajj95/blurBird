@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j;
 
 @Controller
 @Log4j
+@RequestMapping("/bank/*")
 @AllArgsConstructor
 public class BankController {
 
@@ -27,11 +28,6 @@ public class BankController {
 	// 수임사 통장관리 메뉴 이동
 	@GetMapping("/bank/bankco")
 	public void bankco() {
-	}
-	
-	
-	@GetMapping("/common/coheader")
-	public void coheader() {
 	}
 	
 }

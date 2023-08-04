@@ -398,31 +398,6 @@ input.modaltext {
 
 </style>
 <script src="../resources/assets/js/bankco.js"></script>
-<script type="text/javascript">
-	$(function(){
-		
-		// 메모 아이콘 클릭 시 모달 출력 (입력/수정 가능하도록)
-		$("#left").on("click", ".ri-article-fill", function(){
-			// 메모 내용 가져와서 모달 input 에 넣기
-			//let closestLink = $(this).closest('a');
-			//let memo = '';
-			
-			let memo = $(this).closest('td').find('a').attr('title');
-			
-			
-			console.log("@@@@@@@@@@입력된 메모: " + memo);
-			$("#insertedMemo").val(memo);
-			
-			$("#memoinsert").modal('show');
-		});
-		
-		$("#left").on("click", "a[data-bs-toggle='tooltip']", function(){
-			alert("테스트");
-		});
-		
-
-	});
-</script>
 </head>
 
 <body>
@@ -518,10 +493,10 @@ input.modaltext {
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    	<form action="">
-                    		<input type="text" class="modaltext" id="insertedMemo" value=""/>
-                    		<button type="submit" class="btn btn-light">확인</button>
-                    	</form>
+                   		<input type="hidden" id="biznoInMemoModal">
+                   		<input type="hidden" id="amountInMemoModal">
+                   		<input type="text" class="modaltext" id="insertedMemo" value=""/>
+                   		<button type="button" id="saveMemoBtn" class="btn btn-light">저장</button>
                     	</div><!-- end modal-body -->
                   	</div>
                 	</div>

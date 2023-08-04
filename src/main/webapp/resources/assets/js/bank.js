@@ -575,7 +575,6 @@ $(function(){
 					$.each(data, function (index, item) {
 						let accountno = item.accountNo;
 						const temp = document.createElement('tr');
-						//temp.setAttribute('data-btn-index', index); // data-btn-index 속성 설정
 						temp.innerHTML = "<td>" + item.accountNo + "</td><td>"
 							+ item.accountName + "</td>";
 						$('#accountListModal').append(temp);
@@ -591,11 +590,7 @@ $(function(){
       				$("#accountListModal").on("click", 'tr', function(){
       					  let selectedAccountNo = $(this).find('td:first-child').text();
 		                  let selectedAccountName = $(this).find('td:nth-child(2)').text();
-		                  
-		                  console.log("#####선택된 버튼인덱스: " + btnIndex);
-		                  console.log("#####선택된 계정코드: " + selectedAccountNo);
-		                  console.log("#####선택된 계정명: " + selectedAccountName);
-		                  
+
 		                  // 버튼 인덱스를 이용하여 분개내역 테이블 내의 해당 버튼의 행을 선택
 					      let targetRow = $('.detailsliptable tbody tr').eq(btnIndex);
 					
@@ -1654,15 +1649,15 @@ $(function(){
 			    type: "GET",
 			    dataType: "json",
 			    success: function (data) {
-			      const accountList = data; // Ajax 성공 시 데이터를 accountList에 할당합니다.
-			      const searchTerm = $('.valueToAccount').val().trim();
+			      let accountList = data; // Ajax 성공 시 데이터를 accountList에 할당
+			      let searchTerm = $('.valueToAccount').val().trim();
 			      // 데이터를 검색어를 기준으로 필터링합니다.
-			      const filteredAccounts = accountList.filter((account) => {
+			      let filteredAccounts = accountList.filter((account) => {
 			        return (
 			          account.accountName.includes(searchTerm) || account.accountNo.includes(searchTerm)
 			        );
 			      });
-			      // 검색 결과를 표시합니다.
+			      // 검색 결과를 표시
 			      const accountListModal = $('#accountListModal');
 			      accountListModal.empty();
 
