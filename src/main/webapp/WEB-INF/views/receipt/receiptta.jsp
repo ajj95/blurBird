@@ -136,68 +136,7 @@
 			</head>
 
 			<body>
-				<!-- ======= Sidebar ======= -->
-				<aside id="sidebar" class="sidebar">
-					<ul class="sidebar-nav" id="sidebar-nav">
-						<li class="nav-item">
-							<div class="search-bar bizsearch">
-								<form class="search-form d-flex align-items-center search-biz" method="POST" action="#">
-									<input type="text" name="query" placeholder="수임기업명을 검색하세요"
-										title="Enter search keyword">
-									<button type="submit" title="Search">
-										<i class="bi bi-search"></i>
-									</button>
-								</form>
-							</div> <!-- End Search Bar -->
-
-							<nav class="header-nav ms-auto">
-								<ul class="d-flex align-items-center">
-									<li class="nav-item d-block d-lg-none"><a
-											class="nav-link nav-icon search-bar-toggle " href="#"> <i
-												class="bi bi-search"></i>
-										</a></li>
-									<!-- End Search Icon-->
-								</ul>
-							</nav>
-						</li>
-						<button type="button" class="btn btn-outline-primary allbtn">
-							<i class="ri-building-line"></i> 전체수임기업
-						</button>
-						<br>
-						<br>
-						<li class="nav-item-divider"></li>
-						<!-- 회색 선 추가 -->
-						<br>
-						<li class="nav-item">
-							<!-- 수임사 리스트 -->
-							<div class="list-group">
-								<a href="#" class="list-group-item list-group-item-action">
-									<div class="d-flex w-100 justify-content-between">
-										<h5 class="mb-1">엣지상사</h5>
-										<i class="bi bi-bell"></i>
-									</div> <span class="badge biztype">제조</span> <small
-										class="text-muted">222-3333-5555</small>
-								</a> <a href="#" class="list-group-item list-group-item-action">
-									<div class="d-flex w-100 justify-content-between">
-										<h5 class="mb-1">더존</h5>
-										<i class="bi bi-bell"></i>
-									</div> <span class="badge biztype">IT</span> <small
-										class="text-muted">222-3333-5555</small>
-								</a> <a href="#" class="list-group-item list-group-item-action">
-									<div class="d-flex w-100 justify-content-between">
-										<h5 class="mb-1">대한건설</h5>
-										<i class="bi bi-bell"></i>
-									</div> <span class="badge biztype">건설</span> <small
-										class="text-muted">222-3333-5555</small>
-								</a>
-							</div> <!-- End List group Advanced Content -->
-						</li>
-
-					</ul>
-
-				</aside>
-				<!-- End Sidebar-->
-
+			<%@include file="../common/searchbizsidebar.jsp"%>
 				<main id="main" class="main">
 					<div class="pagetitle">
 						<h1>증빙전표입력</h1>
@@ -266,7 +205,6 @@
 														</tr>
 													</thead>
 													<tbody id="searchResults">
-
 													</tbody>
 												</table>
 
@@ -315,15 +253,15 @@
 																	aria-expanded="false"
 																	aria-controls="collapseExample" type="checkbox">
 															</td>
-															<td><input type="text" class="form-control"></td>
-															<td><select class="form-select">
-																	<option value="1">일반</option>
-																	<option value="2">매입</option>
+															<td><input type=" text" class="regdate form-control"></td>
+															<td><select class="typecheck form-select">
+																	<option value="일반">일반</option>
+																	<option value="매입">매입</option>
 																</select></td>
 															<td></td>
-															<td><input type="text" class="form-control"></td>
-															<td>퀵서비스</td>
-															<td><input type="text" class="form-control"></td>
+															<td><input type="text" class="bcnc form-control"></td>
+															<td class ="summary"></td>
+															<td><input type="text" class="amount form-control"></td>
 															<td></td>
 															<td></td>
 															<td><button type="button" class="btn btn-outline-dark"
@@ -348,19 +286,19 @@
 																	data-bs-target="#accountCode">
 																	계정과목  <i class="bi bi-info-circle"></i></button>
 															</th>
-															<th scope="col" class="tabletop">차변(출금)</th>
+															<th scope="col" class=" tabletop">차변(출금)</th>
 															<th scope="col" class="tabletop">대변(입금)</th>
 														</tr>
 													</thead>
 													<tbody>
 														<tr>
 															<td><input class="form-check-input " type="checkbox"></td>
-															<td></td>
-															<td></td>
-															<td colspan="2"></td>
-															<td class="accountCodeNo">101</td>
-															<td class="accountCodeName">현금</td>
-															<td></td>
+															<td class ="b_bcnc"></td>
+															<td class="b_typecheck"></td>
+															<td colspan="2" class="b_summary"></td>
+															<td class="b_accountCodeNo"></td>
+															<td class="b_accountCodeName"></td>
+															<td class="amount"></td>
 															<td></td>
 														</tr>
 													</tbody>
@@ -368,8 +306,6 @@
 												<div class="bottom collapse" id="collapseExample">
 													<button type="button" class="btn btn-outline-danger"
 														style="float: right;">부적합으로 변경</button>
-													<button type="button" class="btn btn-outline-warning"
-														style="float: right;">전표삭제</button>
 													<button type="button" class="btn btn-outline-success"
 														style="float: right;">전표반영</button>
 												</div>
@@ -383,7 +319,7 @@
 															<th scope="col" class="tabletop">No.</th>
 															<th scope="col" class="tabletop">증빙내용</th>
 															<th scope="col" class="tabletop">적용여부</th>
-															<th scope="col" class="tabletop" colspan="2">부적합사유</th>
+															<th scope="col" class="tabletop">부적합사유</th>
 															<th scope="col" class="tabletop">메모</th>
 														</tr>
 													</thead>
@@ -397,7 +333,6 @@
 															</td>
 															<td>비품구매</td>
 															<td>부적합</td>
-															<td>02</td>
 															<td>이미 반영된 증빙입니다.</td>
 															<td><button type="button" class="btn btn-outline-dark"
 																	data-bs-toggle="modal"
@@ -408,8 +343,6 @@
 													</tbody>
 												</table>
 												<div class="collapse" id="collapseExample2">
-													<button type="button" class="btn btn-outline-danger"
-														style="float: right;">삭제</button>
 													<button type="button" class="btn btn-outline-success"
 														style="float: right;">적합으로 변경</button>
 												</div>
@@ -508,16 +441,16 @@
 					        type: 'get',
 					        url: '/receipt/dateSearch',
 					        data: requestData,
-					        dataType: 'json', //이게 누락되네
+					        dataType: 'json',
 					        success: function(response) {
 					          let tbody = $('#searchResults');
 					          tbody.empty(); // 이전 결과를 지우기 위해 tbody 내용을 비웁니다.
 					          $.each(response,function(index,item){
 						            let row = $('<tr>');
-						            row.append('<td><input class="selectRadiobtn form-check-input" type="radio" name="flexRadioDefault"><span hidden>'+item.recreqno+'</span></td>');
+						            row.append('<td><input class="selectRadiobtn form-check-input" type="radio" name="flexRadioDefault"><span hidden class="recreqno">'+item.recreqno+'</span></td>');
 						            row.append('<td>'+item.purpose+'</td>');
-						            row.append('<td><select class="form-select"><option value="1" selected>적합</option><option value="2">부적합</option>	</select></td>');
-						            row.append('<td>');
+						            row.append('<td><select class="judge form-select"><option selected>미증빙</option><option value="1">적합</option><option value="2">부적합</option>	</select></td>');
+						            row.append('<td><input type="text" class="contents form-control"/></td>');
 						            row.append('<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"	data-bs-target="#exampleModal">	<i class="ri-article-fill"></i></button>	</td>');
 						            // 필요한 만큼 필드를 추가하여 데이터를 출력합니다.
 						            tbody.append(row); // 행을 테이블에 추가합니다.
@@ -535,8 +468,8 @@
 					
 					$(document).on('click', '.accountCheck', function () {
 						btnLocation = $(this);
-						accountNo = btnLocation.closest("table").find("tbody > tr > td.accountCodeNo");
-						accountName = btnLocation.closest("table").find("tbody > tr > td.accountCodeName");
+						accountNo = btnLocation.closest("table").find("tbody > tr > td.b_accountCodeNo");
+						accountName = btnLocation.closest("table").find("tbody > tr > td.b_accountCodeName");
 						$.ajax({
 							url: "/receipt/accountList",
 							type: "GET",
@@ -652,6 +585,60 @@
 							},
 						})
 					})
+					$("#businessList").on("input", ".list-group-item", function(e){
+         				e.preventDefault();
+         				let bizno = $(this).find("input[name='biznoInSidebar']").val();
+         				// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
+         				$("#bizno").val(bizno);
+      				});
+					
+					$(document).on('change','.judge',function(){
+						let judge = $(this).val();
+						let recreqno = $(this).closest('tr').find('td:nth-child(1) > span').text();
+						let contents = $(this).closest('tr').find('td:nth-child(4) > input').val();
+						console.log(judge);//적합 부적합 판정
+						console.log(recreqno);//이 문서 번호
+						console.log(contents); //부적합 사유
+						$.ajax({
+							url: "/receipt/judgeReceipt",
+							type: "POST",
+							data:{"recreqno":recreqno,
+								"judge":judge,
+								"contents":contents},
+							dataType:"json",
+							success: function (data) {
+								console.log(data);
+								if(data.confirmed==1){
+									console.log(data.purpose);
+									$('.summary').text(data.purpose);
+								}else if(data.confirmed==2){
+									console.log(data.contents);
+								}
+							},
+							error: function (xhr, status, error) {
+								// 에러 처리
+								console.log("Error:", error);
+							},
+						})
+					})
+					$('.amount').on("blur",function(){
+						const location =  $(this); // 이 위치
+						const amount = $(this).val(); // 금액 
+						const summary = $(this).closest('tr').find('td.summary').text(); //적요
+						const bcnc = $(this).closest('tr').find('td:nth-child(5) > input').val();//거래처
+						const typecheck = $(this).closest('tr').find('td:nth-child(3) > select').val();//구분
+						console.log("amount : "+amount);
+						console.log("summary : "+summary);
+						console.log("bcnc : "+bcnc);
+						console.log("typecheck : "+typecheck);
+						
+						$('.b_bcnc').text(bcnc);
+						$('.b_typecheck').text(typecheck);
+						$('.b_summary').text(summary);
+						$('.amount').text(amount);
+					});
+					
+					
 				</script>
 				<!-- End #main -->
 				<%@include file="../common/footer.jsp" %>

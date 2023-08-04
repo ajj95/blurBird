@@ -398,16 +398,6 @@ input.modaltext {
 
 </style>
 <script src="../resources/assets/js/bankco.js"></script>
-<script type="text/javascript">
-	$(function(){
-		
-		// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$("#left").on("click", ".memolink", function(){
-			$("#memoinsert").modal('show');
-		});
-		
-	});
-</script>
 </head>
 
 <body>
@@ -503,10 +493,10 @@ input.modaltext {
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    	<form action="">
-                    		<input type="text" class="modaltext" value=""/>
-                    		<button type="submit" class="btn btn-light">확인</button>
-                    	</form>
+                   		<input type="hidden" id="biznoInMemoModal">
+                   		<input type="hidden" id="amountInMemoModal">
+                   		<input type="text" class="modaltext" id="insertedMemo" value=""/>
+                   		<button type="button" id="saveMemoBtn" class="btn btn-light">저장</button>
                     	</div><!-- end modal-body -->
                   	</div>
                 	</div>
