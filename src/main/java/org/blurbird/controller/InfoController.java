@@ -1,5 +1,6 @@
 package org.blurbird.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.blurbird.domain.common.BusinessVO;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,16 +30,21 @@ public class InfoController {
 	private InfoService service;
 	
 	@GetMapping("/infoTA")
-	public void getInfoTA() {};
+	public void getInfoTA(Model model) {
+		model.addAttribute("listCO", service.getListBusiness());
+	};
+	
+	
+	
+	
 	
 	@PostMapping("/infoTA")
-	public void getInfoTA(Model model, InfoData infoData) {
-		log.info(infoData.getBizno());
-		log.info(infoData.getYear());
-		model.addAttribute("list", service.getListBusiness());
-		log.info("model1: " + model);
-		model.addAttribute("values", service.getSalesfromAuto(infoData));
-		log.info("model2: " + model);
+	public void getInfoList(Model model, InfoData infoData) {
+	
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getList(infoData));
+		
+		model.addAttribute("list", service.getList(infoData));
+
 	}
 	
 	@GetMapping("/infoCO")

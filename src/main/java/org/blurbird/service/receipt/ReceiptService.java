@@ -12,4 +12,5 @@ import org.springframework.stereotype.Service;
 public interface ReceiptService {
 	public List<AccountVO> getAccountList();
 	public List<ReceiptRequestVO> getReceiptList(DateRange dateRange);
+	public String getImgPath(String recreqno);
 }

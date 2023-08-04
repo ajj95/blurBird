@@ -1,5 +1,6 @@
 package org.blurbird.controller;
 
+import java.io.File;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
@@ -42,16 +44,14 @@ public class ReceiptController {
 		log.info("receiptta!!");
 	}
 
+	@GetMapping("/receiptco")
+	public void receiptco() {
+		log.info("receiptco!!");
+	}
+
 	@GetMapping("/Test")
 	public void test() {
 		log.info("DatePicker Test!!!");
-	}
-	
-	@PostMapping("/Test")
-
-	@GetMapping("/receiptco")
-	public void receiptco() {
-		log.info("TEST!!");
 	}
 
 	@GetMapping("/receiptList")
@@ -62,20 +62,50 @@ public class ReceiptController {
 
 	@GetMapping("/dateSearch")
 	@ResponseBody // JSON 데이터를 반환하는 엔드포인트로 지정
-	public ResponseEntity<List<ReceiptRequestVO>> searchData(
-	        @RequestParam("startDate") String startDateStr,
-	        @RequestParam("endDate") String endDateStr) {
-	    LocalDate startDate = LocalDate.parse(startDateStr);
-	    LocalDate endDate = LocalDate.parse(endDateStr);
-	    DateRange dateRange = new DateRange(startDate, endDate);
-	    List<ReceiptRequestVO> searchData = service.getReceiptList(dateRange);
-	    log.info(searchData);
-	    return ResponseEntity.ok(searchData); // 검색 결과를 JSON 형식으로 반환
+	public ResponseEntity<List<ReceiptRequestVO>> searchData(@RequestParam("startDate") String startDateStr,
+			@RequestParam("endDate") String endDateStr) {
+		LocalDate startDate = LocalDate.parse(startDateStr);
+		LocalDate endDate = LocalDate.parse(endDateStr);
+		DateRange dateRange = new DateRange(startDate, endDate);
+		List<ReceiptRequestVO> searchData = service.getReceiptList(dateRange);
+		log.info(searchData);
+		return ResponseEntity.ok(searchData); // 검색 결과를 JSON 형식으로 반환
 	}
 
 	@GetMapping("/accountList")
 	@ResponseBody
 	public List<AccountVO> getAccountList() {
 		return service.getAccountList();
+	}
+
+	@PostMapping("/imgSearch")
+	@ResponseBody
+	public String getImgPath(@RequestParam("recreqno") String recreqno) {
+		log.info(recreqno);
+		String ImgPath = service.getImgPath(recreqno);
+		log.info(ImgPath);
+		return ImgPath;
+	}
+
+	@PostMapping("/uploadReceipt")
+	@ResponseBody
+	public ResponseEntity<String> uploadReciept(MultipartFile[] uploadFile) {
+		log.info("upload receipt...");
+		String uploadFolder = "C:\\DouZone\\workspace\\spring_work\\project\\blurBird\\src\\main\\webapp\\resources\\upload";
+
+		for (MultipartFile multipartFile : uploadFile) {
+			log.info("----------------------------");
+			log.info(multipartFile.getOriginalFilename());
+			log.info(multipartFile.getSize());
+			String uploadFileName = multipartFile.getOriginalFilename();
+			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+
+			try {
+				multipartFile.transferTo(saveFile);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+		 return  ResponseEntity.ok("\""+uploadFile[0].getOriginalFilename()+"\"");
 	}
 }
