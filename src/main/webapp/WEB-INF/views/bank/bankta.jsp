@@ -11,7 +11,8 @@
 <title>bankta</title>
 <meta content="" name="description">
 <meta content="" name="keywords">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.1.1.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../resources/assets/css/style.css" rel="stylesheet">
 <style type="text/css">
@@ -416,15 +417,7 @@ input.modaltext {
 		});
 		
 		
-		// 계정 조회 버튼
-		$("#bottom").on("click", ".searchaccount", function(){
-			
-			// 버튼별로 동적 생성되는 인덱스값 가져오기: 시작 0 ~ 증가
-			let btnIndex = $(this).data("btn-index");
-			alert("버튼인덱스: " + btnIndex);
-			
-			openAccountCodeModal(btnIndex);
-		});
+		
 		
 		
 	  // 내용확인 모달 창에서 저장 클릭 시 메시지 insert
@@ -654,6 +647,7 @@ input.modaltext {
 													<th>계정과목명</th>
 												</tr>
 											</thead>
+											<!-- 계정과목 리스트 동적생성 -->
 											<tbody id="accountListModal">
 											</tbody>
 										</table>
