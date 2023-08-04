@@ -6,6 +6,7 @@ import java.util.List;
 import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.mapper.InfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class InfoServiceImpl implements InfoService {
 
 	@Override
 	public List<BusinessVO> getListBusiness() {
-		log.info("수임사 목록 가져오기");
+		log.info("�닔�엫�궗 紐⑸줉 媛��졇�삤湲�");
 		return mapper.getListBusiness();
 	}
 
@@ -36,14 +37,14 @@ public class InfoServiceImpl implements InfoService {
 		iS.setBizno(infoData.getBizno());
 
 		if (mapper.getSalesfromAuto(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setSalesfromautoslip(0L);
 		} else {
 			iS.setSalesfromautoslip(mapper.getSalesfromAuto(infoData));
 		}
 
 		if (mapper.getSalesfromBank(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setSalesfrombankslip(0L);
 		} else {
 			iS.setSalesfrombankslip(mapper.getSalesfromBank(infoData));
@@ -52,19 +53,19 @@ public class InfoServiceImpl implements InfoService {
 		iS.setTotalsales(iS.getSalesfromautoslip() + iS.getSalesfrombankslip());
 
 		if (mapper.getCOGSfromAuto(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setCogsfromautoslip(0L);
 		} else {
 			iS.setCogsfromautoslip(mapper.getCOGSfromAuto(infoData));
 		}
 		if (mapper.getCOGSfromBank(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setCogsfrombankslip(0L);
 		} else {
 			iS.setCogsfrombankslip(mapper.getCOGSfromBank(infoData));
 		}
 		if (mapper.getCOGSfromCash(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setCogsfromcashslip(0L);
 		} else {
 			iS.setCogsfromcashslip(mapper.getCOGSfromCash(infoData));
@@ -73,19 +74,19 @@ public class InfoServiceImpl implements InfoService {
 		iS.setTotalcogs(iS.getCogsfromautoslip() + iS.getCogsfrombankslip() + iS.getCogsfromcashslip());
 
 		if (mapper.getOperExpensefromAuto(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setOperExpensefromAutoSlip(0L);
 		} else {
 			iS.setOperExpensefromAutoSlip(mapper.getOperExpensefromAuto(infoData));
 		}
 		if (mapper.getOperExpensefromBank(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setOperExpensefromBankSlip(0L);
 		} else {
 			iS.setOperExpensefromBankSlip(mapper.getOperExpensefromBank(infoData));
 		}
 		if (mapper.getOperExpensefromCash(infoData) == null) {
-			// null�� ��쿡 0���� ����
+			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setOperExpensefromCashSlip(0L);
 		} else {
 			iS.setOperExpensefromCashSlip(mapper.getOperExpensefromCash(infoData));
@@ -128,15 +129,50 @@ public class InfoServiceImpl implements InfoService {
 		IncomeSVO iS = this.getISByBiz(infoData);
 		List<InfoData> infoList = new ArrayList<InfoData>();
 
-			if (infoData.getBizno().equals(iS.getBizno())) {
-				infoData.setBizname(mapper.getBizName(infoData).getBizname());
-				infoData.setBizincome(Long.toString(iS.getBusinessIncome()));
-				infoData.setTax(Long.toString(iS.getTax()));
+		infoData.setBizno(iS.getBizno());
+		infoData.setYear(infoData.getYear());
+		infoData.setBizname(mapper.getBizName(infoData).getBizname());
+		infoData.setBizincome(Long.toString(iS.getBusinessIncome()));
+		infoData.setTax(Long.toString(iS.getTax()));
 
-				infoList.add(infoData);
-			}
+		infoList.add(infoData);
 
 		return infoList;
+	}
+
+	@Override
+	public void report(ReportPaymentVO reportPaymentVO) {
+		mapper.report(reportPaymentVO);
+		
+	}
+
+	@Override
+	public void transfer(ReportPaymentVO reportPaymentVO) {
+		mapper.transfer(reportPaymentVO);
+		
+	}
+
+	@Override
+	public ReportPaymentVO rptfResult(ReportPaymentVO reportPaymentVO) {
+		
+//		reportPaymentVO.setReportpaymentno(reportPaymentVO.getReportpaymentno());
+//		reportPaymentVO.setBizno(reportPaymentVO.getBizno());
+//		reportPaymentVO.setBizname(reportPaymentVO.getBizname());
+//		reportPaymentVO.setYear(reportPaymentVO.getYear());
+//		if(reportPaymentVO.getBizincome()==null) {
+//			reportPaymentVO.setBizincome("0");
+//		}
+//		if(reportPaymentVO.getTax()==null) {
+//			reportPaymentVO.setTax("0");
+//		}
+//		reportPaymentVO.setReportdate(reportPaymentVO.getReportdate());
+//		
+//		reportPaymentVO.setReportdoc(reportPaymentVO.getReportdoc());
+//		reportPaymentVO.setPaymentslip(reportPaymentVO.getPaymentslip());
+//		reportPaymentVO.setTransdate(reportPaymentVO.getTransdate());
+//		reportPaymentVO.setStatus(reportPaymentVO.getStatus());
+		
+		return mapper.rptfResult(reportPaymentVO);
 	}
 
 }

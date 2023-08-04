@@ -60,7 +60,7 @@
 
 <script>
     // 입력 폼 blur (focus 해제) 이벤트 처리
-    $("#memo").on("blur", function() {
+    $("#memo").on("input", function() {
         // 입력 폼에서 focus가 해제되면 입력 값을 받아옴
         const memoLocation = $(this);
         const memo = $(memoLocation).val();

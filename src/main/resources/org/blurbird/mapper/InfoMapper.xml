@@ -164,7 +164,6 @@
 
 	<!-- 영업이익(= 매출 총 이익 - 판관비 = 사업소득금액) -->
 
-
 	<!-- 이하 법인세 관련 값 (확장 예정) -->
 	<!-- 영업외수익 -->
 	<select id="getNonOperIncomefromAuto" resultType="Long"
@@ -276,8 +275,34 @@
 	</select>
 
 
+	<insert id="report"
+		parameterType="org.blurbird.domain.info.ReportPaymentVO">
+		INSERT INTO reportpayment (reportpaymentno, bizno,
+		bizname, year, bizincome, tax, reportdate, reportdoc, paymentslip,
+		status)
+		VALUES (
+		(Seq_reportpayment.NEXTVAL),
+		(SELECT bizno FROM business WHERE business.bizno = #{bizno}),
+		(SELECT bizname FROM business WHERE business.bizno = #{bizno}),
+		#{year}, #{bizincome}, #{tax},
+		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')),
+		#{reportdoc}, #{paymentslip}, #{status}
+		)
+	</insert>
 
+	<update id="transfer"
+		parameterType="org.blurbird.domain.info.ReportPaymentVO">
+		update reportpayment set transdate =
+		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
+		status = #{status} where
+		bizno=#{bizno}
+	</update>
 
+	<select id="rptfResult"
+		resultType="org.blurbird.domain.info.ReportPaymentVO"
+		parameterType="org.blurbird.domain.info.ReportPaymentVO">
+		select * from reportpayment where bizno=#{bizno}
+	</select>
 
 
 

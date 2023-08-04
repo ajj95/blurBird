@@ -89,7 +89,6 @@ public class BankRestController {
             String bhstateno = requestBody.get("bhstateno");
         	
             boolean check = service.modifySlipState(bhno, bhstateno);
-            log.info("return값: " + check);
             
             if (check) {
                 return ResponseEntity.ok("전표 상태가 수정되었습니다.");
@@ -209,9 +208,7 @@ public class BankRestController {
     	
     	for(KeywordDTO keyword:keywordlist) {
     		if(keyword.getKeywordname().equals(memo)){
-    			accountno = keyword.getAccountno();
-    		}else {
-    			accountno = null;
+    			accountno = keyword.getAccountno(); // 일치하는 것 하나 찾으면 넣어주기
     		}
     	}
     	
@@ -252,6 +249,15 @@ public class BankRestController {
     	}
     	
     	return "메모가 저장되었습니다.";
+    }
+    
+    // 수임사 메모 입력 시 수정 반영 처리
+    @GetMapping("/modifyMemo")
+    public String modifyMemo(@RequestParam("bhno")String bhno, @RequestParam("memo")String memo) {
+      
+    	service.modifymemo(bhno, memo);
+       
+        return "메모가 저장되었습니다.";
     }
     
     

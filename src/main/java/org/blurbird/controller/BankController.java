@@ -21,21 +21,13 @@ public class BankController {
 	private BankService service;
 	
 	// 세무사 통장관리 메뉴 이동
-	@GetMapping("/bankta")
+	@GetMapping("/bank/bankta")
 	public void bankta() {
 	}
 	
 	// 수임사 통장관리 메뉴 이동
-	@GetMapping("/bankco")
+	@GetMapping("/bank/bankco")
 	public void bankco() {
 	}
-	
-	
-	@PostMapping("/bankta")
-	public void searchbank(Model model, BankSearchDTO search) {
-		model.addAttribute("bankhistorylist", service.getBankHistoryList(search));
-		//rttr.addAttribute("bankhistorylist", service.getBankHistoryList(search));
-	}
-
 	
 }

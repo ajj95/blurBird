@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/taheader.jsp"%>
 
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,50 +112,224 @@ th:first-child(2), td:first-child(2) {
 }
 </style>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#submitYear").on("click", function(e) {
-			e.preventDefault(); // 폼 제출 방지
+	$(document)
+			.ready(
+					function() {
 
-			var year = $("input[name='year']").val(); // 선택된 년도 값을 가져옴
-			var biznoList = $("input[name='bizno']").map(function() {
-				return $(this).val();
-			}).get(); // bizno 값을 배열로 가져옴
-			//             console.log(biznoList);
+						$("#businessList").on(
+								"click",
+								".list-group-item",
+								function(e) {
+									e.preventDefault();
+									let bizno = $(this).find(
+											"input[name='biznoInSidebar']")
+											.val();
+									// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
+									$("#bizno").val(bizno);
+								});
 
-			processBizno(biznoList, 0, year);
-		});
+						$("#submitYear").on(
+								"click",
+								function(e) {
+									e.preventDefault(); // 폼 제출 방지
 
-		function processBizno(biznoList, index, year) {
-			if (index >= biznoList.length) {
-				// 처리가 끝났을 때
-				//                 console.log("Processing completed.");
-				return;
-			}
+									var year = $("input[name='year']").val(); // 선택된 년도 값을 가져옴
+									var biznoList = $("input[name='bizno']")
+											.map(function() {
+												return $(this).val();
+											}).get(); // bizno 값을 배열로 가져옴
+									//             console.log(biznoList);
+									$('#maketd').empty();
+									processBizno(biznoList, 0, year);
+								});
 
-			var biznoValue = biznoList[index];
-			//             console.log("Processing bizno: " + biznoValue);
+						function processBizno(biznoList, index, year) {
+							if (index >= biznoList.length) {
+								// 처리가 끝났을 때
+								console.log("Processing completed.");
+								return;
+							}
 
-			$.ajax({
-				type : "post",
-				url : "/info/infoTA",
-				data : {
-					"bizno" : biznoValue,
-					"year" : year
-				},
-				success : function(data) {
-					// 받은 데이터에 대한 추가 처리 또는 페이지 업데이트를 여기에서 수행합니다.
+							var biznoValue = biznoList[index];
+							console.log("Processing bizno: " + biznoValue);
 
-					// 다음 bizno 처리를 위해 재귀 호출
-					processBizno(biznoList, index + 1, year);
-				},
-				error : function(xhr, status, error) {
-					console.error(error);
-					// 다음 bizno 처리를 위해 재귀 호출
-					processBizno(biznoList, index + 1, year);
-				}
-			});
-		}
-	});
+							$.ajax({
+										type : "post",
+										url : "/info/infoTA",
+										data : {
+											"bizno" : biznoValue,
+											"year" : year
+										},
+
+										dataType : 'json',
+										success : function(data) {
+											// 받은 데이터에 대한 추가 처리 또는 페이지 업데이트를 여기에서 수행합니다.
+											// 다음 bizno 처리를 위해 재귀 호출
+
+											var arr = data;
+											
+// 											$("#maketd").on("click", "input[class^='rptfbtn']", function(e) {
+// 											    e.preventDefault();
+// 											    var year = $("input[name='year']").val();
+// 											    var bizno = $(this).siblings("input[name='bizno']").val(); // 해당 버튼의 형제 요소인 input에서 bizno 값을 가져옵니다.
+// 											    $.ajax({
+// 											      type: "post",
+// 											      url: "/info/infoTA/report",
+// 											      contentType: "application/json; charset=utf-8",
+// 											      data: {
+// 											        "bizno": bizno,
+// 											        "year": year
+// 											      },
+// 											      dataType: 'json',
+// 											      success: function(data) {
+// 											        console.log(bizno);
+// 											        console.log(data);
+// 											        // 받은 데이터를 처리하거나 페이지를 업데이트하면 됩니다.
+// 											      },
+// 											      error: function(xhr, status, error) {
+// 											        console.error("에러여유");
+// 											      }
+// 											    });
+// 											  });
+
+
+											$('#maketd')
+													.each(
+															function(index) {
+																let html = '<tr>';
+																html += '<td>'
+																		+ arr[index].bizname
+																		+ '<input type="hidden" name="bizno" value="' + arr[index].bizno + '"></td>';
+																html += '<td>'
+																		+ arr[index].year
+																		+ '</td>';
+																html += '<td>'
+																		+ arr[index].bizincome
+																		+ '</td>';
+																html += '<td>'
+																		+ arr[index].tax
+																		+ '</td>';
+																		
+																html += '<td>'
+																		+ arr[index].tax
+																		+ '</td>';
+																html += '<td>'
+																		+ arr[index].tax
+																		+ '</td>';
+																html += '<td>'
+																		+ arr[index].tax
+																		+ '</td>';
+																html += '<td>'
+																		+ arr[index].tax
+																		+ '</td>';
+																html += '<td >'
+																		+ '<input type="button" class="rptfbtn" value="신고서작성"/>'
+																		+ '</td>';
+																html += '</tr>';
+																$(this).append(
+																		html);
+															});
+
+
+											processBizno(biznoList, index + 1,
+													year);
+										},
+										error : function(xhr, status, error) {
+											console.error(error);
+											// 다음 bizno 처리를 위해 재귀 호출
+											processBizno(biznoList, index + 1,
+													year);
+										}
+									});
+
+							
+							  var rptfbtnSelector = ".rptfbtn";
+							  $("#maketd").off("click", rptfbtnSelector);
+							  $("#maketd").on("click", rptfbtnSelector, function(e) {
+								  
+								  console.log($(this).closest('tr').find("td:first-child").text().trim());
+								  console.log($(this).closest('tr').find("td").eq(2).text().trim());
+								  
+								  	var biznumber = $(this).closest('tr').find("input[name='bizno']").val();
+								  	var bizname = $(this).closest('tr').find("td:first-child").text().trim();
+							  		var year = $("input[name='year']").val();
+							  		 var bizincome = $(this).closest('tr').find("td").eq(2).text().trim();
+								    var tax = $(this).closest('tr').find("td").eq(3).text().trim();
+								    
+								    $.ajax({
+								      type: "post",
+								      url: "/info/infoTA/report",
+								      data: {
+									        "bizno": biznumber,
+									        "bizname" : bizname,
+									        "year": year,
+									        "bizincome": bizincome,
+									        "tax": tax
+									      },
+								      dataType: 'json',
+								      success: function(data) {
+								        console.log(data);
+								        
+										  $("#maketd").off("click", rptfbtnSelector);
+										  $("#maketd").on("click", rptfbtnSelector, function(e) {
+											  
+											  $(this).val() = "납부서전송";
+											  var transdate = $(this).closest('tr').find("td").eq(7).text.trim();
+											  
+										  }
+								        
+								      },
+								      error: function(xhr, status, error) {
+								        console.error(error);
+								      }
+								      
+								      
+								    });
+								   
+								  });
+							  
+							
+
+// 							$('.rptfbtn')
+// 									.on(
+// 											"click",
+// 											function(e) {
+// 												var year = $(
+// 														"input[name='year']")
+// 														.val();
+// 												var bizno = $(
+// 														"input[name='bizno']")
+// 														.val();
+
+// 												$
+// 														.ajax({
+// 															type : "post",
+// 															url : "/info/infoTA/report",
+// 															contentType : "application/json; charset=utf-8",
+// 															data : {
+// 																"bizno" : bizno,
+// 																"year" : year
+// 															},
+
+// 															dataType : 'json',
+// 															success : function(
+// 																	data) {
+
+// 																console
+// 																		.log('data');
+// 															},
+// 															error : function(
+// 																	xhr,
+// 																	status,
+// 																	error) {
+// 																console
+// 																		.error("에러여유");
+// 															}
+// 														});
+// 											});
+						}
+
+					});
 </script>
 
 
@@ -162,67 +338,7 @@ th:first-child(2), td:first-child(2) {
 </head>
 
 <body>
-
-	<!-- ======= Sidebar ======= -->
-	<aside id="sidebar" class="sidebar">
-		<ul class="sidebar-nav" id="sidebar-nav">
-			<li class="nav-item">
-				<div class="search-bar bizsearch">
-					<form class="search-form d-flex align-items-center search-biz"
-						method="POST" action="#">
-						<input type="text" name="query" placeholder="수임기업명을 검색하세요"
-							title="Enter search keyword">
-						<button type="submit" title="Search">
-							<i class="bi bi-search"></i>
-						</button>
-					</form>
-				</div> <!-- End Search Bar -->
-
-				<nav class="header-nav ms-auto">
-					<ul class="d-flex align-items-center">
-						<li class="nav-item d-block d-lg-none"><a
-							class="nav-link nav-icon search-bar-toggle " href="#"> <i
-								class="bi bi-search"></i>
-						</a></li>
-						<!-- End Search Icon-->
-					</ul>
-				</nav>
-			</li>
-			<button type="button" class="btn btn-outline-primary allbtn">
-				<i class="ri-building-line"></i> 전체수임기업
-			</button>
-			<br>
-			<br>
-			<li class="nav-item-divider"></li>
-			<!-- 회색 선 추가 -->
-			<br>
-			<li class="nav-item">
-				<!-- 수임사 리스트 -->
-				<div class="list-group">
-					<a href="#" class="list-group-item list-group-item-action">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">엣지상사</h5>
-							<i class="bi bi-bell"></i>
-						</div> <span class="badge biztype">제조</span> <small class="text-muted">222-3333-5555</small>
-					</a> <a href="#" class="list-group-item list-group-item-action">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">더존</h5>
-							<i class="bi bi-bell"></i>
-						</div> <span class="badge biztype">IT</span> <small class="text-muted">222-3333-5555</small>
-					</a> <a href="#" class="list-group-item list-group-item-action">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">대한건설</h5>
-							<i class="bi bi-bell"></i>
-						</div> <span class="badge biztype">건설</span> <small class="text-muted">222-3333-5555</small>
-					</a>
-				</div> <!-- End List group Advanced Content -->
-			</li>
-
-		</ul>
-
-	</aside>
-	<!-- End Sidebar-->
-
+	<%@include file="../common/searchbizsidebar.jsp"%>
 	<main id="main" class="main">
 		<div class="pagetitle">
 			<h1>신고현황표</h1>
@@ -339,76 +455,14 @@ th:first-child(2), td:first-child(2) {
 									</tr>
 								</thead>
 
-								<tbody>
+								<tbody id="maketd">
 									<c:forEach items="${listCO}" var="business">
-									
-										<tr>
+										<tr class='${business.bizno}'>
 											<td><c:out value="${business.bizname}" /> <input
 												type="hidden" name="bizno"
 												value="<c:out value='${business.bizno}' />"></td>
+										</tr>
 									</c:forEach>
-									<c:forEach items="${list}" var="infoData                                              ">
-										<td><c:out value="${infoData.year}" /></td>
-										
-										<td><c:out value="${infoData.bizincome}" /></td>
-										<td><c:out value="${infoData.tax}" /></td>
-									
-									</c:forEach>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									</tr>
-
-
-									<tr>
-										<td>수임처 더존학원</td>
-										<!-- 										<td>전대장</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
-									<tr>
-										<td>수임처 더존학원더긴제목</td>
-										<!-- 										<td>안깃헙</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
-									<tr>
-										<td>세무사학원</td>
-										<!-- 										<td>정디비</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
-									<tr>
-										<td>맛있는 카페</td>
-										<!-- 										<td>강대표</td> -->
-										<td>2023.04</td>
-										<td>25999412</td>
-										<td>1624812</td>
-										<td>2016.05.25</td>
-										<td>ic</td>
-										<td>ic</td>
-										<td>2023.05.08</td>
-										<td><button type="button">신고서작성</button></td>
-									</tr>
 								</tbody>
 							</table>
 
