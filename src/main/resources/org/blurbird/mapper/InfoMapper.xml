@@ -6,7 +6,7 @@
 
 	<!-- 수임사 목록 -->
 	<select id="getListBusiness"
-		resultType="org.blurbird.domain.bank.BusinessVO">
+		resultType="org.blurbird.domain.common.BusinessVO">
 		select * from business
 	</select>
 

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blurbird.domain.bank.BusinessVO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.FinancialSVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
@@ -25,13 +25,13 @@ public class InfoMapperTests {
 	@Autowired
 	private InfoMapper mapper;
 
-	// ¼öÀÓ»ç ¸ñ·Ï °¡Á®¿À±â Å×½ºÆ®
+	// ï¿½ï¿½ï¿½Ó»ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ®
 //	@Test
 //	public void testGetListBusiness() {
 //		log.info(mapper.getListBusiness());
 //	}
 
-	// ¸ÅÃâ(ÃÑ ¼öÀÔ±Ý¾×)
+	// ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ ï¿½ï¿½ï¿½Ô±Ý¾ï¿½)
 //	@Test
 //	public void testGetSalesfromAutoSlip() {
 //		log.info(mapper.getSalesfromAuto());
@@ -61,7 +61,7 @@ public class InfoMapperTests {
 //		log.info("OE: " + totalOperExpense);
 //		
 //		log.info("=======================================");
-//		log.info("»ç¾÷¼Òµæ±Ý¾×: " + (totalSales - (totalCOGS + totalOperExpense)));
+//		log.info("ï¿½ï¿½ï¿½ï¿½Òµï¿½Ý¾ï¿½: " + (totalSales - (totalCOGS + totalOperExpense)));
 //	}
 
 //	@Test
@@ -86,14 +86,14 @@ public class InfoMapperTests {
 //			is.setBizno(infoData.getBizno());
 //
 //			if (mapper.getSalesfromAuto(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setSalesfromautoslip(0L);
 //			} else {
 //				is.setSalesfromautoslip(mapper.getSalesfromAuto(infoData));
 //			}
 //
 //			if (mapper.getSalesfromBank(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setSalesfrombankslip(0L);
 //			} else {
 //				is.setSalesfrombankslip(mapper.getSalesfromBank(infoData));
@@ -102,19 +102,19 @@ public class InfoMapperTests {
 //			is.setTotalsales(is.getSalesfromautoslip() + is.getSalesfrombankslip());
 //
 //			if (mapper.getCOGSfromAuto(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setCogsfromautoslip(0L);
 //			} else {
 //				is.setCogsfromautoslip(mapper.getCOGSfromAuto(infoData));
 //			}
 //			if (mapper.getCOGSfromBank(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setCogsfrombankslip(0L);
 //			} else {
 //				is.setCogsfrombankslip(mapper.getCOGSfromBank(infoData));
 //			}
 //			if (mapper.getCOGSfromCash(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setCogsfromcashslip(0L);
 //			} else {
 //				is.setCogsfromcashslip(mapper.getCOGSfromCash(infoData));
@@ -123,19 +123,19 @@ public class InfoMapperTests {
 //			is.setTotalcogs(is.getCogsfromautoslip() + is.getCogsfrombankslip() + is.getCogsfromcashslip());
 //
 //			if (mapper.getOperExpensefromAuto(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setOperExpensefromAutoSlip(0L);
 //			} else {
 //				is.setOperExpensefromAutoSlip(mapper.getOperExpensefromAuto(infoData));
 //			}
 //			if (mapper.getOperExpensefromBank(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setOperExpensefromBankSlip(0L);
 //			} else {
 //				is.setOperExpensefromBankSlip(mapper.getOperExpensefromBank(infoData));
 //			}
 //			if (mapper.getOperExpensefromCash(infoData) == null) {
-//				// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+//				// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //				is.setOperExpensefromCashSlip(0L);
 //			} else {
 //				is.setOperExpensefromCashSlip(mapper.getOperExpensefromCash(infoData));
@@ -196,6 +196,6 @@ public class InfoMapperTests {
 
 			iSList.add(info);
 		}
-		log.info("°á°ú¸¦ Âï¾îº»´Ù@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
+		log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½îº»ï¿½ï¿½@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
 	}
 }

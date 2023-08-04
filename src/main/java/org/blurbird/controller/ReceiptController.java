@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.blurbird.domain.MemberVO;
 import org.blurbird.domain.receipt.AccountVO;
 import org.blurbird.domain.receipt.DateRange;
 import org.blurbird.domain.receipt.ReceiptRequestVO;
