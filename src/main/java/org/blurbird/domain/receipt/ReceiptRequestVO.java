@@ -15,4 +15,7 @@ public class ReceiptRequestVO {
 	private Date reqdate;
 	private String purpose;
 	private String receiptpath;
+	
+	private String confirmed;
+	private String contents;
 }

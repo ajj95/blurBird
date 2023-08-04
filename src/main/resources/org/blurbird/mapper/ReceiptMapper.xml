@@ -25,11 +25,19 @@
 	select * 
 	from receiptrequest
 	where reqdate between  #{startDate} and #{endDate}
+	and userno=1
 	]]>
 	</select>
 
-	<select id="getImgResource"
-		resultType="String">
+	<select id="judgeReceipt" resultType="org.blurbird.domain.receipt.ReceiptRequestVO">
+		<![CDATA[
+		select *
+		from receiptrequest
+		where recreqno = #{recreqno}
+		]]>
+	</select>
+	
+	<select id="getImgResource" resultType="String">
 		<![CDATA[
 		select receiptpath
 		from receiptrequest
@@ -37,4 +45,26 @@
 		]]>
 	</select>
 
+	<insert id="uploadReceipt">
+		insert into receiptrequest
+		(recreqno,userno,reqdate,purpose,receiptpath)
+		VALUES
+		(seq_recreqno.nextval,'1',TO_DATE(sysdate,'YY/MM/DD'),#{purpose},#{receiptpath})
+	</insert>
+
+	<insert id="confirmedReceipt">
+		insert into confirmed(confirmedno,recreqno,regdate)
+		VALUES(SEQ_CONFIRMEDNO.nextval,#{recreqno},TO_DATE(sysdate,'YY/MM/DD'))
+	</insert>
+	
+	<insert id="unconfirmedReceipt">
+		insert into unconfirmedreason(ucrno,recreqno,contents)
+		VALUES(seq_ucrno.nextval,#{recreqno},#{contents})
+	</insert>
+	
+	<insert id="cashslipConfirmed">
+	insert into cashslip(cashslipno,confirmedno,accountno,sortno,amount,summary)
+	VALUES(SEQ_CASHSLIPNO.nextval,#{confirmedno},#{accountno},3,#{amount},#{summary})
+	</insert>
+	
 </mapper>
