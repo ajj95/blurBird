@@ -176,20 +176,20 @@
 	</update>
 	
 	<!-- 키워드 전체 조회 -->
-	<select id="getListKeyword">
+	<select id="getListKeyword" resultType="org.blurbird.domain.bank.KeywordDTO">
 		SELECT ACCOUNTNO, KEYWORDNAME FROM KEYWORD
 	</select>
 	
-	<!-- (자동 분개) 통장내역과 대응하는 차변 분개내역 입력 -->
+	<!-- (자동 분개) 통장내역과 대응하는 차/대변 분개내역 입력 -->
 	<insert id="registerDebt">
 		INSERT INTO BANKSLIP(BANKSLIPNO, BHNO, SORTNO, ACCOUNTNO, AMOUNT, SUMMARY) 
-		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, '3', '103', #{amount}, null)
+		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, '3', #{debtaccountno}, #{amount}, null)
 	</insert>
 	
 	<!-- (자동 분개) 통장내역과 대응하는 대변 분개내역 입력 -->
 	<insert id="registerCredit">
 		INSERT INTO BANKSLIP(BANKSLIPNO, BHNO, SORTNO, ACCOUNTNO, AMOUNT, SUMMARY) 
-		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, '4', #{accountno}, #{amount}, null)
+		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, '4', #{creditaccountno}, #{amount}, null)
 	</insert>
 	
 	<!-- 확인 안 한 메시지 개수 가져오기 -->

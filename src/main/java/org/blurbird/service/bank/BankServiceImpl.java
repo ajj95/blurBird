@@ -9,6 +9,7 @@ import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
 import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.mapper.BankMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -169,6 +170,5 @@ public class BankServiceImpl implements BankService {
 	public int modifyMessageState(String messageno) {
 		return mapper.modifyMessageState(messageno);
 	}
-
 
 }

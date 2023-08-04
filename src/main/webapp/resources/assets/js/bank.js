@@ -2,6 +2,9 @@
 // 조회버튼 클릭시 통장내역 조회
 $(function(){
 	
+		// 화면 처음 로딩 하자마자 기업 리스트 출력
+		
+	
 		// 툴팁설정
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -553,68 +556,65 @@ $(function(){
 
 			  $("#memoplzmodal").modal("show");
 		});
-		
-		
-		
-		
 	
-});// windowload function
+});// end windowload function
 
 
-	 	// 일자, 수임사 선택 후 조회 시 호출하는 ajax
-	 	// search: 호출하는 자바스크립트로부터 받아옴
-        function historySlipRequest(search) {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json;charset=UTF-8",
-                url: "/bank/getHistoryAndSlip",
-                data: JSON.stringify(search),
-                dataType: "json",
-                success: function(response) {
-                    // 서버로부터 받은 데이터 처리
-                    let historyList = response.historyList;
-                    let slipList = response.slipList;
-                    let total = response.total;
-                    let all = response.all;
-                    let can = response.can;
-                    let confirmed = response.confirmed;
-                    let except = response.except;
-                    let remove = response.remove;
-                    
-                    createBankHistoryAllTable(historyList);
-                    createBankSlipAllTable(slipList, total, all, can, confirmed, except, remove);
-                    createDetailSlipTable();
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }// end historySlipRequest
+ 	// 일자, 수임사 선택 후 조회 시 호출하는 ajax
+ 	// search: 호출하는 자바스크립트로부터 받아옴
+    function historySlipRequest(search) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            url: "/bank/getHistoryAndSlip",
+            data: JSON.stringify(search),
+            dataType: "json",
+            success: function(response) {
+                // 서버로부터 받은 데이터 처리
+                let historyList = response.historyList;
+                let slipList = response.slipList;
+                let total = response.total;
+                let all = response.all;
+                let can = response.can;
+                let confirmed = response.confirmed;
+                let except = response.except;
+                let remove = response.remove;
+                
+                createBankHistoryAllTable(historyList);
+                createBankSlipAllTable(slipList, total, all, can, confirmed, except, remove);
+                createDetailSlipTable();
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }// end historySlipRequest
         
        
-        // 분개내역 조회시 호출하는 ajax 함수
-        // bhnoList: 호출하는 자바스크립트로부터 받아옴
-		function getDetailSlip(bhnoList) {
-		  // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 URL 생성
-		  if (bhnoList.length > 0) {
-		    // url 생성해서 넘겨주기
-		    let queryString = bhnoList.map(bhno => 'bhno=' + bhno).join('&');
-		    
-		    $.ajax({
-		      type: "GET",
-		      contentType: "application/json;charset=UTF-8",
-		      url: "/bank/detailslip?" + queryString,
-		      dataType: "json",
-		      success: function(response) {
-		        // 성공적으로 데이터를 받아온 후 createDetailSlipTable 함수 호출
-		        createDetailSlipTable(response);
-		      },
-		      error: function(xhr, status, error) {
-		        console.error(error);
-		      }
-		    });//end ajax
-		  }//end if
-		}
+    // 분개내역 조회시 호출하는 ajax 함수
+    // bhnoList: 호출하는 자바스크립트로부터 받아옴
+	function getDetailSlip(bhnoList) {
+	  // 배열에 저장된 체크된 체크박스의 bhno 값을 URL 파라미터로 사용하여 분개내역조회 URL 생성
+	  if (bhnoList.length > 0) {
+	    // url 생성해서 넘겨주기
+	    let queryString = bhnoList.map(bhno => 'bhno=' + bhno).join('&');
+	    
+	    $.ajax({
+	      type: "GET",
+	      contentType: "application/json;charset=UTF-8",
+	      url: "/bank/detailslip?" + queryString,
+	      dataType: "json",
+	      success: function(response) {
+	        // 성공적으로 데이터를 받아온 후 createDetailSlipTable 함수 호출
+	        createDetailSlipTable(response);
+	      },
+	      error: function(xhr, status, error) {
+	        console.error(error);
+	      }
+	    });//end ajax
+	  }//end if
+	}
+
 
 	// historySlipRequest ajax가 호출하는 처리 함수
 	function createBankHistoryAllTable(data){
@@ -1241,7 +1241,6 @@ $(function(){
 
 	  searchstart.empty();
 	  
-	  	//let str = '<form method="POST" action="/bank/updateDetailSlips">';
 		let str = '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -1255,16 +1254,15 @@ $(function(){
 		str += '</thead>';
 		str += '<tbody>';
 		
-		
 		 if(detailSlip && detailSlip.length>0){
 	  		for(let i=0; i<detailSlip.length; i++){
 	  			str += '<tr>';
 	  			str += '<input type="hidden" name="bankslipno" value="';
 	  			str += detailSlip[i].bankslipno;
-	  			str += '"/>';
+	  			str += '">';
 	  			str += '<input type="hidden" name="bhno" value="';
 	  			str += detailSlip[i].bhno;
-	  			str += '"/>';
+	  			str += '">';
 				str += '<td>';
 				str += '<select class="form-select" name="sortno" aria-label="Default select example">';
 				
@@ -1297,7 +1295,6 @@ $(function(){
 				str += '</td>';
 				str += '<td class="button-and-input"><button type="button" class="btn searchaccount btn-outline-dark" ';
 				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
-				//str += 'onclick="openAccountCodeModal(this)" ';
 				str += 'data-btn-index="';
 				str += i;
 				str += '">';
@@ -1385,7 +1382,6 @@ $(function(){
 
 
 		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
-		//str += '</form>';
 	  
 	 
 	  searchstart.html(str);
@@ -1514,7 +1510,6 @@ $(function(){
 			str += '<tr>';
 			str += '<td>';
 			str += '<select class="form-select" name="sortno" aria-label="Default select example">';
-			str += '<option selected>차변</option>';
 			str += '<option value="1">입금</option>';
 			str += '<option value="2">출금</option>';
 			str += '<option value="3">차변</option>';
@@ -1675,12 +1670,9 @@ $(function(){
 			        $('#accountListModal tr').dblclick(function () {
 	                    let selectedAccountNo = $(this).find('td:first-child').text();
 	                    let selectedAccountName = $(this).find('td:nth-child(2)').text();
-	                    // 이제 선택한 값에 대해 원하는 처리를 하면 됩니다.
-	                    // 예: 선택한 값을 특정 input 요소에 넣기
+	             
 	                    $('#searchedaccountno').val(selectedAccountNo);
 	                    $('#searchedaccountname').val(selectedAccountName);
-	                    
-	                    // 이걸 이렇게 넣어줄게 아니라 ajax로 또 값 넘겨줘야한다.
 
 	                    // 모달 창 닫기
 	                    $("#accountCode").modal("hide");

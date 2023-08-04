@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.blurbird.mapper.CommonMapper">
+
+	<!-- 기업 조회 -->
+	<select id="getBusinessList" resultType="org.blurbird.domain.common.BusinessVO" 
+							parameterType="string">
+		SELECT BIZNO, BIZNAME, BUSINESSLICENSE, BIZADDRESS, BISTEL, INDUSTRY
+		FROM BUSINESS
+		<if test="value != null and value != ''">
+        	<where>
+            BIZNAME LIKE '%'||#{value}||'%'
+            </where>
+        </if>
+	</select>
+	
+	<!-- <select id="autosearch" parameterType="map" resultType="map">
+		SELECT BIZNO, BIZNAME, BUSINESSLICENSE, BIZADDRESS, BISTEL, INDUSTRY
+		FROM BUSINESS
+		<if test="bizname != null and bizname != ''">
+        	<where>
+            BIZNAME LIKE '%'||#{bizname}||'%'
+            </where>
+        </if>
+	</select>
+	
+	
+	<select id="getBusinessName" resultType="String">
+		SELECT BIZNAME FROM BUSINESS
+        <if test="bizname != null and bizname != ''">
+        	<where>
+            BIZNAME LIKE '%'||#{bizname}||'%'
+            </where>
+        </if>
+	</select> -->
+	
+
+</mapper>

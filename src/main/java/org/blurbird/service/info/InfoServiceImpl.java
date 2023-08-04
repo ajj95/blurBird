@@ -3,7 +3,7 @@ package org.blurbird.service.info;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.blurbird.domain.bank.BusinessVO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
 import org.blurbird.mapper.InfoMapper;
@@ -24,7 +24,7 @@ public class InfoServiceImpl implements InfoService {
 
 	@Override
 	public List<BusinessVO> getListBusiness() {
-		log.info("¼öÀÓ»ç ¸ñ·Ï °¡Á®¿À±â");
+		log.info("ìˆ˜ì„ì‚¬ ëª©ë¡ ê°€ì ¸ì˜¤ê¸°");
 		return mapper.getListBusiness();
 	}
 
@@ -36,14 +36,14 @@ public class InfoServiceImpl implements InfoService {
 		iS.setBizno(infoData.getBizno());
 
 		if (mapper.getSalesfromAuto(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setSalesfromautoslip(0L);
 		} else {
 			iS.setSalesfromautoslip(mapper.getSalesfromAuto(infoData));
 		}
 
 		if (mapper.getSalesfromBank(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setSalesfrombankslip(0L);
 		} else {
 			iS.setSalesfrombankslip(mapper.getSalesfromBank(infoData));
@@ -52,19 +52,19 @@ public class InfoServiceImpl implements InfoService {
 		iS.setTotalsales(iS.getSalesfromautoslip() + iS.getSalesfrombankslip());
 
 		if (mapper.getCOGSfromAuto(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setCogsfromautoslip(0L);
 		} else {
 			iS.setCogsfromautoslip(mapper.getCOGSfromAuto(infoData));
 		}
 		if (mapper.getCOGSfromBank(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setCogsfrombankslip(0L);
 		} else {
 			iS.setCogsfrombankslip(mapper.getCOGSfromBank(infoData));
 		}
 		if (mapper.getCOGSfromCash(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setCogsfromcashslip(0L);
 		} else {
 			iS.setCogsfromcashslip(mapper.getCOGSfromCash(infoData));
@@ -73,19 +73,19 @@ public class InfoServiceImpl implements InfoService {
 		iS.setTotalcogs(iS.getCogsfromautoslip() + iS.getCogsfrombankslip() + iS.getCogsfromcashslip());
 
 		if (mapper.getOperExpensefromAuto(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setOperExpensefromAutoSlip(0L);
 		} else {
 			iS.setOperExpensefromAutoSlip(mapper.getOperExpensefromAuto(infoData));
 		}
 		if (mapper.getOperExpensefromBank(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setOperExpensefromBankSlip(0L);
 		} else {
 			iS.setOperExpensefromBankSlip(mapper.getOperExpensefromBank(infoData));
 		}
 		if (mapper.getOperExpensefromCash(infoData) == null) {
-			// nullÀÏ °æ¿ì¿¡ 0À¸·Î ¼³Á¤
+			// nullï¿½ï¿½ ï¿½ï¿½ì¿¡ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			iS.setOperExpensefromCashSlip(0L);
 		} else {
 			iS.setOperExpensefromCashSlip(mapper.getOperExpensefromCash(infoData));

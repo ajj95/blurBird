@@ -11,7 +11,9 @@ import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
 import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.service.bank.BankService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,6 +50,7 @@ public class BankRestController {
         int except = service.exceptSlipCount();
         int remove = service.removeSlipCount();
         int all = service.allSlipCount();
+        
         
         Map<String, Object> result = new HashMap<>();
         result.put("historyList", historyList);
@@ -190,8 +193,66 @@ public class BankRestController {
     }
     
     // 통장내역 메모 입력 후 저장 시
-    
-    
+    @GetMapping("/sendMemo")
+    public String sendMemo(@RequestParam("bhno")String bhno
+    			, @RequestParam("amount")String amountwithcommas, @RequestParam("memo")String memo){
+    	
+    	// amount -> 쉼표 없애고 int로 변환
+    	int amount = Integer.parseInt(amountwithcommas.replace(",", ""));
+
+    	// 1. 통장내역에 메모 넣어 수정
+    	service.modifymemo(bhno, memo);
+    	
+    	// 2. 키워드 조회, 메모와 비교해 가져올 수 있는 계정 확인
+    	List<KeywordDTO> keywordlist = service.getListKeyword();
+    	String accountno = null;
+    	
+    	for(KeywordDTO keyword:keywordlist) {
+    		if(keyword.getKeywordname().equals(memo)){
+    			accountno = keyword.getAccountno();
+    		}else {
+    			accountno = null;
+    		}
+    	}
+    	
+    	// 3. 입력받은 메모와 키워드가 일치한다면 해당 계정 적용되어 자동 분개, 자동 확정가능 전표로 등록
+    	if(!accountno.equals(null)){
+    		
+    		// bhno로 입금인지 출금인지 조회
+    		List<String> bhnos = new ArrayList<String>();
+    		String sortno = "";
+    		
+    		bhnos.add(bhno);
+    		
+    		List<BankHistoryVO> bankhistory = service.getBankHistoryDetail(bhnos);
+    		
+    		for(BankHistoryVO bankVO : bankhistory) {
+    			sortno = bankVO.getSortno();
+    		}
+
+    		if(sortno.equals("1")){
+    			// 입금인 경우 차변 보통예금, 대변 해당하는 키워드에 맞는 계정코드
+    			String debtaccountno = "103";
+    			String creditaccountno = accountno;
+    			
+    			service.registerDebt(bhno, debtaccountno, amount);
+    			service.registerCredit(bhno, creditaccountno, amount);
+    		}else{
+    			// 출금인 경우 차변 키워드에 맞는 계정코드, 대변 보통예금
+    			String debtaccountno = accountno;
+    			String creditaccountno = "103";
+    			
+    			service.registerDebt(bhno, debtaccountno, amount);
+    			service.registerCredit(bhno, creditaccountno, amount);
+    		}
+    		
+    		// 통장내역 확정 가능 상태로 변경
+    		String bhstateno = "1001";
+    		service.modifySlipState(bhno, bhstateno);
+    	}
+    	
+    	return "메모가 저장되었습니다.";
+    }
     
     
 }

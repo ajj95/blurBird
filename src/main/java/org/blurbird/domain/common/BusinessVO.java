@@ -1,4 +1,4 @@
-package org.blurbird.domain.bank;
+package org.blurbird.domain.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
