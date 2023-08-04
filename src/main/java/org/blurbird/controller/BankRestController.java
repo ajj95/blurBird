@@ -9,8 +9,11 @@ import java.util.Map;
 import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
+import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.service.bank.BankService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +50,7 @@ public class BankRestController {
         int except = service.exceptSlipCount();
         int remove = service.removeSlipCount();
         int all = service.allSlipCount();
+        
         
         Map<String, Object> result = new HashMap<>();
         result.put("historyList", historyList);
@@ -98,6 +102,7 @@ public class BankRestController {
         }
     }
     
+    
     // 선택한 통장 내역 분개 전표에 보여주기
     @PostMapping("/getBankHistoryDetail")
     public ResponseEntity<List<BankHistoryVO>> getBankHistoryDetail(@RequestBody List<String> bhnos) {
@@ -110,34 +115,18 @@ public class BankRestController {
     }
     
     
-    //-------------------------------------------여기서부터 문제--------------------------------------
-    
     // 저장 클릭 시 분개전표 수정처리
-    //@PostMapping("/updateDetailSlips", consum)
     //@RequestMapping(value="/updateDetailSlips", method=RequestMethod.POST, consumes="application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
     @PostMapping(value="/updateDetailSlips", consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateDetailSlips(@RequestBody List<DetailSlipVO> detailSlipList) {
         try {
         	int check = 0;
         	for(DetailSlipVO detailSlip : detailSlipList) {
-        		log.info(detailSlip.getBankslipno());
-        		log.info(detailSlip.getAccountno());
-        		log.info(detailSlip.getSortno());
-        		log.info(detailSlip.getAmount());
-        		log.info(detailSlip.getSource());
-        		log.info(detailSlip.getSummary());
-        		
-        		if(service.modifySlip(detailSlip)!=1){
-        			check = -1;
-        		}
+        		check = service.modifySlip(detailSlip);
+        		log.info("수정service가 반환하는 값이 1인지 확인: " + check);
         	}
-            // detailSlips를 사용하여 오라클 테이블에 업데이트 로직 수행
-            // 업데이트 성공 시, "저장되었습니다." 메시지를 반환
-        	if(check==0) {
-        		return ResponseEntity.ok("저장되었습니다.");
-        	}else {
-        		return ResponseEntity.ok("저장에 실패하였습니다.");
-        	}
+
+        	return ResponseEntity.ok("저장되었습니다.");
         } catch (Exception e) {
             // 업데이트 실패 시, 에러 메시지를 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트에 실패하였습니다.");
@@ -145,24 +134,125 @@ public class BankRestController {
     }// end updateDetailSlips
     
     
-    
-    
-    
-    
-    // 입력 일반전표 저장
+    // 분개내역 입력 처리
     @PostMapping("/insertdetailslips")
-    public ResponseEntity<?> insertDetailsLips(@RequestBody List<DetailSlipVO> detailSlipVOList) {
-    	Map<String, Object> result = new HashMap<>();
+    public @ResponseBody String insertDetailsLips(@RequestBody List<DetailSlipVO> detailSlipVOList) {
     	
     	for (DetailSlipVO detailSlipVO : detailSlipVOList) {
             service.registerDetailSlip(detailSlipVO);
+            // 입력시 확정으로 상태 변경
+            service.modifySlipState(detailSlipVO.getBhno(), "1002");
         }
-    	
-    	result.put("message", "Saved successfully!");
         
-        return ResponseEntity.ok(result);
+        return "저장되었습니다.";
     }
     
+    // 내용확인요청 시 메시지 저장
+    @PostMapping("/requestmessage")
+    public ResponseEntity<String> updateMemo(@RequestBody Map<String, String> requestBody){
+        String bhno = requestBody.get("bhno");
+        String message = requestBody.get("message");
+        String receiver = requestBody.get("receiver");
+        String sender = requestBody.get("sender");
+    	
+        try {
+            service.registerMessage(bhno, message, receiver, sender);
+            return ResponseEntity.ok("내용확인을 요청하였습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating memo: " + e.getMessage());
+        }
+    }
+    
+    
+    // 수임사 화면에서 메시지 출력
+    @GetMapping("/getMessageList")
+    public ResponseEntity<Map<String, Object>> getMessageList(@RequestParam("receiver") String receiver) {
+        Map<String, Object> response = new HashMap<>();
+        List<BhMessageVO> messageList = service.getListMessage(receiver);
+        int unreadMessageCount = service.uncheckedMessageCount(receiver);
+
+        response.put("messageList", messageList);
+        response.put("unreadMessageCount", unreadMessageCount);
+
+        return ResponseEntity.ok(response);
+    }
+    
+    // 수임사쪽에서 메시지 클릭해서 확인시
+    @GetMapping("/getBHfromMessageno")
+    public ResponseEntity<Map<String, Object>> getBHfromMessageno(@RequestParam("messageno") String messageno) {
+        Map<String, Object> response = new HashMap<>();
+        // 메시지번호로 통장 내역 가져오기
+        BankHistoryVO bankhistory = service.getBhFromMessage(messageno);
+        
+        // 메시지 읽음처리
+        service.modifyMessageState(messageno);
+
+        response.put("bankhistory", bankhistory);
+
+        return ResponseEntity.ok(response);
+    }
+    
+    // 통장내역 메모 입력 후 저장 시
+    @GetMapping("/sendMemo")
+    public String sendMemo(@RequestParam("bhno")String bhno
+    			, @RequestParam("amount")String amountwithcommas, @RequestParam("memo")String memo){
+    	
+    	// amount -> 쉼표 없애고 int로 변환
+    	int amount = Integer.parseInt(amountwithcommas.replace(",", ""));
+
+    	// 1. 통장내역에 메모 넣어 수정
+    	service.modifymemo(bhno, memo);
+    	
+    	// 2. 키워드 조회, 메모와 비교해 가져올 수 있는 계정 확인
+    	List<KeywordDTO> keywordlist = service.getListKeyword();
+    	String accountno = null;
+    	
+    	for(KeywordDTO keyword:keywordlist) {
+    		if(keyword.getKeywordname().equals(memo)){
+    			accountno = keyword.getAccountno();
+    		}else {
+    			accountno = null;
+    		}
+    	}
+    	
+    	// 3. 입력받은 메모와 키워드가 일치한다면 해당 계정 적용되어 자동 분개, 자동 확정가능 전표로 등록
+    	if(!accountno.equals(null)){
+    		
+    		// bhno로 입금인지 출금인지 조회
+    		List<String> bhnos = new ArrayList<String>();
+    		String sortno = "";
+    		
+    		bhnos.add(bhno);
+    		
+    		List<BankHistoryVO> bankhistory = service.getBankHistoryDetail(bhnos);
+    		
+    		for(BankHistoryVO bankVO : bankhistory) {
+    			sortno = bankVO.getSortno();
+    		}
+
+    		if(sortno.equals("1")){
+    			// 입금인 경우 차변 보통예금, 대변 해당하는 키워드에 맞는 계정코드
+    			String debtaccountno = "103";
+    			String creditaccountno = accountno;
+    			
+    			service.registerDebt(bhno, debtaccountno, amount);
+    			service.registerCredit(bhno, creditaccountno, amount);
+    		}else{
+    			// 출금인 경우 차변 키워드에 맞는 계정코드, 대변 보통예금
+    			String debtaccountno = accountno;
+    			String creditaccountno = "103";
+    			
+    			service.registerDebt(bhno, debtaccountno, amount);
+    			service.registerCredit(bhno, creditaccountno, amount);
+    		}
+    		
+    		// 통장내역 확정 가능 상태로 변경
+    		String bhstateno = "1001";
+    		service.modifySlipState(bhno, bhstateno);
+    	}
+    	
+    	return "메모가 저장되었습니다.";
+    }
     
     
 }

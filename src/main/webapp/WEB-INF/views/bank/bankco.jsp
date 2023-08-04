@@ -15,6 +15,9 @@
   #main{
   	margin-left: 0px !important;
   }
+  #footer{
+  	margin-left: 0 !important;
+  }
   .pagetitle{
   	margin-top: 8px;
   }
@@ -135,7 +138,7 @@
     float: left;
     width: 49%; 
     box-sizing: border-box;
-    height: 400px;
+    height: 600px;
     overflow: auto;
     margin-bottom: 20px;
   }
@@ -146,7 +149,7 @@
     width: 49%; 
     box-sizing: border-box;
 	flex-wrap: wrap;
-	height: 400px;
+	height: 600px;
     overflow: auto;
     margin-bottom: 20px;
   }
@@ -236,6 +239,7 @@
 }
 #pills-all-tab {
   color: #8592a3;
+  border: 1px solid;
   background: transparent;
 }
 #pills-all-tab:hover {
@@ -250,6 +254,7 @@
 }
 
 #pills-can-tab {
+  border: 1px solid;
   color: #198754;
   border-color: #198754;
   background: transparent;
@@ -279,6 +284,7 @@
   box-shadow: 0 0.125rem 0.25rem 0 rgba(3, 195, 236, 0.4);
 }
 #pills-certain-tab{
+    border: 1px solid;
     color: #4169E1;
     border-color: #4169E1;
     background: transparent;
@@ -296,6 +302,7 @@
   box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
 }
 #pills-except-tab {
+  border: 1px solid;
   color: #ffab00;
   border-color: #e69a00;
   background: transparent;
@@ -325,6 +332,7 @@
 }
 
 #pills-remove-tab {
+  border: 1px solid;
   color: #233446;
   background-color: white;
   border-color: #202f3f;
@@ -377,7 +385,7 @@
 .modaltable td:first-child,
 .modaltable td:nth-child(3),
 .modaltable td:nth-child(5){
-	width: 50px;
+	width: 60px;
 	font-weight: bold;
 	text-align: left;
 }

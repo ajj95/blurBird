@@ -2,7 +2,7 @@ package org.blurbird.service.info;
 
 import java.util.List;
 
-import org.blurbird.domain.bank.BusinessVO;
+import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
 
@@ -10,7 +10,7 @@ public interface InfoService {
 
 	public List<BusinessVO> getListBusiness();
 	
-//	public List<IncomeSVO> getISElements(Long bizno, String year);
+	public IncomeSVO getISByBiz(InfoData infoData);
 	
-	public Long getSalesfromAuto(InfoData infoData);
+	public List<InfoData> getList(InfoData infoData);
 }

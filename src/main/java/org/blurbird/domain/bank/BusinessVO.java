@@ -14,6 +14,6 @@ public class BusinessVO {
 	private String businesslicense;
 	private String bizaddress;
 	private String bistel;
-	private String indusrty;
+	private String industry;
 	
 }

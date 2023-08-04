@@ -32,4 +32,10 @@ public class ReceiptServiceImpl implements ReceiptService {
 		log.info("getReceiptList....");
 		return mapper.getReceiptList(dateRange);
 	}
+
+	@Override
+	public String getImgPath(String recreqno) {
+		log.info("getImgPath....");
+		return mapper.getImgResource(recreqno);
+	}
 }

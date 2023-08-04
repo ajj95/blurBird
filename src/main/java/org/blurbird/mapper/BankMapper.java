@@ -6,8 +6,11 @@ import org.apache.ibatis.annotations.Param;
 import org.blurbird.domain.bank.BankHistoryVO;
 import org.blurbird.domain.bank.BankSearchDTO;
 import org.blurbird.domain.bank.BankSlipVO;
+import org.blurbird.domain.bank.BhMessageVO;
 import org.blurbird.domain.bank.DetailSlipVO;
+import org.blurbird.domain.bank.KeywordDTO;
 import org.blurbird.domain.bank.TotalDTO;
+import org.blurbird.domain.common.BusinessVO;
 
 public interface BankMapper {
 	
@@ -19,6 +22,8 @@ public interface BankMapper {
 	public List<BankHistoryVO> getBankHistoryListConn(BankSearchDTO search);
 	// 원하는 통장내역 조회
 	public List<BankHistoryVO> getBankHistoryDetail(List<String> bhnos);
+	// 전표 상태 변경
+	public int modifySlipState(@Param("bhno") String bhno, @Param("bhstateno") String bhstateno);
 	
 	
 	// 전표내역 조회
@@ -43,12 +48,27 @@ public interface BankMapper {
 	public void registerSlip(DetailSlipVO slip);
 	// 분개내역 수정
 	public int modifySlip(DetailSlipVO slip);
+
+	// 내용확인 요청
+	public void registerMesasge(@Param("bhno") String bhno, @Param("message") String message
+			, @Param("receiver") String receiver, @Param("sender") String sender);
+	// 메모 수정
+	public int modifymemo(@Param("bhno") String bhno, @Param("memo") String memo);
+	// 키워드 전체 조회
+	public List<KeywordDTO> getListKeyword();
+	// 차변 입력
+	public void registerDebt(@Param("bhno") String bhno, @Param("debtaccountno") String debtaccountno, @Param("amount") int amount);
+	// 대변 입력
+	public void registerCredit(@Param("bhno") String bhno, @Param("creditaccountno") String creditaccountno, @Param("amount") int amount);
 	
-	// 전표 삭제
-	public int removeSlip(String bhno);
-	
-	// 전표 상태 변경
-	public int modifySlipState(@Param("bhno") String bhno, @Param("bhstateno") String bhstateno);
+	// 확인 안한 메시지 개수
+	public int uncheckedMessageCount(String receiver);
+	// 메시지 전체 리스트
+	public List<BhMessageVO> getListMessage(String receiver);
+	// 메시지에서 통장내역 가져오기
+	public BankHistoryVO getBhFromMessage(String messageno);
+	// 메시지 읽음 처리
+	public int modifyMessageState(String messageno);
 	
 	
 }

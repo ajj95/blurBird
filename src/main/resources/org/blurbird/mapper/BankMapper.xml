@@ -16,6 +16,7 @@
 		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
                AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+		AND BANKHISTORY.BANKNO = B.BANKNO
 		ORDER BY BHNO DESC
 	</select>
 	
@@ -32,6 +33,7 @@
 		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
                AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+		AND BANKHISTORY.BANKNO = B.BANKNO
 		ORDER BY BHNO DESC
 	</select>
 	
@@ -44,10 +46,11 @@
 		, B.BANKNAME "BANKNAME", MEMO
 		FROM BANKHISTORY, BHSTATE S, BANK B
 		WHERE BIZNO = #{bizno} AND B.BANKNAME= #{bankname}
-		AND BANKHISTORY.BHSTATENO IN('1001', '1002')
+		AND BANKHISTORY.BHSTATENO IN('1001', '1002', '1004', '1005')
 		AND BHDATE BETWEEN TO_DATE(#{startdate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
                AND TO_DATE(#{enddate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
 		AND BANKHISTORY.BHSTATENO = S.BHSTATENO
+		AND BANKHISTORY.BANKNO = B.BANKNO
 		ORDER BY BHNO DESC
 	</select>
 	
@@ -128,18 +131,14 @@
 		SELECT T.SUM "TOTALSUM", D.SUM "DIFFSUM"
 		FROM VIEW_TOTALSUM T, VIEW_DIFFSUM D
 	</select>
-	
-	<!-- 전표 삭제 -->
-	<delete id="removeSlip" parameterType="String">
-		DELETE FROM BANKSLIP WHERE BHNO=#{bhno}
-	</delete>
+
 
 	<!-- 분개내역 조회 -->
 	<select id="getDetailSlip" parameterType="String" resultType="org.blurbird.domain.bank.DetailSlipVO">
 		SELECT BS.BANKSLIPNO "BANKSLIPNO", BS.BHNO "BHNO", S.SORTNO "SORTNO"
 		, S.SORTNAME "SORTNAME"
 		, A.ACCOUNTNO "ACCOUNTNO", A.ACCOUNTNAME "ACCOUNTNAME"
-		, BH.AMOUNT "AMOUNT", BH.SOURCE "SOURCE", BS.SUMMARY "SUMMARY"
+		, BS.AMOUNT "AMOUNT", BH.SOURCE "SOURCE", BS.SUMMARY "SUMMARY"
 		FROM BANKHISTORY BH, BANKSLIP BS, SORT S, ACCOUNT A
 		WHERE BH.BHNO = BS.BHNO
 		AND BS.SORTNO = S.SORTNO
@@ -155,16 +154,90 @@
 	
 	<!-- 분개내역 수정 -->
 	<update id="modifySlip" parameterType="org.blurbird.domain.bank.DetailSlipVO">
-		UPDATE BANKSLIP SET SORTNO=#{sortno}
+		UPDATE BANKSLIP SET SORTNO=#{sortno}, ACCOUNTNO=#{accountno}
 		, AMOUNT=#{amount}, SUMMARY=#{summary}
 		WHERE BANKSLIPNO = #{bankslipno}
-		<!-- , ACCOUNTNO=#{accountno} -->
 	</update>
 
 	<!-- 상태 변경 -->
 	<update id="modifySlipState">
 		UPDATE BANKHISTORY SET BHSTATENO=#{bhstateno} WHERE BHNO = #{bhno}
 	</update>
-
+	
+	<!-- 내용확인 요청 -->
+	<insert id="registerMesasge">
+		INSERT INTO BHMESSAGE(MESSAGENO, BHNO, MESSAGE, RECEIVER, SENDER)
+		VALUES(SEQ_BHMESSAGE.NEXTVAL, #{bhno}, #{message}, #{receiver}, #{sender})
+	</insert>
+	
+	<!-- 메모 수정 -->
+	<update id="modifymemo">
+		UPDATE BANKHISTORY SET MEMO=#{memo} WHERE BHNO=#{bhno}
+	</update>
+	
+	<!-- 키워드 전체 조회 -->
+	<select id="getListKeyword" resultType="org.blurbird.domain.bank.KeywordDTO">
+		SELECT ACCOUNTNO, KEYWORDNAME FROM KEYWORD
+	</select>
+	
+	<!-- (자동 분개) 통장내역과 대응하는 차/대변 분개내역 입력 -->
+	<insert id="registerDebt">
+		INSERT INTO BANKSLIP(BANKSLIPNO, BHNO, SORTNO, ACCOUNTNO, AMOUNT, SUMMARY) 
+		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, '3', #{debtaccountno}, #{amount}, null)
+	</insert>
+	
+	<!-- (자동 분개) 통장내역과 대응하는 대변 분개내역 입력 -->
+	<insert id="registerCredit">
+		INSERT INTO BANKSLIP(BANKSLIPNO, BHNO, SORTNO, ACCOUNTNO, AMOUNT, SUMMARY) 
+		VALUES(SEQ_BANKSLIP.NEXTVAL, #{bhno}, '4', #{creditaccountno}, #{amount}, null)
+	</insert>
+	
+	<!-- 확인 안 한 메시지 개수 가져오기 -->
+	<select id="uncheckedMessageCount" resultType="int">
+		SELECT COUNT(*) FROM BHMESSAGE WHERE CHECKED='1' AND RECEIVER=#{receiver}
+	</select>
+	
+	<!-- 확인 안된 메시지 전체 가져오기 -->
+	<select id="getListMessage" resultType="org.blurbird.domain.bank.BhMessageVO">
+		SELECT
+		    bhm.MESSAGENO AS MESSAGENO,
+		    bhm.BHNO AS BHNO,
+		    bhm.MESSAGE AS MESSAGE,
+		    bhm.BHMDATE AS BHMDATE,
+		    bhm.RECEIVER AS RECEIVER,
+		    bhm.SENDER AS SENDER,
+		    m1.MEMBERNAME AS RECEIVERNAME,
+		    m2.MEMBERNAME AS SENDERNAME,
+		    bhm.CHECKED AS CHECKED
+			FROM
+			    BHMESSAGE bhm
+			LEFT JOIN
+			    USERS u1 ON bhm.RECEIVER = u1.USERNO
+			LEFT JOIN
+			    USERS u2 ON bhm.SENDER = u2.USERNO
+			LEFT JOIN
+			    MEMBER m1 ON u1.MEMBERNO = m1.MEMBERNO
+			LEFT JOIN
+			    MEMBER m2 ON u2.MEMBERNO = m2.MEMBERNO
+			WHERE bhm.RECEIVER=#{receiver}
+			AND bhm.CHECKED = '1'
+	</select>
+	
+	<!-- 클릭한 메시지로 통장내역 1개 가져오기 -->
+	<select id="getBhFromMessage" resultType="org.blurbird.domain.bank.BankHistoryVO">
+		SELECT BHNO, BHDATE, SOURCE, AMOUNT, SORTNO, SUM
+        ,ACCOUNTNUMBER, BHSTATENAME, BANKNAME, MEMO
+		FROM VIEW_BANKHISTORY
+		WHERE BHNO = (
+		    SELECT BHNO FROM BHMESSAGE
+		    WHERE MESSAGENO=#{messageno}
+		)
+	</select>
+	
+	<!-- 메시지 읽음처리 -->
+	<update id="modifyMessageState">
+		UPDATE BHMESSAGE SET CHECKED='2' WHERE MESSAGENO=#{messageno}
+	</update>
+	
 
 </mapper>

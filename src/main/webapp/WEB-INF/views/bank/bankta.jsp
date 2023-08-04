@@ -64,10 +64,9 @@
   .banktable td:nth-child(2) {
     width: 80px; /* 두 번째 열 넓이 */
   }
-
+  .banktable td:nth-child(5),
   .banktable td:nth-child(6),
-  .banktable td:nth-child(4),
-  .banktable td:nth-child(5) {
+  .banktable td:nth-child(7) {
     text-align: right;
   }
   .banktable th:last-child,
@@ -234,13 +233,14 @@
     flex: 1;
 }
 #pills-all-tab {
+  border: 1px solid;
   color: #8592a3;
   background: transparent;
 }
 #pills-all-tab:hover {
   color: black;
   background-color: #F5F5F5;
-    box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(133, 146, 163, 0.4);
 }
 #pills-all-tab.active {
   color: black;
@@ -249,6 +249,7 @@
 }
 
 #pills-can-tab {
+  border: 1px solid;
   color: #198754;
   border-color: #198754;
   background: transparent;
@@ -279,6 +280,7 @@
 }
 #pills-certain-tab{
     color: #4169E1;
+    border: 1px solid;
     border-color: #4169E1;
     background: transparent;
 }
@@ -296,6 +298,7 @@
 }
 #pills-except-tab {
   color: #ffab00;
+  border: 1px solid;
   border-color: #e69a00;
   background: transparent;
 }
@@ -325,6 +328,7 @@
 
 #pills-remove-tab {
   color: #233446;
+  border: 1px solid;
   background-color: white;
   border-color: #202f3f;
 }
@@ -386,60 +390,96 @@ input.modaltext {
 .cantwrite{
 	background-color: #F5F5F5 !important;
 }
-
+.button-and-input {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.searchaccount{
+  margin-right: 4px;
+}
+.modalintitle{
+  margin-right: 10px;
+}
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
 
-		// 내용확인요청 시 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
-		$("#left").on("click", "#memoplzbtn", function(){
-			$("#memoplzmodal").modal('show');
+		// 사이드 바의 동적 생성되는 div 중
+		// 선택된 div의 거래처코드 값 가져오기
+		//- 이 부분은 import된 sidebar를 다뤄서 그런지 본문 스크립트에 작성해야한다.
+		$("#businessList").on("click", ".list-group-item", function(e){
+			e.preventDefault();
+			let bizno = $(this).find("input[name='biznoInSidebar']").val();
+			// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
+			$("#bizno").val(bizno);
 		});
-	
-
-		// 분개전표 내용 입력 후 저장 시 입력 처리 후 다시 화면으로
-		$("#bottom").on("click", "#insertSlipBtn", function(){
-
-			let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
-
-		    // detailSlips 배열에 필요한 데이터를 넣어준다.
-		    $('.detailsliptable tbody tr').each(function() {
-		    	alert($(this).find('[name="bhno"]').val());
-		    	alert($(this).find('[name="sortno"]').val());
-		    	alert($(this).find('[name="accountno"]').val());
-		    	alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
-		    	alert($(this).find('[name="summary"]').val());
-
-		        let detailSlip = {
-		            bhno: $(this).find('[name="bhno"]').val(),
-		            sortno: $(this).find('[name="sortno"]').val(),
-		            accountno: $(this).find('[name="accountno"]').val(),
-		            // -나 ,부분 빼고 int로 변경
-		            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
-		            summary: $(this).find('[name="summary"]').val()
-		        };
-
-		        detailSlipList.push(detailSlip);
-		   });
+		
+		
+		// 계정 조회 버튼
+		$("#bottom").on("click", ".searchaccount", function(){
 			
-		    // AJAX 호출
+			// 버튼별로 동적 생성되는 인덱스값 가져오기: 시작 0 ~ 증가
+			let btnIndex = $(this).data("btn-index");
+			alert("버튼인덱스: " + btnIndex);
+			
+			openAccountCodeModal(btnIndex);
+		});
+		
+		
+	  // 내용확인 모달 창에서 저장 클릭 시 메시지 insert
+	  $("#sendmessagebtn").on("click", function(){
+		  
+		 // 선택된 tr의 bhno 가져오기
+	     let tableRows = document.querySelectorAll("#nonbanktable tbody tr");
+		 let selectedRow = null;
+		 
+		 for (const row of tableRows) {
+		    const checkbox = row.querySelector("input[type='checkbox']");
+		    if (checkbox.checked) {
+		      selectedRow = row;
+		      break;
+		    }
+		 }
+
+		   if (!selectedRow) {
+		   	  return;
+		   }
+		   
+		  // bhno, message 가져오기
+		  let bhno = selectedRow.querySelector("input[name='bhno']").value;
+		  let message = document.getElementById("message").value;
+		  let receiver = '4';   // 나중에 로그인 추가되면 수정
+		  let sender = '3';
+		  
+
+		  let dataToSend = {
+		        bhno: bhno,
+		        message: message,
+		        receiver: receiver,
+		        sender: sender
+		   };
+
 		    $.ajax({
-		      type: "POST",
-		      url: "/bank/insertdetailslips", // 컨트롤러의 URL
-		      contentType: "application/json", // 전송할 데이터의 타입 (JSON)
-		      data: JSON.stringify(detailSlipList), // JSON 형태로 변환하여 전송
-		      success: function (response) {
-		        alert(response.message); // 결과 메시지를 알림으로 보여줌
-		      },
-		      error: function (xhr, status, error) {
-		        // 에러 발생 시 실행할 함수
-		        alert("Error occurred: " + error); // 에러 메시지를 알림으로 보여줌
-		      },
+		        type: "POST",
+		        url: "/bank/requestmessage",
+		        contentType: "application/json;charset=UTF-8",
+			    data: JSON.stringify(dataToSend),
+			    dataType: "json",
+		        success: function(response) {
+		        },
+		        error: function(xhr, status, error) {
+		            console.error(error);
+		        }
 		    });
-			
 		    
-	     	let startDate = $("#startdate").val();
+		    alert("내용확인을 요청하였습니다.");
+		   
+		    // 모달 닫기
+			$("#memoplzmodal").modal("hide");
+		    
+		    // 다시 기존 화면 랜더링
+		    let startDate = $("#startdate").val();
             let endDate = $("#enddate").val();
             let bizno = $("#bizno").val();
             let bankname = $("#bankname").val();
@@ -452,132 +492,15 @@ input.modaltext {
             };
             
            historySlipRequest(search);
-	    });	
-		
-		// reset 시
-		
-		
+		  
+	  });
 
-	
-		//------------------------------- 다시 볼거 --------------------------------------
-
-		// 분개내역 수정 후 저장 시 ajax 호출
-		$("#bottom").on("click", "#modifyslipbtn", function(){
-			 	let detailSlipList = []; // 저장할 DetailSlipVO 객체들을 담을 배열
-
-			    // detailSlips 배열에 필요한 데이터를 넣어준다.
-			    $('.detailsliptable tbody tr').each(function() {
-			    	alert($(this).find('[name="bankslipno"]').val());
-			    	alert($(this).find('[name="bhno"]').val());
-			    	alert($(this).find('[name="sortno"]').val());
-			    	alert($(this).find('[name="accountno"]').val());
-			    	alert($(this).find('[name="accountname"]').val());
-			    	alert(parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')));
-			    	alert($(this).find('[name="source"]').val());
-			    	alert($(this).find('[name="summary"]').val());
-			    	
-			        let detailSlip = {
-			            bankslipno: $(this).find('[name="bankslipno"]').val(),
-			            bhno: $(this).find('[name="bhno"]').val(),
-			            sortno: $(this).find('[name="sortno"]').val(),
-			            accountno: $(this).find('[name="accountno"]').val(),
-			            accountname: $(this).find('[name="accountname"]').val(),
-			            // -나 ,부분 빼고 int로 변경
-			            amount: parseInt($(this).find('[name="amount"]').val().replace(/,/g, '').replace('-', '')),
-			            source: $(this).find('[name="source"]').val(),
-			            summary: $(this).find('[name="summary"]').val()
-			        };
-
-			        detailSlipList.push(detailSlip);
-			    });
-
-			    // AJAX로 업데이트 요청을 보낸다.
-			    updateDetailSlips(detailSlipList);
-		});
-		
-
-		// 분개전표 수정
-		function updateDetailSlips(detailSlipList) {
-		    $.ajax({
-		        type: "POST",
-		        contentType: "application/json;charset=UTF-8",
-		        //beforeSend: function (xhr) {
-		        //    xhr.setRequestHeader("Content-type","application/json");
-		       // },
-		        url: "/bank/updateDetailSlips",
-		        data: JSON.stringify(detailSlipList),
-		        dataType: "json",
-		        success: function(response) {
-		            // 성공적으로 업데이트가 완료되면 안내
-		            alert(response);
-		        },
-		        error: function(xhr, status, error) {
-		            alert("저장에 실패하였습니다.");
-		        }
-		    });
-		}
-	
 		
 	});
 </script>
 </head>
-
 <body>
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-    <ul class="sidebar-nav" id="sidebar-nav">
-      <li class="nav-item">
-      	<div class="search-bar bizsearch">
-	      <form class="search-form d-flex align-items-center search-biz" method="POST" action="#">
-	        <input type="text" name="query" placeholder="수임기업명을 검색하세요" title="Enter search keyword">
-	        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-	      </form>
-	    </div><!-- End Search Bar -->
-
-    	<nav class="header-nav ms-auto">
-        	<ul class="d-flex align-items-center">
-		        <li class="nav-item d-block d-lg-none">
-		          <a class="nav-link nav-icon search-bar-toggle " href="#">
-		            <i class="bi bi-search"></i>
-		          </a>
-		        </li><!-- End Search Icon-->
-		     </ul>
-		 </nav>
-      <button type="button" class="btn btn-outline-primary allbtn">
-      	<i class="ri-building-line"></i> 전체수임기업</button>
-      <br><br>
-      <li class="nav-item-divider"></li> <!-- 회색 선 추가 -->
-      <br>
-      <li class="nav-item">
-      	<!-- 수임사 리스트 -->
-       	<div class="list-group">
-               <a href="#" class="list-group-item list-group-item-action">
-                 <div class="d-flex w-100 justify-content-between">
-                   <h5 class="mb-1">엣지상사</h5><i class="bi bi-bell"></i>
-                 </div>
-                 <span class="badge biztype">제조</span>
-                 <small class="text-muted">222-3333-5555</small>
-               </a>
-               <a href="#" class="list-group-item list-group-item-action">
-                 <div class="d-flex w-100 justify-content-between">
-                   <h5 class="mb-1">더존</h5><i class="bi bi-bell"></i>
-                 </div>
-                 <span class="badge biztype">IT</span>
-                 <small class="text-muted">222-3333-5555</small>
-               </a>
-               <a href="#" class="list-group-item list-group-item-action">
-                 <div class="d-flex w-100 justify-content-between">
-                   <h5 class="mb-1">대한건설</h5><i class="bi bi-bell"></i>
-                 </div>
-                 <span class="badge biztype">건설</span>
-                 <small class="text-muted">222-3333-5555</small>
-               </a>
-        </div><!-- End List group Advanced Content -->
-      </li>
-	</ul>
-
-  </aside><!-- End Sidebar-->
-  
+<%@include file="../common/searchbizsidebar.jsp"%>
   <main id="main" class="main">
     <div class="pagetitle">
       <h1>통장정리</h1>
@@ -649,7 +572,7 @@ input.modaltext {
 	                 			<button type="button" id="searchHistorySlip" class="btn btn-secondary">조회</button>
 	                 		</div>
 	                 	</div>
-	                 	<input type="hidden" name="bizno" id="bizno" value="10001">
+	                 	<input type="hidden" name="bizno" id="bizno">
 	                 	<input type="hidden" name="bankname" id="bankname" value="신한은행">
 	                 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                  	</form>
@@ -681,31 +604,33 @@ input.modaltext {
                       <h5 class="modal-title"><strong>내용 확인 요청</strong></h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="">
 	                   	<div class="modal-body">
 	                   		<div class="modaltable">
 	                   			<div class="tabletitle">통장내역</div>
 		                   		<table>
 		                      		<tr>
-		                      			<td>일자</td>
-		                      			<td><input type="text" name="text" class="intable" value="04-29" readonly></td>
-		                      			<td>내용</td>
-		                      			<td><input type="text" name="text" class="intable" value="(주)거래처" readonly></td>
-		                      			<td>금액</td>
-		                      			<td><input type="text" name="text" class="intable" value="14,000,000" readonly></td>
+		                      			<td class="modalintitle">일자</td>
+		                      			<td><input type="text" id="bhdateinmodal" class="intable" readonly></td>
+		                      		</tr>
+		                      		<tr>
+		                      			<td class="modalintitle">내용</td>
+		                      			<td><input type="text" id="sourceinmodal" class="intable" readonly></td>
+		                      		</tr>
+		                      		<tr>
+		                      			<td class="modalintitle">금액</td>
+		                      			<td><input type="text" id="amountinmodal" class="intable" readonly></td>
 		                      		</tr>
 		                      	</table>
 	                   		</div>
 	                      <div>
 	                      	<label class="labeltitle2">문의 내용</label>
-	                      	<input type="text" class="modaltext" value="거래내용 확인 부탁드립니다."/>
+	                      	<input type="text" id="message" class="modaltext" value="거래내용 확인 부탁드립니다."/>
 	                      </div>
 	                    </div>
 	                    <div class="modal-footer">
 	                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-	                      <button type="submit" class="btn btn-primary">확인</button>
+	                      <button type="button" class="btn btn-primary" id="sendmessagebtn">확인</button>
 	                    </div>
-                    </form>
                   </div>
                 </div>
               </div><!-- End Vertically centered Modal-->
@@ -742,8 +667,8 @@ input.modaltext {
 												id="button-addon2" onclick="searchAccount()">찾기</button>
 										</div>
 										<button type="button" class="btn btn-secondary"
-											data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save
+											data-bs-dismiss="modal">닫기</button>
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">저장
 											changes</button>
 									</div>
 								</div>
