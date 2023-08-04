@@ -5,7 +5,7 @@
 <mapper namespace="org.blurbird.mapper.DocrequestMapper">
 
 <!-- MemberVO를 위한 resultMap -->
-<resultMap id="MemberResultMap" type="org.blurbird.domain.MemberVO">
+<resultMap id="MemberResultMap" type="org.blurbird.domain.common.MemberVO">
     <id property="memberno" column="memberno" />
     <result property="membername" column="membername" />
     <result property="memberid" column="memberid" />
@@ -14,7 +14,7 @@
 </resultMap>
 
 <!-- UsersVO를 위한 resultMap -->
-<resultMap id="UsersResultMap" type="org.blurbird.domain.UsersVO">
+<resultMap id="UsersResultMap" type="org.blurbird.domain.common.UsersVO">
     <id property="userno" column="userno" />
     <result property="memberno" column="memberno" />
     <result property="bizno" column="bizno" />
@@ -58,13 +58,13 @@
 </resultMap>
 
 <!-- businessResultMap: ResultMap for BusinessVO -->
-<resultMap id="businessResultMap" type="org.blurbird.domain.bank.BusinessVO">
+<resultMap id="businessResultMap" type="org.blurbird.domain.common.BusinessVO">
     <result property="bizno" column="bizno" />
     <result property="bizname" column="bizname" />
     <result property="businesslicense" column="businesslicense" />
     <result property="bizaddress" column="bizaddress" />
     <result property="bistel" column="bistel" />
-    <result property="indusrty" column="industry" />
+    <result property="industry" column="industry" />
 </resultMap>
 
 <!-- DocumentRequestList 를위한 resultMap -->
@@ -102,7 +102,7 @@
         INNER JOIN docreqhistory drh ON dr.docreqno = drh.docreqno
         INNER JOIN drstate ds ON drh.drstateno = ds.drstateno
         INNER JOIN business bs ON u.bizno = bs.bizno
-        WHERE dr.docreqno > 0
+        WHERE dr.docreqno > 0 
     ]]>
 </select>
 

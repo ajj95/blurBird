@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class UnconfirmedReasonVO {
-	private String ucrNO;
-	private String reqNO;
+	private String ucrno;
+	private String recreqno;
 	private String contents; 
 }

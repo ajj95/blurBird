@@ -9,6 +9,7 @@ import org.blurbird.domain.bank.BusinessVO;
 import org.blurbird.domain.info.FinancialSVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.ReportPaymentVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,27 +176,36 @@ public class InfoMapperTests {
 //		log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + iSList);
 //
 //	}
-
+//
+//	@Test
+//	public void test() {
+//		List<InfoData> iSList = new ArrayList<InfoData>();
+//		List<BusinessVO> bizList = mapper.getListBusiness();
+//		InfoData infoData = new InfoData();
+//		infoData.setYear("2023");
+//
+//		for (int i = 0; i < bizList.size(); i++) {
+//			InfoData info = new InfoData();
+//			info.setBizno(mapper.getListBusiness().get(i).getBizno());
+//			info.setYear(infoData.getYear());
+//
+//			info.setBizname(mapper.getListBusiness().get(i).getBizname());
+//			if (info.getBizno() == iSList.get(i).getBizno()) {
+//				info.setBizincome(Long.toString(iSList.get(i).getBusinessIncome()));
+//				info.setTax(Long.toString(iSList.get(i).getTax()));
+//			}
+//
+//			iSList.add(info);
+//		}
+//		log.info("결과를 찍어본다@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
+//	}
+	
 	@Test
 	public void test() {
-		List<InfoData> iSList = new ArrayList<InfoData>();
-		List<BusinessVO> bizList = mapper.getListBusiness();
-		InfoData infoData = new InfoData();
-		infoData.setYear("2023");
-
-		for (int i = 0; i < bizList.size(); i++) {
-			InfoData info = new InfoData();
-			info.setBizno(mapper.getListBusiness().get(i).getBizno());
-			info.setYear(infoData.getYear());
-
-			info.setBizname(mapper.getListBusiness().get(i).getBizname());
-			if (info.getBizno() == iSList.get(i).getBizno()) {
-				info.setBizincome(Long.toString(iSList.get(i).getBusinessIncome()));
-				info.setTax(Long.toString(iSList.get(i).getTax()));
-			}
-
-			iSList.add(info);
-		}
-		log.info("결과를 찍어본다@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
+		ReportPaymentVO rp = new ReportPaymentVO();
+		rp.setBizno("10001");
+		
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@"+mapper.rptfResult(rp));
 	}
+	
 }
