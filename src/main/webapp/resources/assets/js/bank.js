@@ -2,6 +2,9 @@
 // 조회버튼 클릭시 통장내역 조회
 $(function(){
 	
+		var csrfHeaderName = "${_crsf.headerName}";
+		var csrfTokenValue = "${_crsf.token}";
+		
 		// 화면 처음 로딩 하자마자 기업 리스트 출력
 		
 	
@@ -617,6 +620,9 @@ $(function(){
             type: "POST",
             contentType: "application/json;charset=UTF-8",
             url: "/bank/getHistoryAndSlip",
+            beforeSend: function(xhr){
+            	xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+            },
             data: JSON.stringify(search),
             dataType: "json",
             success: function(response) {
