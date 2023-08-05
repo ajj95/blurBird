@@ -32,9 +32,16 @@ public class DocrequestServicempl implements DocrequestService {
 	public void issuance(String docreqno) {
 		mapper.issuance(docreqno);
 	}
+	public void issuancedel(String docreqno) {
+		mapper.issuancedel(docreqno);
+	}
+	
 	
 	public void received(String docreqno) {
 		mapper.received(docreqno);
+	}
+	public void receiveddel(String docreqno) {
+		mapper.receiveddel(docreqno);
 	}
 	
 	public DocumentRequestVO getDocrequestread(String docreqno) {

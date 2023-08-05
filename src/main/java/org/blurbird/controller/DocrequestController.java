@@ -53,6 +53,7 @@ public class DocrequestController {
 		log.info("issuance");
 		log.info(docreqno);
 		service.issuance(docreqno);
+		service.issuancedel(docreqno);
 		
 		return "redirect:/docrequest/docrequestTA";
 	}
@@ -63,6 +64,7 @@ public class DocrequestController {
 		log.info("received");
 		log.info(docreqno);
 		service.received(docreqno);
+		service.receiveddel(docreqno);
 	
 		return "redirect:/docrequest/docrequestCO";
 	}
