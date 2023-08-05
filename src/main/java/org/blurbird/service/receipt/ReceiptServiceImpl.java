@@ -73,4 +73,16 @@ public class ReceiptServiceImpl implements ReceiptService {
 		log.info("cashslip confirmed....");
 	}
 
+	@Override
+	public ReceiptRequestVO getReceiptRequestsWithConfirmation(String recreqno) {
+		log.info("confirmedReceipt.....");
+		return mapper.getReceiptRequestsWithConfirmation(recreqno);
+	}
+
+	@Override
+	public String getUserno(String businesslicense) {
+		log.info("getUserno...");
+		return mapper.getUserno(businesslicense);
+	}
+
 }

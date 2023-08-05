@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,9 +54,9 @@ public class ReceiptController {
 
 	@GetMapping("/Test")
 	public void test() {
-		log.info("DatePicker Test!!!");
+		log.info("mail authentication Test!!!");
 	}
-
+	
 	@GetMapping("/receiptList")
 	@ResponseBody
 	public List<ReceiptRequestVO> getReceiptList(DateRange dateRange) {
@@ -98,11 +99,15 @@ public class ReceiptController {
 			@RequestParam("contents") String contents) {
 		log.info("recreqno : "+recreqno);
 		log.info("judge : "+ judge);
-		ReceiptRequestVO receipt = service.judgeReceipt(recreqno);
-		receipt.setConfirmed(judge);
+		ReceiptRequestVO receipt = service.getReceiptRequestsWithConfirmation(recreqno);
+		receipt.setConfirmedTypeno(judge);
 		if(judge.equals("1")) {
 			ConfirmedVO confirmed = new ConfirmedVO();
+			String confirmedno = receipt.getConfirmed().getConfirmedno();
+			Date regdate = receipt.getConfirmed().getRegdate();
 			confirmed.setRecreqno(recreqno);
+			confirmed.setConfirmedno(confirmedno);
+			receipt.setConfirmed(confirmed);
 			log.info("confirmed : "+ confirmed);
 			service.confirmedReceipt(confirmed);
 		}else if(judge.equals("2")){
@@ -116,19 +121,14 @@ public class ReceiptController {
 		return receipt;
 	}
 	
-	@PostMapping("/cashslipConfirmed")
+	@PostMapping(path = "/cashslipConfirmed", produces = "application/json")
 	@ResponseBody
-	public CashSlipVO cashslipConfirmed(@RequestParam("confirmedno") String confirmedno,
-			@RequestParam("accountno")String accountno, @RequestParam("summary") String summary) {
+	public CashSlipVO cashslipConfirmed(@RequestBody CashSlipVO cashSlip) {
 		log.info("cashslipConfirmed....");
-		CashSlipVO cashslip = new CashSlipVO();
-		cashslip.setConfirmedno(confirmedno);
-		cashslip.setAccountno(accountno);
-		cashslip.setSummary(summary);
-		service.cashslipConfirmed(cashslip);
-		log.info(cashslip);
+		service.cashslipConfirmed(cashSlip);
+		log.info(cashSlip);
 		
-		return cashslip;
+		return cashSlip;
 	}
 	
 	@PostMapping("/uploadReceipt")

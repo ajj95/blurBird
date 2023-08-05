@@ -16,6 +16,7 @@ public class ReceiptRequestVO {
 	private String purpose;
 	private String receiptpath;
 	
-	private String confirmed;
+	private ConfirmedVO confirmed;
+	private String confirmedTypeno;
 	private String contents;
 }

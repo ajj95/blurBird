@@ -48,13 +48,14 @@ public class ServiceTests {
 //		unconfirmed.setContents("서비스 테스트");
 //		service.unconfirmedReceipt(unconfirmed);
 //		
-		CashSlipVO cashSlip = new CashSlipVO();
-		cashSlip.setConfirmedno("19");
-		cashSlip.setAccountno("103");
-		cashSlip.setAmount(67898);
-		cashSlip.setSummary("서비스 테스트");
-		service.cashslipConfirmed(cashSlip);
-		
+//		CashSlipVO cashSlip = new CashSlipVO();
+//		cashSlip.setConfirmedno("19");
+//		cashSlip.setAccountno("103");
+//		cashSlip.setAmount(67898);
+//		cashSlip.setSummary("서비스 테스트");
+//		service.cashslipConfirmed(cashSlip);
+//		service.getReceiptRequestsWithConfirmation("38");
+		service.getUserno("213-86-35896");
 	}
 
 }
