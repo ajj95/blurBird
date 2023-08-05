@@ -1,10 +1,13 @@
 package org.blurbird.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.service.info.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -39,12 +43,41 @@ public class InfoController {
 	
 	
 	@PostMapping("/infoTA")
-	public void getInfoList(Model model, InfoData infoData) {
+	public @ResponseBody List<InfoData> getInfoList(Model model, InfoData infoData) {
 	
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getList(infoData));
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@aa" + infoData.getBizno());
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@aa" + infoData.getYear());
+//		log.info("#################################" + service.getList(infoData));
+//		log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + service.getISByBiz(infoData));
 		
-		model.addAttribute("list", service.getList(infoData));
+		
+		return service.getList(infoData);
 
+	}
+	
+	@PostMapping("/infoTA/report")
+	public @ResponseBody ReportPaymentVO report(ReportPaymentVO reportPaymentVO) {
+		
+//		Date date = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String dateString = sdf.format(date);
+//		
+//		reportPaymentVO.setReportdate(dateString);
+		reportPaymentVO.setReportdoc("신고서이미지");
+		reportPaymentVO.setPaymentslip("납부서이미지");
+//		reportPaymentVO.setTransdate("");
+		reportPaymentVO.setStatus("납부서전송");
+		
+		service.report(reportPaymentVO);
+		log.info(service.rptfResult(reportPaymentVO));
+		return service.rptfResult(reportPaymentVO);
+	}
+	
+	@PostMapping("/infoTA/transfer")
+	public @ResponseBody ReportPaymentVO transfer(ReportPaymentVO reportPaymentVO) {
+		
+		service.transfer(reportPaymentVO);
+		return service.rptfResult(reportPaymentVO);
 	}
 	
 	@GetMapping("/infoCO")

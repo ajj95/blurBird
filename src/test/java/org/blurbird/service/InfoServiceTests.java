@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.mapper.InfoMapper;
 import org.blurbird.mapper.InfoMapperTests;
 import org.blurbird.service.info.InfoService;
@@ -63,14 +64,21 @@ public class InfoServiceTests {
 //		
 //		log.info("¿Ã∞‘ info2 ∞¥√º¥Ÿ~!!!! : " + info);
 //	}
+//	
+//	@Test
+//	public void test() {
+//		InfoData info = new InfoData();
+//		info.setYear("2023");
+//		
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getISByBiz(info));
+//	}
 	
 	@Test
 	public void test() {
-		InfoData info = new InfoData();
-		info.setYear("2023");
+		ReportPaymentVO rp = new ReportPaymentVO();
+		rp.setBizno("10001");
 		
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getISByBiz(info));
+		log.info("@@@@@@@@@@@@@@@@@@:" + service.rptfResult(rp));
 	}
-	
 
 }

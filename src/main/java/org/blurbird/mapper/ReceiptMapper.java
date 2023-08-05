@@ -3,7 +3,6 @@ package org.blurbird.mapper;
 import java.sql.Date;
 import java.util.List;
 
-import org.blurbird.domain.MemberVO;
 import org.blurbird.domain.receipt.AccountVO;
 import org.blurbird.domain.receipt.CashSlipVO;
 import org.blurbird.domain.receipt.ConfirmedVO;

@@ -1,4 +1,4 @@
-package org.blurbird.domain;
+package org.blurbird.domain.common;
 
 import lombok.Data;
 
