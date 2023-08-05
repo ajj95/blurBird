@@ -16,10 +16,46 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
+	// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
+	$(function() {
+		
+		// 사이드 바의 동적 생성되는 div 중
+		// 선택된 div의 거래처코드 값 가져오기
+		//- 이 부분은 import된 sidebar를 다뤄서 그런지 본문 스크립트에 작성해야한다.
+		$(".menu2").on("click", function(e){
+			e.preventDefault();
+			
+		    console.log(this);
+		    var buttonId = this.id;
+			
+			
+		    // 클릭한 요소를 구분하여 처리합니다.
+		    if (buttonId == "button1") {
+		        // 버튼 1을 클릭했을 때 실행할 동작
+		        console.log("버튼 1을 클릭했습니다.");
+		        window.location.href = "/docrequest/docrequestCO"
+		    } else if (buttonId == "button2") {
+		        // 버튼 2를 클릭했을 때 실행할 동작
+		        console.log("버튼 2를 클릭했습니다.");
+		        window.location.href = "/receipt/receiptco"
+		    } else if (buttonId == "button3") {
+		        // 버튼 3를 클릭했을 때 실행할 동작
+		        console.log("버튼 3를 클릭했습니다.");
+		        window.location.href = "/bank/bankco"
+		    }else if (buttonId == "button4") {
+		        // 버튼 4를 클릭했을 때 실행할 동작
+		        console.log("버튼 4를 클릭했습니다.");
+		        window.location.href = "/info/infoCO"
+		    }else {
+		        // 다른 버튼을 클릭했을 때 실행할 동작
+		        console.log("다른 버튼을 클릭했습니다.");
+		    }
 
-
-
-
+			
+		});
+		
+		
+	});
 </script>
 
 
@@ -42,7 +78,7 @@
 .menu2 {
     max-width: 25%;
     width: 100%;
-    
+    cursor: pointer; /* 커서 모양을 포인터로 변경하여 클릭 가능함을 나타냄 */
 }
 
 .col-lg-6 {
@@ -55,7 +91,7 @@
 }
 
 .menu-icon .iconfont{
-	font-size: 22px;
+	font-size: 20px;
 	font-family: "Poppins", sans-serif;
 	padding: 20px 15px 15px 0px;
 }
@@ -103,7 +139,7 @@
               <div class="card info-card customers-card cardf">
 
                 <div class="card-body ">
-                  <h5 class="card-title">그린테크 <span>| 대표님</span></h5>
+                  <h5 class="card-title">그린테크 <span> | 수임사</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -111,7 +147,7 @@
                     </div>
                     <div class="ps-3">
                       <h6>박길동</h6>
-                      <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+                      <span class="text-danger small pt-1 fw-bold">대표님</span> <span class="text-muted small pt-2 ps-1">pack@naver.com</span>
 
                     </div>
                   </div>
@@ -173,34 +209,33 @@
             
             
             
-            <div class="menu2">
+            <div class="menu2" id="button1">
               <div class="info-box card cardf">
                 <i class="ri-file-edit-line menu-icon"> <span class="iconfont">민원 서류</span> </i>
-                
                 <p></p>
               </div>
             </div>
             
             
-            <div class="menu2">
+            <div class="menu2" id="button2">
               <div class="info-box card cardf">
-                <i class="ri-file-edit-line menu-icon"> <span class="iconfont">전표증빙</span> </i>
+                <i class="ri-clipboard-line menu-icon"> <span class="iconfont">전표증빙</span> </i>
                 <p></p>
               </div>
             </div>
             
             
-            <div class="menu2">
+            <div class="menu2" id="button3">
               <div class="info-box card cardf">
-                <i class="ri-file-edit-line menu-icon"> <span class="iconfont">통장 관리</span> </i>
+                <i class="ri-bank-card-line menu-icon"> <span class="iconfont">통장 관리</span> </i>
                 <p></p>
               </div>
             </div>
             
             
-            <div class="menu2">
+            <div class="menu2" id="button4">
               <div class="info-box card cardf">
-                <i class="ri-file-chart-line menu-icon"><span class="iconfont"> 신고 현황</span></i>
+                <i class="ri-file-chart-line menu-icon"><span class="iconfont">  신고 현황</span></i>
                 <p></p>
               </div>
             </div>
@@ -227,7 +262,7 @@
             </div>
 
             <div class="card-body">
-              <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+              <h5 class="card-title">기업 활동 내역 <span>| Activity</span></h5>
 
               <div class="activity">
 
@@ -235,7 +270,7 @@
                   <div class="activite-label">32 min</div>
                   <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
                   <div class="activity-content">
-                    Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
+                    회사의 부가세과표.면세수입금액 확인 <a href="/docrequest/docrequestCO" class="fw-bold text-dark">민원 서류 신청</a>
                   </div>
                 </div><!-- End activity item-->
 
@@ -243,7 +278,7 @@
                   <div class="activite-label">56 min</div>
                   <i class="bi bi-circle-fill activity-badge text-danger align-self-start"></i>
                   <div class="activity-content">
-                    Voluptatem blanditiis blanditiis eveniet
+                    회사의 영수증 <a href="/receipt/receiptco" class="fw-bold text-dark">증빙 전표 신청</a>
                   </div>
                 </div><!-- End activity item-->
 
@@ -251,7 +286,7 @@
                   <div class="activite-label">2 hrs</div>
                   <i class="bi bi-circle-fill activity-badge text-primary align-self-start"></i>
                   <div class="activity-content">
-                    Voluptates corrupti molestias voluptatem
+                    법인세 신고서 작성을 위한 재무 데이터 수집 및 검토
                   </div>
                 </div><!-- End activity item-->
 
@@ -259,7 +294,7 @@
                   <div class="activite-label">1 day</div>
                   <i class="bi bi-circle-fill activity-badge text-info align-self-start"></i>
                   <div class="activity-content">
-                    Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
+                    회사의 <a href="/info/infoCO" class="fw-bold text-dark">종합소득세 신고</a> 가 완료 되었습니다 
                   </div>
                 </div><!-- End activity item-->
 
@@ -267,7 +302,7 @@
                   <div class="activite-label">2 days</div>
                   <i class="bi bi-circle-fill activity-badge text-warning align-self-start"></i>
                   <div class="activity-content">
-                    Est sit eum reiciendis exercitationem
+                    회사의 자산 관리를 위해 고정자산 목록 작성 및 갱신
                   </div>
                 </div><!-- End activity item-->
 
@@ -275,7 +310,7 @@
                   <div class="activite-label">4 weeks</div>
                   <i class="bi bi-circle-fill activity-badge text-muted align-self-start"></i>
                   <div class="activity-content">
-                    Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
+                    그린테크 기업 BlurTax 가입
                   </div>
                 </div><!-- End activity item-->
 
@@ -358,12 +393,6 @@
         </div><!-- End Left side columns -->
 
     </section>
-        
-        
-        
-        
-        
-        
         
 
 </main>
