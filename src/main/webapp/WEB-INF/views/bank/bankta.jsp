@@ -401,6 +401,12 @@ input.modaltext {
 .modalintitle{
   margin-right: 10px;
 }
+.btnmarginright{
+	margin-right: 5px;
+}
+ul#pills-tab {
+    margin-left: 13px;
+}
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
@@ -662,8 +668,7 @@ input.modaltext {
 										</div>
 										<button type="button" class="btn btn-secondary"
 											data-bs-dismiss="modal">닫기</button>
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">저장
-											changes</button>
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">저장</button>
 									</div>
 								</div>
 							</div>

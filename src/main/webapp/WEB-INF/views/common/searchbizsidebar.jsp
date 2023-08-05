@@ -13,6 +13,11 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script src="../resources/assets/js/searchbizsidebar.js"></script>
+<style type="text/css">
+	.changebackground{
+		background-color: #DCDCDC !important;
+	}
+</style>
 <script type="text/javascript">
 	$(function(){
 		let testList = ['테스트', '테스트입니다', '테스트할게'];
@@ -48,6 +53,14 @@
         		}
         });
 		
+    	// 기업 클릭 시 회색, 재클릭 시 배경색 사라짐
+		$("#businessList").on("click", ".list-group-item", function(){
+			// 기존의 a태그 모두 클래스 삭제
+			$('.list-group-item').removeClass('changebackground');
+
+    		// 클릭된 a 태그에만 클래스 추가
+    		$(this).addClass('changebackground');
+		});
 		
 	});
 </script>

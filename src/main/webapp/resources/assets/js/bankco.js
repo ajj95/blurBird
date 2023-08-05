@@ -26,73 +26,6 @@ $(function(){
             // 수임사: 체크 불가
            historySlipRequest(search);
         });
-        
-        		
-		 // 메모 아이콘 클릭 시 모달 출력 (입력/수정 가능하도록)
-		$("#left").on("click", ".ri-article-fill", function(){
-			// 메모 내용, 통장내역 번호, 금액 가져와서 모달 input 에 넣기
-			let bhno = $(this).closest('tr').find('input[name="bhno"]').val();
-			let closestLink = $(this).closest('a');
-			let memo = '';
-
-			if(closestLink.length>0){
-				memo = closestLink.data('bs-original-title');
-			}
-			
-			$("#biznoInMemoModal").val(bhno);
-			$("#insertedMemo").val(memo);
-			
-			$("#memoinsert").modal('show');
-		});
-		
-		// 메모 입력 모달 창에서 저장 버튼 클릭시
-		$("#saveMemoBtn").on("click", function(){
-			let bhno = $("#biznoInMemoModal").val();
-			let memo = $("#insertedMemo").val();
-			
-	        let datas = {
-	                bhno: bhno,
-	                memo: memo,
-	       };
-			
-			// 통장내역번호, 메모로 해야하는 일들
-			$.ajax({
-		            type: "GET",
-		            url: "/bank/modifyMemo",
-		            dataType: "json",
-		            data: datas,
-		            success: function(response) {
-		               alert(response);
-		            },
-		            error: function(xhr, status, error) {
-		                console.error(error);
-		            }
-		     });
-			
-			alert("메모가 저장되었습니다.");
-			
-			// 모달 닫기
-	        $('#memoinsert').modal('hide');
-			
-			// 다시 화면 로드
-	        let startDate = $("#startdate").val();
-            let endDate = $("#enddate").val();
-            let bizno = $("#bizno").val();
-            let bankname = $("#bankname").val();
-            
-            let search = {
-                startdate: startDate,
-                enddate: endDate,
-                bizno: bizno,
-                bankname: bankname
-            };
-            
-            // 수임사: 체크 불가
-           historySlipRequest(search);
-			
-		});
-        
-      
 	
 });// windowload function
 
@@ -180,8 +113,7 @@ $(function(){
 	if(data && data.length >0){
 		for (let i = 0; i < data.length; i++) {
       	str +='<tr>';
-      	str += '<input type="hidden" name="bhno" value="';
-	    str += data[i].bhno;
+      	str += '<input type="hidden" name="bhno" value="' + data[i].bhno + '">';
  	  	str +='<td>';
  	  	str += formatDate(data[i].bhdate);
  	  	str +='</td>';
@@ -190,14 +122,14 @@ $(function(){
  	  	str +='</td>';
  	  	if(data[i].sortno==1){
  	  		// 입금
- 	  		str +='<td name="bhamount">';
+ 	  		str +='<td>';
 	 	  	str +=formatNumberWithCommas(data[i].amount);
 	 	  	str +='</td>';
 	 	  	str +='<td></td>';
  	  	}else{
  	  		// 출금
  	  		str +='<td></td>';
- 	  		str +='<td name="bhamount">';
+ 	  		str +='<td>';
 	 	  	str +=formatNumberWithCommas(data[i].amount);
 	 	  	str +='</td>';
  	  	}
@@ -212,7 +144,7 @@ $(function(){
 	  		 str +='"><i class="ri-article-fill"></i></a></td>';
 	  	}
 		str +='</tr>';
-	  }
+	  }//end for
 	}else{
 	}
 	
@@ -383,31 +315,31 @@ $(function(){
 	str += '<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-home" aria-selected="true">';
-	str += '<span class="button-text">전&nbsp;&nbsp;&nbsp;&nbsp;체</span><div class="howmany">';
+	str += '<span class="button-text">전　　체</span><div class="howmany">';
 	str += all;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-can-tab" data-bs-toggle="pill" data-bs-target="#pills-can" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">';
-	str += '<span class="button-text">확정가능</span><div class="howmany">';
+	str += '<span class="button-text">확정 가능</span><div class="howmany">';
 	str += can;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-certain-tab" data-bs-toggle="pill" data-bs-target="#pills-certain" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">확&nbsp;&nbsp;&nbsp;&nbsp;정</span><div class="howmany">';
+	str += '<span class="button-text">확　　정</span><div class="howmany">';
 	str += confirmed;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-except-tab" data-bs-toggle="pill" data-bs-target="#pills-except" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">제&nbsp;&nbsp;&nbsp;&nbsp;외</span><div class="howmany">';
+	str += '<span class="button-text">제　　외</span><div class="howmany">';
 	str += except;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-remove-tab" data-bs-toggle="pill" data-bs-target="#pills-remove" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">삭&nbsp;&nbsp;&nbsp;&nbsp;제</span><div class="howmany">';
+	str += '<span class="button-text">삭　　제</span><div class="howmany">';
 	str += remove;
 	str += '</div></button>';
 	str += '</li>';

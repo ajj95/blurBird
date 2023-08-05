@@ -832,7 +832,7 @@ $(function(){
 	
 	str += '</tbody>';
 	str += '</table>';
-	str += '<button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small">전표입력</button>';
+	str += '<button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small btnmarginright">전표입력</button>';
 	str += '<button type="button" id="memoplzbtn" class="btn btn-primary btn-small">내용확인요청</button>';
 	str += '</div>';
 	
@@ -930,31 +930,31 @@ $(function(){
 	str += '<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-home" aria-selected="true">';
-	str += '<span class="button-text">전&nbsp;&nbsp;&nbsp;&nbsp;체</span><div class="howmany">';
+	str += '<span class="button-text">전　　체</span><div class="howmany">';
 	str += all;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-can-tab" data-bs-toggle="pill" data-bs-target="#pills-can" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">';
-	str += '<span class="button-text">확정가능</span><div class="howmany">';
+	str += '<span class="button-text">확정 가능</span><div class="howmany">';
 	str += can;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-certain-tab" data-bs-toggle="pill" data-bs-target="#pills-certain" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">확&nbsp;&nbsp;&nbsp;&nbsp;정</span><div class="howmany">';
+	str += '<span class="button-text">확　　정</span><div class="howmany">';
 	str += confirmed;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-except-tab" data-bs-toggle="pill" data-bs-target="#pills-except" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">제&nbsp;&nbsp;&nbsp;&nbsp;외</span><div class="howmany">';
+	str += '<span class="button-text">제　　외</span><div class="howmany">';
 	str += except;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-remove-tab" data-bs-toggle="pill" data-bs-target="#pills-remove" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">삭&nbsp;&nbsp;&nbsp;&nbsp;제</span><div class="howmany">';
+	str += '<span class="button-text">삭　　제</span><div class="howmany">';
 	str += remove;
 	str += '</div></button>';
 	str += '</li>';
@@ -1020,7 +1020,7 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	
 	// 확정가능 탭
@@ -1082,10 +1082,10 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="certainslip" class="btn btn-light">확정</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
-	str += '<button type="button" id="exceptslip" class="btn btn-light">제외</button>';
-	str += '<button type="button" id="removeslip" class="btn btn-light">삭제</button>';
+	str += '<button type="button" id="certainslip" class="btn btn-light btnmarginright">확정</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
+	str += '<button type="button" id="exceptslip" class="btn btn-light btnmarginright">제외</button>';
+	str += '<button type="button" id="removeslip" class="btn btn-light btnmarginright">삭제</button>';
 	str += '</div>';
 	
 	// 확정
@@ -1147,8 +1147,8 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="cancelcertainslip" class="btn btn-light">확정취소</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="cancelcertainslip" class="btn btn-light btnmarginright">확정취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	
 	// 제외
@@ -1210,8 +1210,8 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="cancelexceptslip" class="btn btn-light">제외취소</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="cancelexceptslip" class="btn btn-light btnmarginright">제외취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	
 	// 삭제
@@ -1273,8 +1273,8 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="cancelremoveslip" class="btn btn-light">삭제취소</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="cancelremoveslip" class="btn btn-light btnmarginright">삭제취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	str += '</div>';
 	  
@@ -1291,7 +1291,7 @@ $(function(){
 
 	  searchstart.empty();
 	  
-		var str = '';
+		let str = '';
 	    str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -1310,8 +1310,7 @@ $(function(){
 	  			str += '<tr>';
 	  			str += '<input type="hidden" name="bankslipno" value="';
 	  			str += detailSlip[i].bankslipno;
-	  			str += '">';
-	  			str += '<input type="hidden" name="bhno" value="'+detailSlip[i].bhno+'">';
+	  			str += '" />'
 	  			str += '<input type="hidden" name="bhno" value="';
 	  			str += detailSlip[i].bhno;
 	  			str += '">';
@@ -1347,7 +1346,9 @@ $(function(){
 				str += '</td>';
 				str += '<td class="button-and-input"><button type="button" class="btn searchaccount btn-outline-dark" ';
 				str += 'data-bs-toggle="modal" data-bs-target="#accountCode" ';
-				str += 'data-btn-index="'+ i + '">';
+				str += 'data-btn-index="';
+				str += i;
+				str += '">';
 				str += '<i class="ri-article-fill"></i>';
 				str += '</button><input type="text" name="accountno" class="intable" value="';
 				str += detailSlip[i].accountno;
@@ -1369,28 +1370,26 @@ $(function(){
 					str += '<td><input type="text" name="amount" class="intable" value="';
 					str += formatNumberWithCommas(Math.abs(detailSlip[i].amount));
 					str += '"></td>';
+					
 				}
 				
-				str += '<td><input type="text" name="source" class="intable" value="' + detailSlip[i].source + '"></td>';
-				// 메모가 null인 경우 처리!!!
-				str += '<td><input type="text" name="summary" class="intable" value="' + (detailSlip[i].summary ? detailSlip[i].summary : '') + '"></td>';
+				str += '<td><input type="text" name="source" class="intable" value="';
+				str += detailSlip[i].source;
+				str += '"></td>';
+				str += '<td><input type="text" name="summary" class="intable" value="';
 				
-				/*
-				이렇게 if로 하니까 이상하게 나온다.
 				if(detailSlip[i].summary==null){
 					str += '"></td>';
 				}else{
-					str += detailSlip[i].summary;
+					str += detailSlip[i].summary + '"></td>';
 				}
-				str += '"></td>';
-				*/
 				
 				str += '</tr>';
 	  		}//end for
 	  		
 	  		str += '</tbody>';
 			str += '</table>';
-	  		str += '<button type="button" class="btn btn-outline-confirm" id="modifyslipbtn">저장</button>';
+	  		str += '<button type="button" class="btn btn-primary btnmarginright" id="modifyslipbtn">저장</button>';
 	  		str += '<button type="button" class="btn btn-outline-secondary" id="resetbtn">취소</button>';
 	  	 }else{
 	  	 
@@ -1447,7 +1446,6 @@ $(function(){
 	  searchstart.empty();
 	  
 	  	let str = '';
-	  	//str += '<form method="POST" action="/bank/insertdetailslips" id="insertDetailSlipForm">';
 		str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -1538,7 +1536,7 @@ $(function(){
 	  		
 	  		str += '</tbody>';
 			str += '</table>';
-	  		str += '<button type="submit" class="btn btn-outline-confirm" id="insertSlipBtn">저장</button>';
+	  		str += '<button type="submit" class="btn btn-primary btnmarginright" id="insertSlipBtn">저장</button>';
 	  		str += '<button type="reset" class="btn btn-outline-secondary" id="resetbtn">취소</button>';
 	  	 }else{
 	  	 
@@ -1581,7 +1579,6 @@ $(function(){
 
 
 		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
-		//str += '</form>';
 	  
 	 
 	  searchstart.html(str);
@@ -1655,7 +1652,7 @@ $(function(){
 			          account.accountName.includes(searchTerm) || account.accountNo.includes(searchTerm)
 			        );
 			      });
-			      // 검색 결과를 표시합니다.
+			      // 검색 결과를 표시
 			      const accountListModal = $('#accountListModal');
 			      accountListModal.empty();
 
@@ -1689,4 +1686,3 @@ $(function(){
 		}
 		
 		
-
