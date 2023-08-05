@@ -20,23 +20,35 @@
 	</select>
 
 	<select id="getReceiptList"
-		resultType="org.blurbird.domain.receipt.ReceiptRequestVO">
+		resultMap="ReceiptRequestResultMap">
 	<![CDATA[
-	select * 
-	from receiptrequest
-	where reqdate between  #{startDate} and #{endDate}
-	and userno=1
+SELECT
+        RR.RECREQNO,
+        RR.USERNO,
+        RR.REQDATE,
+        RR.PURPOSE,
+        RR.RECEIPTPATH,
+        C.CONFIRMEDNO,
+        C.REGDATE
+    FROM
+        receiptrequest RR
+    LEFT JOIN
+        confirmed C ON RR.RECREQNO = C.RECREQNO
+    WHERE
+       REQDATE BETWEEN #{startDate} and #{endDate}
+       and userno = 1
 	]]>
 	</select>
 
-	<select id="judgeReceipt" resultType="org.blurbird.domain.receipt.ReceiptRequestVO">
+	<select id="judgeReceipt"
+		resultType="org.blurbird.domain.receipt.ReceiptRequestVO">
 		<![CDATA[
 		select *
 		from receiptrequest
 		where recreqno = #{recreqno}
 		]]>
 	</select>
-	
+
 	<select id="getImgResource" resultType="String">
 		<![CDATA[
 		select receiptpath
@@ -54,17 +66,58 @@
 
 	<insert id="confirmedReceipt">
 		insert into confirmed(confirmedno,recreqno,regdate)
-		VALUES(SEQ_CONFIRMEDNO.nextval,#{recreqno},TO_DATE(sysdate,'YY/MM/DD'))
+		<selectKey keyProperty="confirmedno" order="BEFORE"
+			resultType="String">
+			select SEQ_CONFIRMEDNO.nextval from dual
+		</selectKey>
+		VALUES(#{confirmedno},#{recreqno},TO_DATE(sysdate,'YY/MM/DD'))
 	</insert>
-	
+
 	<insert id="unconfirmedReceipt">
-		insert into unconfirmedreason(ucrno,recreqno,contents)
+		insert into
+		unconfirmedreason(ucrno,recreqno,contents)
 		VALUES(seq_ucrno.nextval,#{recreqno},#{contents})
 	</insert>
-	
+
 	<insert id="cashslipConfirmed">
-	insert into cashslip(cashslipno,confirmedno,accountno,sortno,amount,summary)
-	VALUES(SEQ_CASHSLIPNO.nextval,#{confirmedno},#{accountno},3,#{amount},#{summary})
+		insert into
+		cashslip(cashslipno,confirmedno,accountno,sortno,amount,summary,bcnc)
+		VALUES(SEQ_CASHSLIPNO.nextval,#{confirmedno},#{accountno},3,#{amount},#{summary},#{bcnc})
 	</insert>
-	
+
+	<resultMap id="ReceiptRequestResultMap" type="org.blurbird.domain.receipt.ReceiptRequestVO">
+    <id property="recreqno" column="RECREQNO"/>
+    <result property="userno" column="USERNO"/>
+    <result property="reqdate" column="REQDATE"/>
+    <result property="purpose" column="PURPOSE"/>
+    <result property="receiptpath" column="RECEIPTPATH"/>
+    <!-- Define the association with Confirmed -->
+    <association property="confirmed" resultMap="ConfirmedResultMap"/>
+</resultMap>
+
+<resultMap id="ConfirmedResultMap" type="org.blurbird.domain.receipt.ConfirmedVO">
+    <id property="confirmedno" column="CONFIRMEDNO"/>
+    <result property="recreqno" column="RECREQNO"/>
+    <result property="regdate" column="REGDATE"/>
+</resultMap>
+
+<select id="getReceiptRequestsWithConfirmation" resultMap="ReceiptRequestResultMap">
+    SELECT
+        RR.RECREQNO,
+        RR.USERNO,
+        RR.REQDATE,
+        RR.PURPOSE,
+        RR.RECEIPTPATH,
+        C.CONFIRMEDNO,
+        C.REGDATE
+    FROM
+        receiptrequest RR
+    LEFT JOIN
+        confirmed C ON RR.RECREQNO = C.RECREQNO
+    WHERE
+       RR.RECREQNO = #{recreqno}
+</select>
+
+
+
 </mapper>
