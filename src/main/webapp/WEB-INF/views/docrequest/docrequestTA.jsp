@@ -27,7 +27,6 @@
 			let bizno = $(this).find("input[name='biznoInSidebar']").val();
 			// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
 			$("#bizno").val(bizno);
-			$(this).closest("tr").remove();
 		});
 		
 		
@@ -70,6 +69,20 @@
 </script>
 
 <style>
+.allbtn {
+    margin-top: 10px;
+    margin-left: 5px;
+    width: 250px;
+}
+.search-biz input {
+    width: 250px;
+}
+
+.biztype {
+    color: #4169E1;
+    background-color: #F0F8FF;
+}
+
 .docbtn {
 	margin-left: 5px;
 	width: 250px;

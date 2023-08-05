@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>BlurTax</title>
+  <title>세무사header</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -175,12 +175,11 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="../main/mainTA" class="logo d-flex align-items-center">
+      <a  class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">BlurTax</span>
         <span class="additional">.</span>
       </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 	<nav id="navbar" class="navbar">
         <ul>
@@ -403,14 +402,14 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="../resources/assets/img/taprofile.png" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">박채원</span>
+            <img src="../resources/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>박채원</h6>
-              <span>채원 세무회계</span>
+              <h6>Kevin Anderson</h6>
+              <span>Web Designer</span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -419,7 +418,7 @@
             <li>
               <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-person"></i>
-                <span>개인정보</span>
+                <span>My Profile</span>
               </a>
             </li>
             <li>
@@ -429,7 +428,7 @@
             <li>
               <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-gear"></i>
-                <span>환경설정</span>
+                <span>Account Settings</span>
               </a>
             </li>
             <li>
@@ -439,7 +438,7 @@
             <li>
               <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
                 <i class="bi bi-question-circle"></i>
-                <span>도움말</span>
+                <span>Need Help?</span>
               </a>
             </li>
             <li>
@@ -449,7 +448,7 @@
             <li>
               <a class="dropdown-item d-flex align-items-center" href="#">
                 <i class="bi bi-box-arrow-right"></i>
-                <span>로그아웃</span>
+                <span>Sign Out</span>
               </a>
             </li>
 
