@@ -20,4 +20,5 @@ public interface ReceiptMapper {
 	public void cashslipConfirmed(CashSlipVO cashSlipVO);
 	public ReceiptRequestVO judgeReceipt(String recreqno);
 	public ReceiptRequestVO getReceiptRequestsWithConfirmation(String recreqno);
+	public String getUserno(String businesslicense);
 }

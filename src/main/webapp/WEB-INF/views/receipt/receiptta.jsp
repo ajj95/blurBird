@@ -647,6 +647,7 @@
 									$('.summary').text(data.purpose);
 									$('.recreqno').text(data.recreqno);
 									$('.confirmedNo').text(data.confirmed.confirmedno);
+									alert("증빙 정보를 입력해주세요!!");
 								}else if(data.confirmed==2){
 									console.log(data.contents);
 								}
@@ -717,7 +718,11 @@
 				            }
 				        });
 				    });
-					
+					$(document).off("click",'#businessList > div > a').on("click",'#businessList > div > a',function(){
+						companySelected = $(this);
+						companyLicense = $(this).find('small');
+						console.log(companyLicense.text());
+					})
 				</script>
 				<!-- End #main -->
 				<%@include file="../common/footer.jsp" %>

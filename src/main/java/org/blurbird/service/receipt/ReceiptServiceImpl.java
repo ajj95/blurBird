@@ -79,4 +79,10 @@ public class ReceiptServiceImpl implements ReceiptService {
 		return mapper.getReceiptRequestsWithConfirmation(recreqno);
 	}
 
+	@Override
+	public String getUserno(String businesslicense) {
+		log.info("getUserno...");
+		return mapper.getUserno(businesslicense);
+	}
+
 }

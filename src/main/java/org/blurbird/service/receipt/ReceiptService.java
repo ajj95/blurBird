@@ -22,4 +22,5 @@ public interface ReceiptService {
 	public void cashslipConfirmed(CashSlipVO cashSlip);
 	public ReceiptRequestVO judgeReceipt(String recreqno);
 	public ReceiptRequestVO getReceiptRequestsWithConfirmation(String recreqno);
+	public String getUserno(String businesslicense);
 }

@@ -76,9 +76,10 @@ public class testMappers {
 //			mapper.getReceiptRequestWithConfirmed("1");
 //		DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
 //		mapper.getReceiptList(dr);
-		ConfirmedVO cv = new ConfirmedVO();
-		cv.setRecreqno("1");
-		mapper.confirmedReceipt(cv);
+//		ConfirmedVO cv = new ConfirmedVO();
+//		cv.setRecreqno("1");
+//		mapper.confirmedReceipt(cv);
+			log.info(mapper.getUserno("213-86-35896"));
 	}
 
 }

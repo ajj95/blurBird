@@ -54,7 +54,8 @@ public class ServiceTests {
 //		cashSlip.setAmount(67898);
 //		cashSlip.setSummary("서비스 테스트");
 //		service.cashslipConfirmed(cashSlip);
-		service.getReceiptRequestsWithConfirmation("38");
+//		service.getReceiptRequestsWithConfirmation("38");
+		service.getUserno("213-86-35896");
 	}
 
 }
