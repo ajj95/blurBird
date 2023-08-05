@@ -66,13 +66,20 @@ public class testMappers {
 //			log.info("안됐어 이자식아");
 //			e.getStackTrace();
 //		}
-		CashSlipVO cashSlip = new CashSlipVO();
-		cashSlip.setConfirmedno("19");
-		cashSlip.setAccountno("103");
-		cashSlip.setAmount(12345);
-		cashSlip.setSummary("매퍼테스트");
-		mapper.cashslipConfirmed(cashSlip);
-		
+//		CashSlipVO cashSlip = new CashSlipVO();
+//		cashSlip.setConfirmedno("19");
+//		cashSlip.setAccountno("103");
+//		cashSlip.setAmount(12345);
+//		cashSlip.setSummary("매퍼테스트");
+//		mapper.cashslipConfirmed(cashSlip);
+
+//			mapper.getReceiptRequestWithConfirmed("1");
+//		DateRange dr = new DateRange(LocalDate.of(2023,07,01),LocalDate.now());
+//		mapper.getReceiptList(dr);
+//		ConfirmedVO cv = new ConfirmedVO();
+//		cv.setRecreqno("1");
+//		mapper.confirmedReceipt(cv);
+			log.info(mapper.getUserno("213-86-35896"));
 	}
 
 }
