@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.IncomeSVO;
-import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.InfoMainVO;
 import org.blurbird.domain.info.ReportPaymentVO;
 
 public interface InfoService {
 
-	public List<BusinessVO> getListBusiness();
+	public List<InfoMainVO> getListBusiness();
 	
-	public IncomeSVO getISByBiz(InfoData infoData);
+	public IncomeSVO getISByBiz(InfoMainVO infoMainVO);
 	
-	public List<InfoData> getList(InfoData infoData);
+	public List<InfoMainVO> getList(InfoMainVO infoMainVO);
 	
 	public void report(ReportPaymentVO reportPaymentVO);
 	

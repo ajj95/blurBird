@@ -5,13 +5,15 @@
 <mapper namespace="org.blurbird.mapper.InfoMapper">
 
 	<!-- 수임사 목록 -->
-	<select id="getListBusiness"
-		resultType="org.blurbird.domain.common.BusinessVO">
-		select * from business
+
+	<select id="getListBusiness"  parameterType="org.blurbird.domain.info.InfoMainVO"
+		resultType="org.blurbird.domain.info.InfoMainVO">
+		select * from business left join reportpayment on business.bizno=reportpayment.bizno order by business.bizno
+<!-- 		where reportpayment.year=#{year}   -->
 	</select>
 
 	<select id="getBizName"
-		resultType="org.blurbird.domain.info.InfoData">
+		resultType="org.blurbird.domain.info.InfoMainVO">
 		select bizname from business where bizno=#{bizno}
 	</select>
 
@@ -22,7 +24,7 @@
 	<!-- 손익계산서 항목 -->
 	<!-- 매출(총 수입금액) -->
 	<select id="getSalesfromAuto" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case when
 		accountNo in (401, 402) and sortno=4
@@ -35,7 +37,7 @@
 	</select>
 
 	<select id="getSalesfromBank" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case when
 		accountNo in (401, 402) and sortno=4
@@ -54,7 +56,7 @@
 
 	<!-- 매출원가(필요경비) -->
 	<select id="getCOGSfromAuto" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case when
 		accountNo in (451, 455) and sortno=3
@@ -67,7 +69,7 @@
 	</select>
 
 	<select id="getCOGSfromBank" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case when
 		accountNo in (451, 455) and sortno=3
@@ -85,7 +87,7 @@
 	</select>
 
 	<select id="getCOGSfromCash" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case when
 		accountNo in (451, 455) and sortno=3
@@ -108,7 +110,7 @@
 
 	<!-- 판관비 -->
 	<select id="getOperExpensefromAuto" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case
 		when accountNo in (501, 502, 503, 505,
@@ -123,7 +125,7 @@
 	</select>
 
 	<select id="getOperExpensefromBank" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case
 		when accountNo in (501, 502, 503, 505,
@@ -142,7 +144,7 @@
 	</select>
 
 	<select id="getOperExpensefromCash" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case
 		when accountNo in (501, 502, 503, 505,
@@ -167,7 +169,7 @@
 	<!-- 이하 법인세 관련 값 (확장 예정) -->
 	<!-- 영업외수익 -->
 	<select id="getNonOperIncomefromAuto" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case
 		when accountNo in (901, 902, 903, 906,
@@ -182,7 +184,7 @@
 	</select>
 
 	<select id="getNonOperIncomefromBank" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case
 		when accountNo in (901, 902, 903, 906,
@@ -201,7 +203,7 @@
 	</select>
 
 	<select id="getNonOperIncomefromCash" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum(case
 		when accountNo in (901, 902, 903, 906,
@@ -222,7 +224,7 @@
 
 	<!-- 영업외비용 -->
 	<select id="getNonOperExpensefromAuto" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum
 		(case when accountNo in (931, 933, 960) and
@@ -236,7 +238,7 @@
 	</select>
 
 	<select id="getNonOperExpensefromBank" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum
 		(case when accountNo in (931, 933, 960) and
@@ -255,7 +257,7 @@
 	</select>
 
 	<select id="getNonOperExpensefromCash" resultType="Long"
-		parameterType="org.blurbird.domain.info.InfoData">
+		parameterType="org.blurbird.domain.info.InfoMainVO">
 		select
 		sum
 		(case when accountNo in (931, 933, 960) and
@@ -293,7 +295,7 @@
 	<update id="transfer"
 		parameterType="org.blurbird.domain.info.ReportPaymentVO">
 		update reportpayment set transdate =
-		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
+		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')),
 		status = #{status} where
 		bizno=#{bizno}
 	</update>
