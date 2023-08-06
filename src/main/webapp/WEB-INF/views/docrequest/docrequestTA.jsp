@@ -19,6 +19,17 @@
 	// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
 	$(function() {
 		
+		// 사이드 바의 동적 생성되는 div 중
+		// 선택된 div의 거래처코드 값 가져오기
+		//- 이 부분은 import된 sidebar를 다뤄서 그런지 본문 스크립트에 작성해야한다.
+		$("#businessList").on("click", ".list-group-item", function(e){
+			e.preventDefault();
+			let bizno = $(this).find("input[name='biznoInSidebar']").val();
+			// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
+			$("#bizno").val(bizno);
+		});
+		
+		
 		$(".request").on("click", function() {
 			
 			var buttonValue = $(this).data("value");
@@ -41,7 +52,7 @@
 			        $("#membername").val(response.member.membername);
 			        $("#ssn").val(response.member.ssn);
 			        $("#bistel").val(response.business.bistel);
-			        $("#indusrty").val(response.business.indusrty);
+			        $("#industry").val(response.business.industry);
 			        $("#bizaddress").val(response.business.bizaddress);
 			        $("#doctype").val(response.doctype);
 			        $("#count").val(response.count);
@@ -58,6 +69,20 @@
 </script>
 
 <style>
+.allbtn {
+    margin-top: 10px;
+    margin-left: 5px;
+    width: 250px;
+}
+.search-biz input {
+    width: 250px;
+}
+
+.biztype {
+    color: #4169E1;
+    background-color: #F0F8FF;
+}
+
 .docbtn {
 	margin-left: 5px;
 	width: 250px;
@@ -103,53 +128,7 @@ table.total {
 
 <body>
 	<!-- ======= Sidebar ======= -->
-	<aside id="sidebar" class="sidebar">
-
-		<ul class="sidebar-nav" id="sidebar-nav">
-
-			<br>
-			<li class="nav-item"><a class="nav-link " href="#"> <i
-					class="bi bi-grid"></i> <span>전체민원서류</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>사업자등록신청서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>사업자등록증재교부신청서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>사업자등록정정신고서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>휴폐업신고서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>총괄납부승인/변경/포기신청</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>간이과세적용신청/포기신고서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>면세적용신청/포기신고서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>재무재표등 확인</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>원천징수이행상황신고서 확인</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>소득금액확인</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>납세증명서</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link collapsed" href="#">
-					<i class="bi bi-journal-text"></i> <span>사실증명</span>
-			</a></li>
-		</ul>
-
-	</aside>
+<%@include file="../common/searchbizsidebar.jsp"%>
 	<!-- End Sidebar-->
 
 	<main id="main" class="main">
@@ -319,7 +298,7 @@ table.total {
 										</div>
 										<label for="inputText" class="col-sm-2 col-form-label">업종</label>
 										<div class="col-sm-10 half">
-											<input type="text" class="form-control" id="indusrty"
+											<input type="text" class="form-control" id="industry"
 												readonly="readonly" >
 										</div>
 									</div>

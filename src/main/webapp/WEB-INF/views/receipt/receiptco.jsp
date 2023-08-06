@@ -218,6 +218,8 @@ th:first-child, td:first-child {
 						const ImgPath = "../resources/upload/" + uploadImg;
 						alert("uploaded!!");
 						$("#uploadedImage").attr("src", ImgPath);
+						 $("input[name='uploadFile']").val('');
+			                $('#purpose').val('');
 					},
 					error : function(xhr, status, error) {
 						// 에러 처리

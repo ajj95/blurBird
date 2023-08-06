@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>세무사header</title>
+  <title>수임사header</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -93,6 +95,12 @@
     visibility: visible;
     transform: scaleX(0.7);
   }
+  
+  .navbar .active,
+  .navbar .active:focus,
+  .navbar li:hover>a{
+  
+  }
 
   .navbar .dropdown a:hover:before,
   .navbar .dropdown:hover>a:before,
@@ -100,20 +108,15 @@
     visibility: hidden;
   }
 
-  /* 메뉴 상단, 하단 드롭다운 부분 */
-  .navbar .dropdown a:hover{
-    color: #4169E1;      
+  .navbar .dropdown a:hover,
+  .navbar .dropdown .active,
+  .navbar .dropdown .active:focus,
+  .navbar .dropdown:hover>a {
+    color: #4169E1;      /* 드롭다운 hover 시 색상 */
     font-weight: 600;
-  	transform: scale(1.1);
+    background: white;
+    transform: scale(1.1);
 	transition: transform 1s;
-  }
-  
-  .navbar .dropdown ul a:hover,
-  .navbar .dropdown ul .active,
-  .navbar .dropdown ul .active:hover,
-  .navbar .dropdown ul li:hover>a {
-    color: #4169E1;
-    background: #f6f9ff;
   }
 
   .navbar .dropdown ul {
@@ -145,6 +148,14 @@
     font-size: 12px;
   }
 
+  .navbar .dropdown ul a:hover,
+  .navbar .dropdown ul .active,
+  .navbar .dropdown ul .active:hover,
+  .navbar .dropdown ul li:hover>a {
+    color: #4169E1;
+    background: #f6f9ff;
+  }
+
   .navbar .dropdown:hover>ul {
     opacity: 1;
     visibility: visible;
@@ -164,84 +175,296 @@
   }
   
   .header .toggle-sidebar-btn {
-  padding-right: 150px;        /* 토글버튼과 메뉴 사이 */
+     padding-right: 100px;        /* 토글버튼과 메뉴 사이 */
   }
-
+  
+  .edge{
+	 color: #87CEEB !important;
+	 font-size: 18px !important;
+	 font-weight: bold;
+	 margin-top: 8px;
+	 margin-left: 5px;
+  }
   </style>
-</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	
+$(function(){
+		
+		// 로그인한 사용자의 메시지 요청
+		function fetchMessageList() {
+			// 로그인한 사용자의 userno
+			let receiver = '4';
+			
+	        $.ajax({
+	            type: "GET",
+	            url: "/bank/getMessageList",
+	            dataType: "json",
+	            data: { receiver: receiver },
+	            success: function(response) {
+	                let list = response.messageList;
+	                let count = response.unreadMessageCount; 
+	                createMessageList(list, count);
+	            },
+	            error: function(xhr, status, error) {
+	                console.error(error);
+	            }
+	        });
+	    }
 
+	    // 페이지 로드 시, 메시지 목록 가져오기
+	    fetchMessageList();
+		
+});
+
+	function formatNumberWithCommas(number) {
+			return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+	function createMessageList(list, count){
+			
+		let start = $('#makeMessage');
+	  	start.empty();
+		  	
+		let str = '';
+		str += '<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">';
+		str += '<a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">';
+		str += '<i class="bi bi-chat-left-text"></i>';
+		if(count==0){
+			str += '<span class="badge bg-success badge-number"></span>';
+		}else{
+			str += '<span class="badge bg-success badge-number">';
+			str += count;
+			str += '</span>';
+		}
+		str += '</a>'; // end messages icon
+		
+		str += '<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">';
+		str += '<li class="dropdown-header">';
+		str += count;
+		str += '개의 새로운 메시지가 있습니다.';
+		str += '<a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">모두 보기</span></a>';
+		str += '</li>';
+		str += '<li>';
+		str += '<hr class="dropdown-divider">';
+		str += '</li>';
+		
+		if(list && list.length >0){
+			for (let i = 0; i < list.length; i++) {
+				str += '<li class="message-item">';
+				str += '<a href="#">';
+				str += '<div>';
+				str += '<input type="hidden" class="messageno" value="';
+				str += list[i].messageno;
+				str += '">';
+				str += '<h4>';
+				str += list[i].sendername;
+				str += '</h4>';
+				str += '<p>';
+				str += list[i].message;
+				str += '</p>';
+				str += '<p>';
+				str += list[i].bhmdate.split(".")[0];   //소수점 이하 숫자 제거
+				str += '</p>';
+				str += '</div>';
+				str += '</a>';
+				str += '</li>';
+				str += '<li>';
+				str += '<hr class="dropdown-divider">';
+				str += '</li>';
+			}//end for
+			
+			str += '<li class="dropdown-footer">';
+			str += '<a href="#">모두 보기</a>';
+			str += '</li>';
+		}//end if
+
+		str += '</ul>';
+		
+		start.html(str);
+	}// 메시지 출력
+
+
+$(function(){
+	
+	// 메시지 부분 클릭시
+	$("#makeMessage").on("click", ".message-item", function(){
+		
+		// 클릭한 li의 messageno 가져오기
+		let messageno = $(this).find(".messageno").val();
+		
+		// 메시지 상태변경(확인) + 통장내역 가져와서 모달에 넣기
+		 $.ajax({
+	            type: "GET",
+	            url: "/bank/getBHfromMessageno",
+	            dataType: "json",
+	            data: { messageno: messageno },
+	            success: function(response) {
+	                let bh = response.bankhistory;
+	                
+	                // 모달 내용 채우기
+	                $('#msg_bhno').val(bh.bhno);
+	                $('#msg_bankname').val(bh.bankname);
+	                $('#msg_accountnumber').val(bh.accountnumber);
+	                $('#msg_bhdate').val(bh.bhdate);
+	                $('#msg_source').val(bh.source);
+	                $('#msg_amount').val(formatNumberWithCommas(bh.amount));
+	                
+	            },
+	            error: function(xhr, status, error) {
+	                console.error(error);
+	            }
+	     });
+		
+         // 모달 열기
+         $('#readMessage').modal('show');
+	});
+	
+	// 모달에서 메모 입력 후 저장시
+	$("#sendbhmemobtn").on("click", function(){
+		// hidden으로 되어있는 bhno 가져오기
+		let msg_bhno = $("#msg_bhno").val();
+		// 금액 가져오기
+		let msg_amount = $("#msg_amount").val();
+		// 입력한 메모 가져오기
+		let memo = $("#insert_bhmessage").val();
+		
+        let datas = {
+                bhno: msg_bhno,
+                amount: msg_amount,
+                memo: memo,
+       };
+		
+		// 통장내역번호, 메모로 해야하는 일들
+		$.ajax({
+	            type: "GET",
+	            url: "/bank/sendMemo",
+	            dataType: "json",
+	            data: datas,
+	            success: function(response) {
+	               alert(response);
+	            },
+	            error: function(xhr, status, error) {
+	                console.error(error);
+	            }
+	     });
+		
+		alert("메모가 저장되었습니다.");
+		
+		// 모달 닫기
+        $('#readMessage').modal('hide');
+		
+     	// 페이지 로드 시, 메시지 목록 다시 가져오기
+	    fetchMessageList();
+		
+	});//end click sendbhmemobtn
+	
+});
+
+	
+</script>
+</head>
+    <!-- 메시지 클릭 시 모달 -->
+    <div class="modal fade" id="readMessage" tabindex="-1">
+       <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title"><strong>메시지 확인</strong></h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           	<div class="modal-body">
+           		<div class="modaltable">
+           			<div class="tabletitle">통장내역</div>
+           			<input type="hidden" id="msg_bhno">
+            		<table>
+               		<tr>
+               			<td class="modalintitle">은행</td>
+               			<td><input type="text" id="msg_bankname" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">계좌</td>
+               			<td><input type="text" id="msg_accountnumber" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">일자</td>
+               			<td><input type="text" id="msg_bhdate" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">적요</td>
+               			<td><input type="text" id="msg_source" class="intable" readonly></td>
+               		</tr>
+               		<tr>
+               			<td class="modalintitle">금액</td>
+               			<td><input type="text" id="msg_amount" class="intable" readonly></td>
+               		</tr>
+               	</table>
+           		</div>
+              <div>
+              	<label class="labeltitle2">메모입력</label>
+              	<input type="text" id="insert_bhmessage" class="modaltext" placeholder="메모를 입력해주세요."/>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" id="sendbhmemobtn">확인</button>
+            </div>
+         </div>
+       </div>
+      </div><!-- End 모달-->
 <body>
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="../main/mainTA" class="logo d-flex align-items-center">
+      <a class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">BlurTax</span>
-        <span class="additional">.</span>
+        <span class="edge">edge</span>
       </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 	<nav id="navbar" class="navbar">
         <ul>
-          <li class="dropdown"><a href="#"><span>수임처관리</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+          <li class="dropdown"><a href="#"><span>매입/매출거래현황</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul class="dropnavs">
-              <li><a href="#">수임처 정보</a></li>
-              <li><a href="#">수임처별 업무체크리스트</a></li>
-              <li><a href="#">민원서류 및 증명서류</a></li>
-              <li><a href="#">재무자료전송관리</a></li>
-              <li><a href="#">부가세신고현황리포트</a></li>
-              <li><a href="#">인건비신고현황리포트</a></li>
+              <li><a href="#">통장입출금현황</a></li>
+              <li><a href="#">카드매출현황</a></li>
+              <li><a href="#">매출/매입현황</a></li>
+              <li><a href="#">경영현황</a></li>
             </ul>
           </li>
-          <li class="dropdown"><a href="#"><span>기장업무</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
+          <li class="dropdown"><a href="#"><span>증빙기장관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul class="dropnavs">
-              <li><a href="#">기장진도현황</a></li>
-              <li><a href="#">자동전표처리</a></li>
-              <li><a href="#">증빙전표입력</a></li>
               <li><a href="#">통장정리</a></li>
-              <li><a href="#">수임처 직원정보</a></li>
-              <li><a href="#">수임처 급여관리</a></li>
+              <li><a href="#">증빙/영수증관리</a></li>
+              <li><a href="#">전자세금계산서</a></li>
+              <li><a href="#">청구서조회</a></li>
             </ul>
           </li>
-		  <li class="dropdown"><a href="#"><span>신고업무</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
+		  <li class="dropdown"><a href="#"><span>세무서비스관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
           	<ul class="dropnavs">
-              <li><a href="#">종합소득세 신고관리</a></li>
-              <li><a href="#">신고현황표</a></li>
-              <li><a href="#">신고상황분석표</a></li>
-              <li><a href="#">인사정보변동관리</a></li>
-              <li><a href="#">4대보험 일괄신고</a></li>
-              <li><a href="#">신용카드 매출자료조회</a></li>
-              <li><a href="#">고지 및 체납내역 조회</a></li>
-              <li><a href="#">사업용계좌신고 현황조회</a></li>
+              <li><a href="#">신고/납부현황</a></li>
+              <li><a href="#">문서보관함</a></li>
+              <li><a href="#">민원서류</a></li>
+              <li><a href="#">세무대리공유폴더</a></li>
             </ul>
           </li>
-		  <li class="dropdown"><a href="#"><span>청구/수금</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
+		  <li class="dropdown"><a href="#"><span>법인통장관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
           	<ul class="dropnavs">
-              <li><a href="#">청구서관리</a></li>
-              <li><a href="#">수금/정산관리</a></li>
+              <li><a href="#">통장기본설정</a></li>
+              <li><a href="#">카드기본설정</a></li>
               <li><a href="#">출금동의관리</a></li>
-            </ul>
-          </li>
-		  <li class="dropdown"><a href="#"><span>업무관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
-          	 <ul class="dropnavs">
-              <li><a href="#">일일업무보고</a></li>
-              <li><a href="#">담당자별현황</a></li>
-              <li><a href="#">일일업무현황</a></li>
-              <li><a href="#">데이터내리기 히스토리</a></li>
-              <li><a href="#">수임기업 생성관리</a></li>
             </ul>
           </li>
 	      <li class="dropdown"><a href="#"><span>설정관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
           	<ul class="dropnavs">
-              <li><a href="#">공지사항</a></li>
-              <li><a href="#">권한관리</a></li>
-              <li><a href="#">수집정보등록</a></li>
+              <li><a href="#">개인정보설정</a></li>
+              <li><a href="#">회사관리</a></li>
               <li><a href="#">홈택스인증서관리</a></li>
               <li><a href="#">청구/수금설정</a></li>
             </ul>
-          </i>
-      </nav><!-- .navbar -->
+          </li>
+      </ul>
+   </nav><!-- .navbar -->
       
     <!-- Saerch Bar -->
     <div class="search-bar">
@@ -263,7 +486,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number"></span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
@@ -334,70 +557,8 @@
 
         </li><!-- End Notification Nav -->
 
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a><!-- End Messages Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul><!-- End Messages Dropdown Items -->
-
+		<!-- ajax 동적 생성 부분 -->
+        <li class="nav-item dropdown" id="makeMessage">
         </li><!-- End Messages Nav -->
 
         <li class="nav-item dropdown pe-3">

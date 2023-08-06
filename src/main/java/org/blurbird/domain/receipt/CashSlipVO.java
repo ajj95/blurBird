@@ -14,4 +14,5 @@ public class CashSlipVO {
 	private String sortno;
 	private int amount;
 	private String summary;
+	private String bcnc;
 }

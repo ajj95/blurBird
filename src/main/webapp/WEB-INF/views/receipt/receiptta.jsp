@@ -130,6 +130,9 @@
 					.selected {
   					  --bs-table-bg : #f0f0f0;
 					}
+					.textSlip{
+					text-align: center;
+					}
 				</style>
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -252,6 +255,8 @@
 																	data-bs-target="#collapseExample"
 																	aria-expanded="false"
 																	aria-controls="collapseExample" type="checkbox">
+																	<span hidden class="recreqno"></span>
+																	<span hidden class="confirmedNo" ></span>
 															</td>
 															<td><input type=" text" class="regdate form-control"></td>
 															<td><select class="typecheck form-select">
@@ -266,7 +271,7 @@
 															<td></td>
 															<td><button type="button" class="btn btn-outline-dark"
 																	data-bs-toggle="modal"
-																	data-bs-target="#exampleModal">
+																	data-bs-target="#memoModal">
 																	<i class="ri-article-fill"></i>
 																</button></td>
 														</tr>
@@ -292,7 +297,8 @@
 													</thead>
 													<tbody>
 														<tr>
-															<td><input class="form-check-input " type="checkbox"></td>
+															<td><input class="form-check-input " type="checkbox">
+															<span hidden class="b_recreqno"></span></td>
 															<td class ="b_bcnc"></td>
 															<td class="b_typecheck"></td>
 															<td colspan="2" class="b_summary"></td>
@@ -306,7 +312,7 @@
 												<div class="bottom collapse" id="collapseExample">
 													<button type="button" class="btn btn-outline-danger"
 														style="float: right;">부적합으로 변경</button>
-													<button type="button" class="btn btn-outline-success"
+													<button type="button" class="cashSlipConfirmed btn btn-outline-success"
 														style="float: right;">전표반영</button>
 												</div>
 											</div>
@@ -336,7 +342,7 @@
 															<td>이미 반영된 증빙입니다.</td>
 															<td><button type="button" class="btn btn-outline-dark"
 																	data-bs-toggle="modal"
-																	data-bs-target="#exampleModal">
+																	data-bs-target="#memoModal">
 																	<i class="ri-article-fill"></i>
 																</button></td>
 														</tr>
@@ -359,12 +365,12 @@
 						<!-- Button trigger modal -->
 
 						<!-- Modal -->
-						<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+						<div class="modal fade" id="memoModal" tabindex="-1" aria-labelledby="memoModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h1 class="modal-title fs-5" id="exampleModalLabel">메모</h1>
+										<h1 class="modal-title fs-5" id="memoModalLabel">메모</h1>
 										<button type="button" class="btn-close" data-bs-dismiss="modal"
 											aria-label="Close"></button>
 									</div>
@@ -384,12 +390,13 @@
 							</div>
 						</div>
 						<!-- modal end -->
-						<div class="modal fade" id="accountCode" tabindex="-1" aria-labelledby="exampleModalLabel"
+						<!-- Modal -->
+						<div class="modal fade" id="accountCode" tabindex="-1" aria-labelledby="accountModalLabel"
 							aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h1 class="modal-title fs-5" id="exampleModalLabel">계정과목
+										<h1 class="modal-title fs-5" id="accountModalLabel">계정과목
 											코드도움</h1>
 										<button type="button" class=" btn-close" data-bs-dismiss="modal"
 											aria-label="Close"></button>
@@ -421,7 +428,30 @@
 								</div>
 							</div>
 						</div>
-
+						<!--modal end  -->
+						<!-- Modal -->
+						<div class="modal fade" id="registerCashSlip" tabindex="-1" aria-labelledby="registerCashSlipModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="accountModalLabel">전표 승인</h1>
+										<button type="button" class=" btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										<h1 class="textSlip">전표를 승인하시겠습니까?</h1>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="confirmedBtn btn btn-primary" value="1"
+											data-bs-dismiss="modal">확인</button>
+										<button type="button" class="unconfirmedBtn btn btn-secondary" value="2"
+											data-bs-dismiss="modal">닫기</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--modal end  -->
 					</section>
 					<!-- End section dashboard -->
 				</main>
@@ -446,14 +476,17 @@
 					          let tbody = $('#searchResults');
 					          tbody.empty(); // 이전 결과를 지우기 위해 tbody 내용을 비웁니다.
 					          $.each(response,function(index,item){
+					        	  const check = item.confirmed.confirmedno;
+					        	  if(check == null){
 						            let row = $('<tr>');
 						            row.append('<td><input class="selectRadiobtn form-check-input" type="radio" name="flexRadioDefault"><span hidden class="recreqno">'+item.recreqno+'</span></td>');
 						            row.append('<td>'+item.purpose+'</td>');
 						            row.append('<td><select class="judge form-select"><option selected>미증빙</option><option value="1">적합</option><option value="2">부적합</option>	</select></td>');
 						            row.append('<td><input type="text" class="contents form-control"/></td>');
-						            row.append('<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"	data-bs-target="#exampleModal">	<i class="ri-article-fill"></i></button>	</td>');
+						            row.append('<td><button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"	data-bs-target="#memoModal">	<i class="ri-article-fill"></i></button>	</td>');
 						            // 필요한 만큼 필드를 추가하여 데이터를 출력합니다.
 						            tbody.append(row); // 행을 테이블에 추가합니다.
+					        	  }
 					          });
 					        },
 					        error: function(xhr, status, error) {
@@ -594,6 +627,7 @@
 					
 					$(document).on('change','.judge',function(){
 						let judge = $(this).val();
+						let row = $(this).parent().parent();
 						let recreqno = $(this).closest('tr').find('td:nth-child(1) > span').text();
 						let contents = $(this).closest('tr').find('td:nth-child(4) > input').val();
 						console.log(judge);//적합 부적합 판정
@@ -608,9 +642,12 @@
 							dataType:"json",
 							success: function (data) {
 								console.log(data);
-								if(data.confirmed==1){
+								if(data.confirmedTypeno==1){
 									console.log(data.purpose);
 									$('.summary').text(data.purpose);
+									$('.recreqno').text(data.recreqno);
+									$('.confirmedNo').text(data.confirmed.confirmedno);
+									alert("증빙 정보를 입력해주세요!!");
 								}else if(data.confirmed==2){
 									console.log(data.contents);
 								}
@@ -620,6 +657,7 @@
 								console.log("Error:", error);
 							},
 						})
+							row.remove();
 					})
 					$('.amount').on("blur",function(){
 						const location =  $(this); // 이 위치
@@ -627,6 +665,7 @@
 						const summary = $(this).closest('tr').find('td.summary').text(); //적요
 						const bcnc = $(this).closest('tr').find('td:nth-child(5) > input').val();//거래처
 						const typecheck = $(this).closest('tr').find('td:nth-child(3) > select').val();//구분
+						const recreqno = $(this).closest('tr').find('td:nth-child(1) > span').text(); //승인 문서 번호
 						console.log("amount : "+amount);
 						console.log("summary : "+summary);
 						console.log("bcnc : "+bcnc);
@@ -635,10 +674,55 @@
 						$('.b_bcnc').text(bcnc);
 						$('.b_typecheck').text(typecheck);
 						$('.b_summary').text(summary);
+						$('.b_recreqno').text(recreqno);
 						$('.amount').text(amount);
+						
 					});
-					
-					
+				    // cashSlipConfirmed 버튼 클릭 시 처리
+				    $('.cashSlipConfirmed').on("click", function () {
+				        $('#registerCashSlip').modal("show");
+				    });
+
+				    // confirmedBtn 버튼 클릭 시 처리
+				    $('.confirmedBtn').on("click", function () {
+				        let confirmedno = $('.confirmedNo').text();
+				        let accountno = $('.b_accountCodeNo').text();
+				        let amount = $('.amount').val();
+				        let summary = $('.summary').text();
+				        let bcnc = $('.bcnc').val();
+				        console.log("confirmedno : " + confirmedno);
+				        console.log("accountno : " + accountno);
+				        console.log("amount : " + amount);
+				        console.log("summary : " + summary);
+				        console.log("bcnc : " + bcnc);
+				        
+				        alert("승인이 완료되었습니다!");
+				        $.ajax({
+				            url: "/receipt/cashslipConfirmed",
+				            type: "POST",
+				            contentType: "application/json",
+				            data: JSON.stringify({
+				                "confirmedno": confirmedno,
+				                "accountno": accountno,
+				                "amount": amount,
+				                "summary": summary,
+				                "bcnc": bcnc
+				            }),
+				            dataType: "json",
+				            success: function (data) {
+				                // 성공적으로 처리한 후의 동작
+				                
+				            },
+				            error: function (xhr, status, error) {
+				                // 에러 처리
+				            }
+				        });
+				    });
+					$(document).off("click",'#businessList > div > a').on("click",'#businessList > div > a',function(){
+						companySelected = $(this);
+						companyLicense = $(this).find('small');
+						console.log(companyLicense.text());
+					})
 				</script>
 				<!-- End #main -->
 				<%@include file="../common/footer.jsp" %>

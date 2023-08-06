@@ -5,6 +5,7 @@
 <mapper namespace="org.blurbird.mapper.InfoMapper">
 
 	<!-- 수임사 목록 -->
+
 	<select id="getListBusiness"  parameterType="org.blurbird.domain.info.InfoMainVO"
 		resultType="org.blurbird.domain.info.InfoMainVO">
 		select * from business left join reportpayment on business.bizno=reportpayment.bizno order by business.bizno
