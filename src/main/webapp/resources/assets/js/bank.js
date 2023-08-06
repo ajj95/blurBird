@@ -1,13 +1,8 @@
 
 // 조회버튼 클릭시 통장내역 조회
 $(function(){
-	
-		var csrfHeaderName = "${_crsf.headerName}";
-		var csrfTokenValue = "${_crsf.token}";
-		
 		// 화면 처음 로딩 하자마자 기업 리스트 출력
-		
-	
+
 		// 툴팁설정
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -609,7 +604,7 @@ $(function(){
 				}
 			});
 	 	 });
-	
+
 });// end windowload function
 
 
@@ -620,9 +615,6 @@ $(function(){
             type: "POST",
             contentType: "application/json;charset=UTF-8",
             url: "/bank/getHistoryAndSlip",
-            beforeSend: function(xhr){
-            	xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-            },
             data: JSON.stringify(search),
             dataType: "json",
             success: function(response) {
@@ -969,7 +961,7 @@ $(function(){
 	str += '<div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="home-tab">';
 	
 	// 전체 탭
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableAll" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1002,9 +994,26 @@ $(function(){
 			 	str += '<td>';
 			 	str += slipList[i].accountname;
 			 	str += '</td>';
-			 	str += '<td>';
-			 	str += slipList[i].bhstatename;
-			 	str += '</td>';
+			 	
+			 	if(slipList[i].bhstatename == '확정가능'){
+			 	 	str += '<td style="color: #198754;">';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}else if(slipList[i].bhstatename == '확정'){
+			 		str += '<td style="color: #4169E1;">';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}else if(slipList[i].bhstatename == '제외'){
+			 		str += '<td style="color: #ffab00;">';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}else{
+			 		str += '<td>';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}
+			 	
+			 	
 			 	str += '<td>';
 			 	str += formatNumberWithCommas(slipList[i].sum);
 			 	str += '</td></tr>';
@@ -1018,12 +1027,17 @@ $(function(){
 	str += '<td class="total" colspan="4">잔액: ';
 	if(total.totalsum!=null){
 		str += formatNumberWithCommas(total.totalsum);
+	}else{
+		str += '';
 	}
 	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
 	if(total.diffsum!=null){
 		str += formatNumberWithCommas(total.diffsum);
+		str += '</span></td>';
+	}else{
+		str += '</span></td>';
 	}
-	str += '</span></td>';
+	
 	str += '</tr>';
 	str +='</tbody></table>';
 	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
@@ -1031,7 +1045,7 @@ $(function(){
 	
 	// 확정가능 탭
 	str += '<div class="tab-pane fade" id="pills-can" role="tabpanel" aria-labelledby="profile-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableCan" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1096,7 +1110,7 @@ $(function(){
 	
 	// 확정
 	str += '<div class="tab-pane fade" id="pills-certain" role="tabpanel" aria-labelledby="contact-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableCertain" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1159,7 +1173,7 @@ $(function(){
 	
 	// 제외
 	str += '<div class="tab-pane fade" id="pills-except" role="tabpanel" aria-labelledby="contact-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableExcept" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1222,7 +1236,7 @@ $(function(){
 	
 	// 삭제
 	str += '<div class="tab-pane fade" id="pills-remove" role="tabpanel" aria-labelledby="contact-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableCancel" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';

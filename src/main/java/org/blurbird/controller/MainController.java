@@ -26,5 +26,12 @@ public class MainController {
 		log.info("mainTA");
 	}
 	
+	@GetMapping("/beforeloginmainco")
+	public void beforeloginmainco() {
+	}
+	
+	@GetMapping("/beforeloginmainta")
+	public void beforeloginmainta() {
+	}
 	
 }
