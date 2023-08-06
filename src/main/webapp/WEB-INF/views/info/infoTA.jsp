@@ -57,7 +57,7 @@ th, td {
 
 th:first-child, td:first-child {
 	/* 첫 번째 열 넓이 */
-	width: 350px;
+	width: 250px;
 }
 
 th:first-child(2), td:first-child(2) {
@@ -112,38 +112,58 @@ th:first-child(2), td:first-child(2) {
 }
 </style>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-
-						$("#businessList").on(
-								"click",
-								".list-group-item",
-								function(e) {
+	$(document).ready(
+			
+					function() {$("#businessList").on("click",".list-group-item",function(e) {
 									e.preventDefault();
-									let bizno = $(this).find(
-											"input[name='biznoInSidebar']")
-											.val();
+									let bizno = $(this).find("input[name='biznoInSidebar']").val();
 									// body의 검색 조건의 bizno 부분에 값을 넣어 조회하도록 만들기
 									$("#bizno").val(bizno);
 								});
-
-						$("#submitYear").on(
-								"click",
-								function(e) {
+					
+// 					var submitbtn ="#submitYear" 
+						
+// 					$(".selectYear").off("click", submitbtn);
+					
+					
+						$("#submitYear").on("click",function(e) {
+							
 									e.preventDefault(); // 폼 제출 방지
+									
+// 									var pct = ".percentage";
+// 									var graph = ".graph";
+									
+// 									console.log("what is pct: " + $('pct').val);
+									
+									
 
 									var year = $("input[name='year']").val(); // 선택된 년도 값을 가져옴
-									var biznoList = $("input[name='bizno']")
-											.map(function() {
+									
+									var biznoList = $("input[name='bizno']").map(function() {
 												return $(this).val();
-											}).get(); // bizno 값을 배열로 가져옴
-									//             console.log(biznoList);
-									$('#maketd').empty();
-									processBizno(biznoList, 0, year);
-								});
-
+											}).get(); // name이 bizno인 input요소의 값들을 배열로 가져옴 -> 여기서 버튼을 한번 눌렀던 행의 bizno를 못가져온다.
+											
+// 											console.log("this is " + this);
+// 											console.log("첫번째: " + $("input[name='bizno']").map(function() {
+// 												return $(this).val();
+// 											}).get()); 
+// 											console.log("두번째: " + $(this).val());
+// 									            console.log(biznoList);
+									
+									
+											$('#maketd').empty();
+											
+									processBizno(biznoList, 0 , year); // biznoList의 인덱스 0번부터 1씩 더해가면서 가져온다. -> 값이 잘 들어왔으면 잘 출력돼야 한다.
+									
+								}); // $("#submitYear").on("click",function(e) 종료
+										
+								
+								
+								
 						function processBizno(biznoList, index, year) {
+							console.log(biznoList);
+							console.log(index);
+							
 							if (index >= biznoList.length) {
 								// 처리가 끝났을 때
 								console.log("Processing completed.");
@@ -167,169 +187,172 @@ th:first-child(2), td:first-child(2) {
 											// 다음 bizno 처리를 위해 재귀 호출
 
 											var arr = data;
+											console.log(data); // 데이터가 잘 나오는데, 이 데이터를 받았을 때 이미 biznoList에 데이터가 저장된 bizno는 빠졍ㅅ다.
+											console.log("aaa");
+
+// 											data.forEach(function(item, index){
+// 												console.log("인덱스: " + index);
+// 												console.log("항목: " + item);
+// 											});
 											
-// 											$("#maketd").on("click", "input[class^='rptfbtn']", function(e) {
-// 											    e.preventDefault();
-// 											    var year = $("input[name='year']").val();
-// 											    var bizno = $(this).siblings("input[name='bizno']").val(); // 해당 버튼의 형제 요소인 input에서 bizno 값을 가져옵니다.
-// 											    $.ajax({
-// 											      type: "post",
-// 											      url: "/info/infoTA/report",
-// 											      contentType: "application/json; charset=utf-8",
-// 											      data: {
-// 											        "bizno": bizno,
-// 											        "year": year
-// 											      },
-// 											      dataType: 'json',
-// 											      success: function(data) {
-// 											        console.log(bizno);
-// 											        console.log(data);
-// 											        // 받은 데이터를 처리하거나 페이지를 업데이트하면 됩니다.
-// 											      },
-// 											      error: function(xhr, status, error) {
-// 											        console.error("에러여유");
-// 											      }
-// 											    });
-// 											  });
-
-
-											$('#maketd')
-													.each(
-															function(index) {
+											
+											
+											$('#maketd').each(function(index, item) {
 																let html = '<tr>';
-																html += '<td>'
-																		+ arr[index].bizname
-																		+ '<input type="hidden" name="bizno" value="' + arr[index].bizno + '"></td>';
-																html += '<td>'
-																		+ arr[index].year
-																		+ '</td>';
-																html += '<td>'
-																		+ arr[index].bizincome
-																		+ '</td>';
-																html += '<td>'
-																		+ arr[index].tax
-																		+ '</td>';
-																		
-																html += '<td>'
-																		+ arr[index].tax
-																		+ '</td>';
-																html += '<td>'
-																		+ arr[index].tax
-																		+ '</td>';
-																html += '<td>'
-																		+ arr[index].tax
-																		+ '</td>';
-																html += '<td>'
-																		+ arr[index].tax
-																		+ '</td>';
-																html += '<td >'
-																		+ '<input type="button" class="rptfbtn" value="신고서작성"/>'
-																		+ '</td>';
+																html += '<td>'+ arr[index].bizname+ '<input type="hidden" name="bizno" value="' + arr[index].bizno + '"></td>';
+																html += '<td>'+ arr[index].year+ '</td>';
+																 if (arr[index].bizincome) {
+																        html += '<td>'+ arr[index].bizincome+ '</td>';
+																    } else {
+																        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
+																    }
+// 																html += '<td>'+ arr[index].bizincome+ '</td>';
+															    if (arr[index].tax) {
+															        html += '<td>'+ arr[index].tax+ '</td>';
+															    } else {
+															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
+															    }
+
+// 																html += '<td>'+ arr[index].tax+ '</td>';
+
+																  // 값이 있는 경우 해당 값을 셀에 추가
+															    if (arr[index].reportdate) {
+															        html += '<td>'+ arr[index].reportdate+ '</td>';
+															    } else {
+															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
+															    }
+
+															    if (arr[index].reportdoc) {
+															        html += '<td>'+ arr[index].reportdoc+ '</td>';
+															    } else {
+															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
+															    }
+
+															    if (arr[index].paymentslip) {
+															        html += '<td>'+ arr[index].paymentslip+ '</td>';
+															    } else {
+															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
+															    }
+
+															    if (arr[index].transdate) {
+															        html += '<td>'+ arr[index].transdate+ '</td>';
+															    } else {
+															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
+															    }
+																html += '<td >'+ '<input type="button" class="rptfbtn" value="신고서작성"/>'+ '</td>';
 																html += '</tr>';
-																$(this).append(
-																		html);
+																$(this).append(html);
+																
 															});
 
-
-											processBizno(biznoList, index + 1,
-													year);
-										},
-										error : function(xhr, status, error) {
-											console.error(error);
-											// 다음 bizno 처리를 위해 재귀 호출
-											processBizno(biznoList, index + 1,
-													year);
+											processBizno(biznoList, index + 1,year);
 										}
 									});
 
+							var rptfbtnSelector = ".rptfbtn";
+							$("#maketd").off("click", rptfbtnSelector);
+							$("#maketd").on("click",rptfbtnSelector,function(e) {
+								
+					
+
+												// 								  console.log($(this).closest('tr').find("td:first-child").text().trim());
+												// 								  console.log($(this).closest('tr').find("td").eq(2).text().trim());
+
+// 												console.log("this는 이것입니다: " + $(this).closest('tr').find("input[name='bizno']").val());
+										
+												
+												var biznumber = $(this).closest('tr').find("input[name='bizno']").val();
+												var bizname = $(this).closest('tr').find("td:first-child").text().trim();
+												var year = $("input[name='year']").val();
+												var bizincome = $(this).closest('tr').find("td").eq(2).text().trim();
+												var tax = $(this).closest('tr').find("td").eq(3).text().trim();
+												var reportdate = $(this).closest('tr').find("td").eq(4).text().trim();
+												var reportdoc = $(this).closest('tr').find("td").eq(5).text().trim();
+												var paymentslip = $(this).closest('tr').find("td").eq(6).text().trim();
+												var transdate = $(this).closest('tr').find("td").eq(7).text().trim();
+												var status = $(this).val();
+
+												
+													var loc = $(this).parent().closest('tr').find("td")
+												
+												$.ajax({
+															type : "post",
+															url : "/info/infoTA/report",
+															data : {
+																"bizno" : biznumber,
+																"bizname" : bizname,
+																"year" : year,
+																"bizincome" : bizincome,
+																"tax" : tax,
+																"reportdate": reportdate,
+																"reportdoc": reportdoc,
+																"paymentslip": paymentslip,
+																"transdate" : transdate,
+																"status":status
+															},
+															dataType : 'json',
+															success : function(data) {
+																
+																
+// 																console.log(data);
+// 																console.log($('.rptfbtn')	.closest('tr');
+// 																console.log($('.rptfbtn')	.closest('tr').find("td").eq(0));
+// 																console.log($('.rptfbtn').closest('tr').find("td").eq(0).text());
+// 																console.log($('.rptfbtn').closest('tr').find("td").eq(0).text().val);
+
+
+																loc.eq(0).text(data.bizname);
+																loc.eq(1).text(data.year);
+																loc.eq(2).text(data.bizincome);
+																loc.eq(3).text(data.tax);
+
+																var date = new Date(data.reportdate);
+																var formattedDate = date.toLocaleDateString('ko-KR');
+																loc.eq(4).text(formattedDate);
+																loc.eq(5).text(data.reportdoc);
+																loc.eq(6).text(data.paymentslip);
+																loc.eq(8).html('<input type="button" class="transferbtn" value="'+data.status+'"/>');
+
+
+										var trbtn = ".transferbtn";
+					$("#maketd").off("click", trbtn);
+					$("#maketd").on("click",trbtn,function(e) {
+						var loc = $(this).parent().closest('tr').find("td")
+						console.log(loc);
+					$.ajax({
+				type : "post",
+				url : "/info/infoTA/transfer",
+				data : {
+					"bizno" : biznumber,
+				},
+				dataType : 'json',
+				success : function(data) {
+					
+					
+// 					console.log(data);
+					
+					var date = new Date(data.reportdate);
+					var formattedDate = date.toLocaleDateString('ko-KR');
+					loc.eq(7).text(formattedDate);
+					loc.eq(8).html('<input type="button" disabled value="'+data.status+'"/>');
+				},
+				error : function(xhr,status,error) {
+					console.error(error);
+				}
+
+			}); // trbtn 클릭 ajax
+					
+				}); // trbtn 클릭
+																
+																
+															} // success 끝
+						})// ajax 끝
+
+					}); // $("#maketd").on("click",rptfbtnSelector,function(e) 끝
 							
-							  var rptfbtnSelector = ".rptfbtn";
-							  $("#maketd").off("click", rptfbtnSelector);
-							  $("#maketd").on("click", rptfbtnSelector, function(e) {
-								  
-								  console.log($(this).closest('tr').find("td:first-child").text().trim());
-								  console.log($(this).closest('tr').find("td").eq(2).text().trim());
-								  
-								  	var biznumber = $(this).closest('tr').find("input[name='bizno']").val();
-								  	var bizname = $(this).closest('tr').find("td:first-child").text().trim();
-							  		var year = $("input[name='year']").val();
-							  		 var bizincome = $(this).closest('tr').find("td").eq(2).text().trim();
-								    var tax = $(this).closest('tr').find("td").eq(3).text().trim();
-								    
-								    $.ajax({
-								      type: "post",
-								      url: "/info/infoTA/report",
-								      data: {
-									        "bizno": biznumber,
-									        "bizname" : bizname,
-									        "year": year,
-									        "bizincome": bizincome,
-									        "tax": tax
-									      },
-								      dataType: 'json',
-								      success: function(data) {
-								        console.log(data);
-								        
-										  $("#maketd").off("click", rptfbtnSelector);
-										  $("#maketd").on("click", rptfbtnSelector, function(e) {
-											  
-											  $(this).val() = "납부서전송";
-											  var transdate = $(this).closest('tr').find("td").eq(7).text.trim();
-											  
-										  }
-								        
-								      },
-								      error: function(xhr, status, error) {
-								        console.error(error);
-								      }
-								      
-								      
-								    });
-								   
-								  });
-							  
-							
-
-// 							$('.rptfbtn')
-// 									.on(
-// 											"click",
-// 											function(e) {
-// 												var year = $(
-// 														"input[name='year']")
-// 														.val();
-// 												var bizno = $(
-// 														"input[name='bizno']")
-// 														.val();
-
-// 												$
-// 														.ajax({
-// 															type : "post",
-// 															url : "/info/infoTA/report",
-// 															contentType : "application/json; charset=utf-8",
-// 															data : {
-// 																"bizno" : bizno,
-// 																"year" : year
-// 															},
-
-// 															dataType : 'json',
-// 															success : function(
-// 																	data) {
-
-// 																console
-// 																		.log('data');
-// 															},
-// 															error : function(
-// 																	xhr,
-// 																	status,
-// 																	error) {
-// 																console
-// 																		.error("에러여유");
-// 															}
-// 														});
-// 											});
-						}
-
-					});
+					
+						} // function processBizno(biznoList, index, year)  종료(연도 선택 후 조회버튼 눌렀을 때 실행되는 함수)
+					})
 </script>
 
 
@@ -433,7 +456,7 @@ th:first-child(2), td:first-child(2) {
 
 					<div>
 						신고리스트
-						<button type="button" class="printButton">인쇄</button>
+						<button type="button" id="print" class="printButton"  onclick="window.print()">인쇄</button>
 					</div>
 
 					<div class="tab-content pt-2" id="borderedTabContent">
@@ -451,7 +474,7 @@ th:first-child(2), td:first-child(2) {
 										<th scope="col" class="tabletop">접수증</th>
 										<th scope="col" class="tabletop">납부서</th>
 										<th scope="col" class="tabletop">전송일자</th>
-										<th scope="col" class="tabletop"></th>
+										<th scope="col" class="tabletop">신고현황</th>
 									</tr>
 								</thead>
 
@@ -461,6 +484,15 @@ th:first-child(2), td:first-child(2) {
 											<td><c:out value="${business.bizname}" /> <input
 												type="hidden" name="bizno"
 												value="<c:out value='${business.bizno}' />"></td>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 										</tr>
 									</c:forEach>
 								</tbody>

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.IncomeSVO;
-import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.InfoMainVO;
 import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.mapper.InfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,72 +24,72 @@ public class InfoServiceImpl implements InfoService {
 	private InfoMapper mapper;
 
 	@Override
-	public List<BusinessVO> getListBusiness() {
+	public List<InfoMainVO> getListBusiness() {
 		log.info("�닔�엫�궗 紐⑸줉 媛��졇�삤湲�");
 		return mapper.getListBusiness();
 	}
 
 	@Override
-	public IncomeSVO getISByBiz(InfoData infoData) {
+	public IncomeSVO getISByBiz(InfoMainVO infoMainVO) {
 
 		IncomeSVO iS = new IncomeSVO();
 
-		iS.setBizno(infoData.getBizno());
+		iS.setBizno(infoMainVO.getBizno());
 
-		if (mapper.getSalesfromAuto(infoData) == null) {
+		if (mapper.getSalesfromAuto(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setSalesfromautoslip(0L);
 		} else {
-			iS.setSalesfromautoslip(mapper.getSalesfromAuto(infoData));
+			iS.setSalesfromautoslip(mapper.getSalesfromAuto(infoMainVO));
 		}
 
-		if (mapper.getSalesfromBank(infoData) == null) {
+		if (mapper.getSalesfromBank(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setSalesfrombankslip(0L);
 		} else {
-			iS.setSalesfrombankslip(mapper.getSalesfromBank(infoData));
+			iS.setSalesfrombankslip(mapper.getSalesfromBank(infoMainVO));
 		}
 
 		iS.setTotalsales(iS.getSalesfromautoslip() + iS.getSalesfrombankslip());
 
-		if (mapper.getCOGSfromAuto(infoData) == null) {
+		if (mapper.getCOGSfromAuto(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setCogsfromautoslip(0L);
 		} else {
-			iS.setCogsfromautoslip(mapper.getCOGSfromAuto(infoData));
+			iS.setCogsfromautoslip(mapper.getCOGSfromAuto(infoMainVO));
 		}
-		if (mapper.getCOGSfromBank(infoData) == null) {
+		if (mapper.getCOGSfromBank(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setCogsfrombankslip(0L);
 		} else {
-			iS.setCogsfrombankslip(mapper.getCOGSfromBank(infoData));
+			iS.setCogsfrombankslip(mapper.getCOGSfromBank(infoMainVO));
 		}
-		if (mapper.getCOGSfromCash(infoData) == null) {
+		if (mapper.getCOGSfromCash(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setCogsfromcashslip(0L);
 		} else {
-			iS.setCogsfromcashslip(mapper.getCOGSfromCash(infoData));
+			iS.setCogsfromcashslip(mapper.getCOGSfromCash(infoMainVO));
 		}
 
 		iS.setTotalcogs(iS.getCogsfromautoslip() + iS.getCogsfrombankslip() + iS.getCogsfromcashslip());
 
-		if (mapper.getOperExpensefromAuto(infoData) == null) {
+		if (mapper.getOperExpensefromAuto(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setOperExpensefromAutoSlip(0L);
 		} else {
-			iS.setOperExpensefromAutoSlip(mapper.getOperExpensefromAuto(infoData));
+			iS.setOperExpensefromAutoSlip(mapper.getOperExpensefromAuto(infoMainVO));
 		}
-		if (mapper.getOperExpensefromBank(infoData) == null) {
+		if (mapper.getOperExpensefromBank(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setOperExpensefromBankSlip(0L);
 		} else {
-			iS.setOperExpensefromBankSlip(mapper.getOperExpensefromBank(infoData));
+			iS.setOperExpensefromBankSlip(mapper.getOperExpensefromBank(infoMainVO));
 		}
-		if (mapper.getOperExpensefromCash(infoData) == null) {
+		if (mapper.getOperExpensefromCash(infoMainVO) == null) {
 			// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 			iS.setOperExpensefromCashSlip(0L);
 		} else {
-			iS.setOperExpensefromCashSlip(mapper.getOperExpensefromCash(infoData));
+			iS.setOperExpensefromCashSlip(mapper.getOperExpensefromCash(infoMainVO));
 		}
 
 		iS.setTotaloe(
@@ -125,17 +125,25 @@ public class InfoServiceImpl implements InfoService {
 	}
 
 	@Override
-	public List<InfoData> getList(InfoData infoData) {
-		IncomeSVO iS = this.getISByBiz(infoData);
-		List<InfoData> infoList = new ArrayList<InfoData>();
+	public List<InfoMainVO> getList(InfoMainVO infoMainVO) {
+		IncomeSVO iS = this.getISByBiz(infoMainVO);
+		List<InfoMainVO> infoList = mapper.getListBusiness();
+//		List<InfoMainVO> infoList = new ArrayList<InfoMainVO>();
+			
 
-		infoData.setBizno(iS.getBizno());
-		infoData.setYear(infoData.getYear());
-		infoData.setBizname(mapper.getBizName(infoData).getBizname());
-		infoData.setBizincome(Long.toString(iS.getBusinessIncome()));
-		infoData.setTax(Long.toString(iS.getTax()));
-
-		infoList.add(infoData);
+//		infoMainVO.setBizno(infoMainVO.getBizno());
+//		infoMainVO.setYear(infoMainVO.getYear());
+//		infoMainVO.setBizname(mapper.getBizName(infoMainVO).getBizname());
+//		infoMainVO.setBizincome(Long.toString(iS.getBusinessIncome()));
+//		infoMainVO.setTax(Long.toString(iS.getTax()));
+//		//TODO: mapper를 통해서 DB값 받아올것
+//		infoMainVO.setReportdate(infoMainVO.getReportdate());
+//		infoMainVO.setReportdoc(infoMainVO.getReportdoc());
+//		infoMainVO.setPaymentslip(infoMainVO.getPaymentslip());
+//		infoMainVO.setTransdate(infoMainVO.getTransdate());
+//		infoMainVO.setStatus(infoMainVO.getStatus());
+		
+//		infoList.add(infoMainVO);
 
 		return infoList;
 	}
