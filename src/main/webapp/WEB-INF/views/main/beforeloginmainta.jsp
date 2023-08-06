@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="../resources/assets/css/animated.css">
     <link rel="stylesheet" href="../resources/assets/css/owl.css">
 	<link rel="stylesheet" href="../resources/assets/css/style.css">
+	
   </head>
   
   <style type="text/css">
@@ -75,7 +76,7 @@
               <li class="scroll-to-section"><a href="#about">수임고객</a></li>
               <li class="scroll-to-section"><a href="#pricing">서비스소개</a></li>
               <li class="scroll-to-section"><a href="#newsletter">요금안내</a></li>
-              <li><div class="gradient-button"><a id="modal_trigger" href="#modal"><i class="fa fa-sign-in-alt"></i> 로그인</a></div></li> 
+              <li><div class="gradient-button"><a id="modal_trigger" href="/main/talogin"><i class="fa fa-sign-in-alt"></i> 로그인</a></div></li> 
             </ul>        
             <a class='menu-trigger'>
                 <span>Menu</span>
@@ -182,125 +183,73 @@
     </div>
   </div>
 
-  <div id="about" class="about-us section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 align-self-center">
-          <div class="section-heading">
-            <h4>About <em>What We Do</em> &amp; Who We Are</h4>
-            <img src="../resources/assets/img/heading-line-dec.png" alt="">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor incididunt ut labore et dolore magna.</p>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Maintance Problems</a></h4>
-                <p>Lorem Ipsum Text</p>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">24/7 Support &amp; Help</a></h4>
-                <p>Lorem Ipsum Text</p>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Fixing Issues About</a></h4>
-                <p>Lorem Ipsum Text</p>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="box-item">
-                <h4><a href="#">Co. Development</a></h4>
-                <p>Lorem Ipsum Text</p>
-              </div>
-            </div>
-            <div class="col-lg-12">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor idunte ut labore et dolore adipiscing  magna.</p>
-              <div class="gradient-button">
-                <a href="#">Start 14-Day Free Trial</a>
-              </div>
-              <span>*No Credit Card Required</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="right-image">
-            <img src="../resources/assets/img/about-right-dec.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div id="pricing" class="pricing-tables">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 offset-lg-2">
           <div class="section-heading">
-            <h4>We Have The Best Pre-Order <em>Prices</em> You Can Get</h4>
+            <h4>세무회계사무소에게 필요한 업무환경을 <em>BlurTax</em> 에서 만나보세요</h4>
             <img src="../resources/assets/img/heading-line-dec.png" alt="">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor incididunt ut labore et dolore magna.</p>
+            <p>BlurTax에 가입하지 않은 수임고객의 기장업무도 무료로 지원할 수 있습니다.</p>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="pricing-item-regular">
-            <span class="price">$12</span>
-            <h4>Standard Plan App</h4>
+            <span class="price"></span>
+            <h4>Standard Plan</h4>
             <div class="icon">
               <img src="../resources/assets/img/pricing-table-01.png" alt="">
             </div>
             <ul>
-              <li>Lorem Ipsum Dolores</li>
-              <li>20 TB of Storage</li>
-              <li class="non-function">Life-time Support</li>
-              <li class="non-function">Premium Add-Ons</li>
-              <li class="non-function">Fastest Network</li>
-              <li class="non-function">More Options</li>
+              <li>한눈에 확인하는 수임고객별 업무현황</li>
+              <li>실시간 기장진도 현황 및 신고현황 조회</li>
+              <li>간편한 민원서류/증명서류 발급 및 전송</li>
+              <li>강화된 자동분개 추천 및 수임고객과의 통장내역 공유</li>
+              <li class="non-function">빅데이터 분석을 통한 사업분석보고서 자동생성</li>
+              <li class="non-function">효율적인 업무를 위한 일정/할일 관리</li>
             </ul>
             <div class="border-button">
-              <a href="#">Purchase This Plan Now</a>
+              <a href="#">요금제 확인하기</a>
             </div>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="pricing-item-pro">
-            <span class="price">$25</span>
-            <h4>Business Plan App</h4>
+            <span class="price"></span>
+            <h4>Business Plan</h4>
             <div class="icon">
               <img src="../resources/assets/img/pricing-table-01.png" alt="">
             </div>
             <ul>
-              <li>Lorem Ipsum Dolores</li>
-              <li>50 TB of Storage</li>
-              <li>Life-time Support</li>
-              <li>Premium Add-Ons</li>
-              <li class="non-function">Fastest Network</li>
-              <li class="non-function">More Options</li>
+              <li>한눈에 확인하는 수임고객별 업무현황</li>
+              <li>실시간 기장진도 현황 및 신고현황 조회</li>
+              <li>간편한 민원서류/증명서류 발급 및 전송</li>
+              <li>강화된 자동분개 추천 및 수임고객과의 통장내역 공유</li>
+              <li>빅데이터 분석을 통한 사업분석보고서 자동생성</li>
+              <li>효율적인 업무를 위한 일정/할일 관리</li>
             </ul>
             <div class="border-button">
-              <a href="#">Purchase This Plan Now</a>
+              <a href="#">요금제 확인하기</a>
             </div>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="pricing-item-regular">
-            <span class="price">$66</span>
-            <h4>Premium Plan App</h4>
+            <span class="price"></span>
+            <h4>Free for BlurTax edge</h4>
             <div class="icon">
               <img src="../resources/assets/img/pricing-table-01.png" alt="">
             </div>
             <ul>
-              <li>Lorem Ipsum Dolores</li>
-              <li>120 TB of Storage</li>
-              <li>Life-time Support</li>
-              <li>Premium Add-Ons</li>
-              <li>Fastest Network</li>
-              <li>More Options</li>
+              <li>우리회사 담당 세무대리인과의 대화방</li>
+              <li>한눈에 보는 우리회사 경영/자금현황</li>
+              <li>간편한 증빙이미지 전송</li>
+              <li>쉽고 빠른 민원서류/증명서 신청</li>
+              <li>신고서 및 기타 문서를 보관하는 문서고</li>
+              <li>급여명세, 연말정산, 근로계약 등 모바일과 연계되는 인사관리</li>
             </ul>
             <div class="border-button">
-              <a href="#">Purchase This Plan Now</a>
+              <a href="#">정보 더 확인하기</a>
             </div>
           </div>
         </div>

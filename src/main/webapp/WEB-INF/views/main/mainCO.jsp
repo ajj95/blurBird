@@ -16,12 +16,9 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
-	// 모달출력: 나중엔 동적 생성시 생기는 버튼이므로 변경
+
 	$(function() {
-		
-		// 사이드 바의 동적 생성되는 div 중
-		// 선택된 div의 거래처코드 값 가져오기
-		//- 이 부분은 import된 sidebar를 다뤄서 그런지 본문 스크립트에 작성해야한다.
+
 		$(".menu2").on("click", function(e){
 			e.preventDefault();
 			
@@ -50,10 +47,7 @@
 		        // 다른 버튼을 클릭했을 때 실행할 동작
 		        console.log("다른 버튼을 클릭했습니다.");
 		    }
-
-			
 		});
-		
 		
 	});
 </script>
@@ -139,15 +133,18 @@
               <div class="card info-card customers-card cardf">
 
                 <div class="card-body ">
-                  <h5 class="card-title">그린테크 <span> | 수임사</span></h5>
+                  <h5 class="card-title" id="loginuserbizname">그린테크소프트<span> | 수임사</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>박길동</h6>
-                      <span class="text-danger small pt-1 fw-bold">대표님</span> <span class="text-muted small pt-2 ps-1">pack@naver.com</span>
+                      <h6 id="loginusername">김성민</h6>
+                      <span class="text-danger small pt-1 fw-bold">
+                      	대표님
+                      </span>
+                      <span class="text-muted small pt-2 ps-1">sungmin@naver.com</span>
 
                     </div>
                   </div>
@@ -294,7 +291,7 @@
                   <div class="activite-label">1 day</div>
                   <i class="bi bi-circle-fill activity-badge text-info align-self-start"></i>
                   <div class="activity-content">
-                    회사의 <a href="/info/infoCO" class="fw-bold text-dark">종합소득세 신고</a> 가 완료 되었습니다 
+                    회사의 <a href="/info/infoCO" class="fw-bold text-dark">종합소득세 신고</a> 완료 
                   </div>
                 </div><!-- End activity item-->
 

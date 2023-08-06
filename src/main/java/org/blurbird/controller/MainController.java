@@ -34,4 +34,12 @@ public class MainController {
 	public void beforeloginmainta() {
 	}
 	
+	@GetMapping("/talogin")
+	public void talogin() {
+	}
+	
+	@GetMapping("/cologin")
+	public void cologin() {
+	}
+	
 }

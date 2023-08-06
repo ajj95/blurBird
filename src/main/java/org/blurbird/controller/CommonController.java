@@ -15,10 +15,6 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class CommonController {
 	
-	@GetMapping("/common/talogin")
-	public void talogin() {
-	}
-	
 	@GetMapping("/accessError")
 	public void accessDenied(Authentication auth, Model model) {
 		log.info("access Denied: " + auth);

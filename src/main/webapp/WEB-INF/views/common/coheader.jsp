@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -431,17 +432,17 @@ $(function(){
           </li>
           <li class="dropdown"><a href="#"><span>증빙기장관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul class="dropnavs">
-              <li><a href="#">통장정리</a></li>
-              <li><a href="#">증빙/영수증관리</a></li>
+              <li><a href="/bank/bankco">통장정리</a></li>
+              <li><a href="/receipt/receiptco">증빙/영수증관리</a></li>
               <li><a href="#">전자세금계산서</a></li>
               <li><a href="#">청구서조회</a></li>
             </ul>
           </li>
 		  <li class="dropdown"><a href="#"><span>세무서비스관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
           	<ul class="dropnavs">
-              <li><a href="#">신고/납부현황</a></li>
+              <li><a href="/info/infoCO">신고/납부현황</a></li>
               <li><a href="#">문서보관함</a></li>
-              <li><a href="#">민원서류</a></li>
+              <li><a href="/docrequest/docrequestCO">민원서류</a></li>
               <li><a href="#">세무대리공유폴더</a></li>
             </ul>
           </li>
@@ -562,13 +563,17 @@ $(function(){
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="../resources/assets/img/coprofile.png" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">김성민</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">
+            	김성민
+            </span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>김성민</h6>
-              <span>그린테크소프트</span>
+              <span>
+              	그린테크소프트
+              </span>
             </li>
             <li>
               <hr class="dropdown-divider">

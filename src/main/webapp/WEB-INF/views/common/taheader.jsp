@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -188,7 +191,7 @@
             <ul class="dropnavs">
               <li><a href="#">수임처 정보</a></li>
               <li><a href="#">수임처별 업무체크리스트</a></li>
-              <li><a href="#">민원서류 및 증명서류</a></li>
+              <li><a href="/docrequest/docrequestTA">민원서류 및 증명서류</a></li>
               <li><a href="#">재무자료전송관리</a></li>
               <li><a href="#">부가세신고현황리포트</a></li>
               <li><a href="#">인건비신고현황리포트</a></li>
@@ -198,8 +201,8 @@
             <ul class="dropnavs">
               <li><a href="#">기장진도현황</a></li>
               <li><a href="#">자동전표처리</a></li>
-              <li><a href="#">증빙전표입력</a></li>
-              <li><a href="#">통장정리</a></li>
+              <li><a href="/receipt/receiptta">증빙전표입력</a></li>
+              <li><a href="/bank/bankta">통장정리</a></li>
               <li><a href="#">수임처 직원정보</a></li>
               <li><a href="#">수임처 급여관리</a></li>
             </ul>
@@ -207,7 +210,7 @@
 		  <li class="dropdown"><a href="#"><span>신고업무</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
           	<ul class="dropnavs">
               <li><a href="#">종합소득세 신고관리</a></li>
-              <li><a href="#">신고현황표</a></li>
+              <li><a href="/info/infoTA">신고현황표</a></li>
               <li><a href="#">신고상황분석표</a></li>
               <li><a href="#">인사정보변동관리</a></li>
               <li><a href="#">4대보험 일괄신고</a></li>
