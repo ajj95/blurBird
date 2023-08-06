@@ -3,7 +3,7 @@ package org.blurbird.service;
 import static org.junit.Assert.*;
 
 import org.blurbird.domain.info.IncomeSVO;
-import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.InfoMainVO;
 import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.mapper.InfoMapper;
 import org.blurbird.mapper.InfoMapperTests;
@@ -72,13 +72,21 @@ public class InfoServiceTests {
 //		
 //		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + service.getISByBiz(info));
 //	}
+//	
+//	@Test
+//	public void test() {
+//		InfoMainVO infoMainVO = new InfoMainVO();
+//		infoMainVO.setBizno("10001");
+//		infoMainVO.setYear("2023");
+//		
+//		service.getISByBiz(infoMainVO);
+//		
+//		log.info("@@@@@@@@@@@@@@@@@@:" + service.getISByBiz(infoMainVO));
+//	}
+
 	
 	@Test
 	public void test() {
-		ReportPaymentVO rp = new ReportPaymentVO();
-		rp.setBizno("10001");
-		
-		log.info("@@@@@@@@@@@@@@@@@@:" + service.rptfResult(rp));
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + mapper.getListBusiness());
 	}
-
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.blurbird.domain.common.BusinessVO;
-import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.InfoMainVO;
 import org.blurbird.domain.info.ReportPaymentVO;
 import org.blurbird.service.info.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,9 @@ public class InfoController {
 	
 	@GetMapping("/infoTA")
 	public void getInfoTA(Model model) {
+//		log.info("빈 모델:" + model);
 		model.addAttribute("listCO", service.getListBusiness());
+//		log.info("찬 모델: " + model);
 	};
 	
 	
@@ -43,16 +45,16 @@ public class InfoController {
 	
 	
 	@PostMapping("/infoTA")
-	public @ResponseBody List<InfoData> getInfoList(Model model, InfoData infoData) {
+	public @ResponseBody List<InfoMainVO> getInfoList(InfoMainVO infoMainVO) {
 	
-//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@aa" + infoData.getBizno());
-//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@aa" + infoData.getYear());
-//		log.info("#################################" + service.getList(infoData));
-//		log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + service.getISByBiz(infoData));
+		log.info("bizno: " + infoMainVO.getBizno());
+		log.info("year: " + infoMainVO.getYear());
 		
-		
-		return service.getList(infoData);
-
+		log.info(service.getList(infoMainVO));
+//		log.info("VO: " + infoMainVO);
+//		log.info("모델:" + model);
+//		log.info("list: " + service.getList(infoMainVO)); // 조회버튼 누르면 번호가 빠자ㅣ고 들어온다..
+		return  service.getList(infoMainVO);
 	}
 	
 	@PostMapping("/infoTA/report")
@@ -69,12 +71,14 @@ public class InfoController {
 		reportPaymentVO.setStatus("납부서전송");
 		
 		service.report(reportPaymentVO);
-		log.info(service.rptfResult(reportPaymentVO));
+//		log.info(service.rptfResult(reportPaymentVO));
 		return service.rptfResult(reportPaymentVO);
 	}
 	
 	@PostMapping("/infoTA/transfer")
 	public @ResponseBody ReportPaymentVO transfer(ReportPaymentVO reportPaymentVO) {
+		
+		reportPaymentVO.setStatus("전송완료");
 		
 		service.transfer(reportPaymentVO);
 		return service.rptfResult(reportPaymentVO);
