@@ -27,4 +27,9 @@ public interface InfoMapper {
 	public void report(ReportPaymentVO reportPaymentVO);
 	public void transfer(ReportPaymentVO reportPaymentVO);
 	public ReportPaymentVO rptfResult(ReportPaymentVO reportPaymentVO);
+	
+	public int getStatusCount();
+	public int getTotalCount();
+
+	
 }

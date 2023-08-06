@@ -200,12 +200,17 @@ public class InfoMapperTests {
 //		log.info("결과를 찍어본다@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
 //	}
 	
+//	@Test
+//	public void test() {
+//		ReportPaymentVO rp = new ReportPaymentVO();
+//		rp.setBizno("10001");
+//		
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@"+mapper.rptfResult(rp));
+//	}
+	
 	@Test
 	public void test() {
-		ReportPaymentVO rp = new ReportPaymentVO();
-		rp.setBizno("10001");
-		
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@"+mapper.rptfResult(rp));
+		log.info("@@@@@@@@@@@@@@Statuscount: " + mapper.getStatusCount());
 	}
 	
 }
