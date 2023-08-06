@@ -21,12 +21,12 @@ public class BankController {
 	private BankService service;
 	
 	// 세무사 통장관리 메뉴 이동
-	@GetMapping("/bank/bankta")
+	@GetMapping("/bankta")
 	public void bankta() {
 	}
 	
 	// 수임사 통장관리 메뉴 이동
-	@GetMapping("/bank/bankco")
+	@GetMapping("/bankco")
 	public void bankco() {
 	}
 	

@@ -1,10 +1,8 @@
 
 // 조회버튼 클릭시 통장내역 조회
 $(function(){
-	
 		// 화면 처음 로딩 하자마자 기업 리스트 출력
-		
-	
+
 		// 툴팁설정
 		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -606,7 +604,7 @@ $(function(){
 				}
 			});
 	 	 });
-	
+
 });// end windowload function
 
 
@@ -832,7 +830,7 @@ $(function(){
 	
 	str += '</tbody>';
 	str += '</table>';
-	str += '<button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small">전표입력</button>';
+	str += '<button type="button" id="bankslipplzbtn" class="btn btn-primary btn-small btnmarginright">전표입력</button>';
 	str += '<button type="button" id="memoplzbtn" class="btn btn-primary btn-small">내용확인요청</button>';
 	str += '</div>';
 	
@@ -930,31 +928,31 @@ $(function(){
 	str += '<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-controls="pills-home" aria-selected="true">';
-	str += '<span class="button-text">전&nbsp;&nbsp;&nbsp;&nbsp;체</span><div class="howmany">';
+	str += '<span class="button-text">전　　체</span><div class="howmany">';
 	str += all;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-can-tab" data-bs-toggle="pill" data-bs-target="#pills-can" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">';
-	str += '<span class="button-text">확정가능</span><div class="howmany">';
+	str += '<span class="button-text">확정 가능</span><div class="howmany">';
 	str += can;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-certain-tab" data-bs-toggle="pill" data-bs-target="#pills-certain" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">확&nbsp;&nbsp;&nbsp;&nbsp;정</span><div class="howmany">';
+	str += '<span class="button-text">확　　정</span><div class="howmany">';
 	str += confirmed;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-except-tab" data-bs-toggle="pill" data-bs-target="#pills-except" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">제&nbsp;&nbsp;&nbsp;&nbsp;외</span><div class="howmany">';
+	str += '<span class="button-text">제　　외</span><div class="howmany">';
 	str += except;
 	str += '</div></button>';
 	str += '</li>';
 	str += '<li class="nav-item" role="presentation">';
 	str += '<button class="nav-link" id="pills-remove-tab" data-bs-toggle="pill" data-bs-target="#pills-remove" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">';
-	str += '<span class="button-text">삭&nbsp;&nbsp;&nbsp;&nbsp;제</span><div class="howmany">';
+	str += '<span class="button-text">삭　　제</span><div class="howmany">';
 	str += remove;
 	str += '</div></button>';
 	str += '</li>';
@@ -963,7 +961,7 @@ $(function(){
 	str += '<div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="home-tab">';
 	
 	// 전체 탭
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableAll" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -996,9 +994,26 @@ $(function(){
 			 	str += '<td>';
 			 	str += slipList[i].accountname;
 			 	str += '</td>';
-			 	str += '<td>';
-			 	str += slipList[i].bhstatename;
-			 	str += '</td>';
+			 	
+			 	if(slipList[i].bhstatename == '확정가능'){
+			 	 	str += '<td style="color: #198754;">';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}else if(slipList[i].bhstatename == '확정'){
+			 		str += '<td style="color: #4169E1;">';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}else if(slipList[i].bhstatename == '제외'){
+			 		str += '<td style="color: #ffab00;">';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}else{
+			 		str += '<td>';
+			 		str += slipList[i].bhstatename;
+			 		str += '</td>';
+			 	}
+			 	
+			 	
 			 	str += '<td>';
 			 	str += formatNumberWithCommas(slipList[i].sum);
 			 	str += '</td></tr>';
@@ -1012,20 +1027,25 @@ $(function(){
 	str += '<td class="total" colspan="4">잔액: ';
 	if(total.totalsum!=null){
 		str += formatNumberWithCommas(total.totalsum);
+	}else{
+		str += '';
 	}
 	str += '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red; font-wieght: bold;">차액: '
 	if(total.diffsum!=null){
 		str += formatNumberWithCommas(total.diffsum);
+		str += '</span></td>';
+	}else{
+		str += '</span></td>';
 	}
-	str += '</span></td>';
+	
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	
 	// 확정가능 탭
 	str += '<div class="tab-pane fade" id="pills-can" role="tabpanel" aria-labelledby="profile-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableCan" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1082,15 +1102,15 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="certainslip" class="btn btn-light">확정</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
-	str += '<button type="button" id="exceptslip" class="btn btn-light">제외</button>';
-	str += '<button type="button" id="removeslip" class="btn btn-light">삭제</button>';
+	str += '<button type="button" id="certainslip" class="btn btn-light btnmarginright">확정</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
+	str += '<button type="button" id="exceptslip" class="btn btn-light btnmarginright">제외</button>';
+	str += '<button type="button" id="removeslip" class="btn btn-light btnmarginright">삭제</button>';
 	str += '</div>';
 	
 	// 확정
 	str += '<div class="tab-pane fade" id="pills-certain" role="tabpanel" aria-labelledby="contact-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableCertain" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1147,13 +1167,13 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="cancelcertainslip" class="btn btn-light">확정취소</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="cancelcertainslip" class="btn btn-light btnmarginright">확정취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	
 	// 제외
 	str += '<div class="tab-pane fade" id="pills-except" role="tabpanel" aria-labelledby="contact-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableExcept" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1210,13 +1230,13 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="cancelexceptslip" class="btn btn-light">제외취소</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="cancelexceptslip" class="btn btn-light btnmarginright">제외취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	
 	// 삭제
 	str += '<div class="tab-pane fade" id="pills-remove" role="tabpanel" aria-labelledby="contact-tab">';
-	str += '<table id="" class="banksliptable table table-hover table-bordered">';
+	str += '<table id="banksliptableCancel" class="banksliptable table table-hover table-bordered">';
 	  str += '<thead><tr>';
 	  str += '<th scope="col" class="tabletop"><input class="form-check-input" type="checkbox"></th>';
 	  str += '<th scope="col" class="tabletop">거래처명</th>';
@@ -1273,8 +1293,8 @@ $(function(){
 	str += '</span></td>';
 	str += '</tr>';
 	str +='</tbody></table>';
-	str += '<button type="button" id="cancelremoveslip" class="btn btn-light">삭제취소</button>';
-	str += '<button type="button" id="detailslipshow" class="btn btn-light">분개내역조회</button>';
+	str += '<button type="button" id="cancelremoveslip" class="btn btn-light btnmarginright">삭제취소</button>';
+	str += '<button type="button" id="detailslipshow" class="btn btn-light btnmarginright">분개내역조회</button>';
 	str += '</div>';
 	str += '</div>';
 	  
@@ -1381,18 +1401,15 @@ $(function(){
 				if(detailSlip[i].summary==null){
 					str += '"></td>';
 				}else{
-					str += detailSlip[i].summary;
+					str += detailSlip[i].summary + '"></td>';
 				}
-				str += '"></td>';
-				
-				
 				
 				str += '</tr>';
 	  		}//end for
 	  		
 	  		str += '</tbody>';
 			str += '</table>';
-	  		str += '<button type="button" class="btn btn-outline-confirm" id="modifyslipbtn">저장</button>';
+	  		str += '<button type="button" class="btn btn-primary btnmarginright" id="modifyslipbtn">저장</button>';
 	  		str += '<button type="button" class="btn btn-outline-secondary" id="resetbtn">취소</button>';
 	  	 }else{
 	  	 
@@ -1449,7 +1466,6 @@ $(function(){
 	  searchstart.empty();
 	  
 	  	let str = '';
-	  	//str += '<form method="POST" action="/bank/insertdetailslips" id="insertDetailSlipForm">';
 		str += '<table class="table detailsliptable table-bordered">';
 		str += '<thead>';
 		str += '<tr>';
@@ -1540,7 +1556,7 @@ $(function(){
 	  		
 	  		str += '</tbody>';
 			str += '</table>';
-	  		str += '<button type="submit" class="btn btn-outline-confirm" id="insertSlipBtn">저장</button>';
+	  		str += '<button type="submit" class="btn btn-primary btnmarginright" id="insertSlipBtn">저장</button>';
 	  		str += '<button type="reset" class="btn btn-outline-secondary" id="resetbtn">취소</button>';
 	  	 }else{
 	  	 
@@ -1583,7 +1599,6 @@ $(function(){
 
 
 		str += '<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />';
-		//str += '</form>';
 	  
 	 
 	  searchstart.html(str);
@@ -1691,4 +1706,3 @@ $(function(){
 		}
 		
 		
-

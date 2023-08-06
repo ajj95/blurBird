@@ -3,6 +3,7 @@
 <%@include file="../common/tamainheader.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -196,14 +197,14 @@
               <div class="card info-card customers-card cardf">
 
                 <div class="card-body ">
-                  <h5 class="card-title">파랑세<span> | 세무사</span></h5>
+                  <h5 class="card-title">채원 세무회계<span> | 세무사</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>김하늘</h6>
+                      <h6>박채원</h6>
                       <span class="text-danger small pt-1 fw-bold">담당자</span> <span class="text-muted small pt-2 ps-1">sky@naver.com</span>
 
                     </div>

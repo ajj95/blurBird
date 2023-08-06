@@ -27,6 +27,9 @@
 			searchBizList(bizname);
 		});
 		
+		//$("#businessList").off("click", ".list-group-item");
+		
+	
 	
 	});//end window load
 	
