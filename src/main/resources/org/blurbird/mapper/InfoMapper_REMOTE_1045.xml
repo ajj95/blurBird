@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.blurbird.mapper.InfoMapper">
+
+	<!-- 수임사 목록 -->
+
+	<select id="getListBusiness"  parameterType="org.blurbird.domain.info.InfoMainVO"
+		resultType="org.blurbird.domain.info.InfoMainVO">
+		select * from business left join reportpayment on business.bizno=reportpayment.bizno order by business.bizno
+<!-- 		where reportpayment.year=#{year}   -->
+	</select>
+
+	<select id="getBizName"
+		resultType="org.blurbird.domain.info.InfoMainVO">
+		select bizname from business where bizno=#{bizno}
+	</select>
+
+	<!-- <select id="getBizName" resultType="org.blurbird.domain.info.InfoData" 
+		parameterType="org.blurbird.domain.info.InfoData"> select bizname from business 
+		where bizno=#{bizno, jdbcType=VARCHAR} </select> -->
+
+	<!-- 손익계산서 항목 -->
+	<!-- 매출(총 수입금액) -->
+	<select id="getSalesfromAuto" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case when
+		accountNo in (401, 402) and sortno=4
+		then amount else 0 end) as
+		SalesfromAutoSlip
+		from autoslip where
+		bizno=#{bizno, jdbcType=VARCHAR} and regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD')
+	</select>
+
+	<select id="getSalesfromBank" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case when
+		accountNo in (401, 402) and sortno=4
+		then amount else 0 end) as
+		SalesfromBankSlip
+		from (select b.accountno,
+		b.amount, b.sortno,
+		bh.bhdate from bankhistory
+		bh join bankslip b on
+		bh.bhno=b.bhno
+		where
+		bh.bizno=#{bizno, jdbcType=VARCHAR} and bh.bhdate
+		between to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<!-- 매출원가(필요경비) -->
+	<select id="getCOGSfromAuto" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case when
+		accountNo in (451, 455) and sortno=3
+		then amount else 0 end) as
+		COGSfromAutoSlip
+		from autoslip where
+		bizno=#{bizno, jdbcType=VARCHAR} and regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD')
+	</select>
+
+	<select id="getCOGSfromBank" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case when
+		accountNo in (451, 455) and sortno=3
+		then amount else 0 end) as
+		COGSfromBankSlip
+		from (select b.accountno,
+		b.amount, b.sortno,
+		bh.bhdate from bankhistory
+		bh join bankslip b on
+		bh.bhno=b.bhno
+		where
+		bh.bizno=#{bizno, jdbcType=VARCHAR} and bh.bhdate
+		between to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<select id="getCOGSfromCash" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case when
+		accountNo in (451, 455) and sortno=3
+		then amount else 0 end) as
+		COGSfromCashSlip
+		from (select c.accountno,
+		c.amount, c.sortno,
+		cf.regdate from confirmed cf
+		join cashslip c on
+		cf.confirmedno=c.confirmedno join receiptrequest r
+		on
+		cf.recreqno=r.recreqno join users u on r.userno=u.userno
+		where
+		u.bizno=#{bizno, jdbcType=VARCHAR} and cf.regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<!-- 매출 총 이익(= 매출-매출원가) -->
+
+	<!-- 판관비 -->
+	<select id="getOperExpensefromAuto" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case
+		when accountNo in (501, 502, 503, 505,
+		510, 511) and sortno=3 then
+		amount else 0 end) as
+		OperExpensefromAutoSlip
+		from autoslip where
+		bizno=#{bizno,
+		jdbcType=VARCHAR} and regdate between to_date(#{year}||'-01-01',
+		'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD')
+	</select>
+
+	<select id="getOperExpensefromBank" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case
+		when accountNo in (501, 502, 503, 505,
+		510, 511) and sortno=3 then
+		amount else 0 end) as
+		OperExpensefromBankSlip
+		from (select b.accountno,
+		b.amount, b.sortno,
+		bh.bhdate from bankhistory
+		bh join bankslip b on
+		bh.bhno=b.bhno
+		where
+		bh.bizno=#{bizno, jdbcType=VARCHAR} and bh.bhdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<select id="getOperExpensefromCash" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case
+		when accountNo in (501, 502, 503, 505,
+		510, 511) and sortno=3 then
+		amount else 0 end) as
+		OperExpensefromCashSlip
+		from (select c.accountno,
+		c.amount, c.sortno,
+		cf.regdate from confirmed cf
+		join cashslip c on
+		cf.confirmedno=c.confirmedno join receiptrequest r
+		on
+		cf.recreqno=r.recreqno join users u on r.userno=u.userno
+		where
+		u.bizno=#{bizno, jdbcType=VARCHAR} and cf.regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<!-- 영업이익(= 매출 총 이익 - 판관비 = 사업소득금액) -->
+
+	<!-- 이하 법인세 관련 값 (확장 예정) -->
+	<!-- 영업외수익 -->
+	<select id="getNonOperIncomefromAuto" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case
+		when accountNo in (901, 902, 903, 906,
+		912, 930) and sortno=4 then
+		amount else 0 end) as
+		NonOperIncomefromAutoSlip
+		from autoslip where
+		bizno=#{bizno,
+		jdbcType=VARCHAR} and regdate between to_date(#{year}||'-01-01',
+		'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD')
+	</select>
+
+	<select id="getNonOperIncomefromBank" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case
+		when accountNo in (901, 902, 903, 906,
+		912, 930) and sortno=4 then
+		amount else 0 end) as
+		NonOperIncomefromBankSlip
+		from(select
+		b.accountno, b.amount, b.sortno,
+		bh.bhdate from bankhistory bh join
+		bankslip b on bh.bhno=b.bhno
+		where
+		bh.bizno=#{bizno, jdbcType=VARCHAR} and bh.bhdate
+		between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<select id="getNonOperIncomefromCash" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum(case
+		when accountNo in (901, 902, 903, 906,
+		912, 930) and sortno=4 then
+		amount else 0 end) as
+		NonOperIncomefromCashSlip
+		from(select
+		c.accountno, c.amount, c.sortno,
+		cf.regdate from cashslip c join
+		confirmed cf on
+		c.confirmedno=cf.confirmedno join receiptrequest r on
+		cf.recreqno=r.recreqno join users u on r.userno=u.userno
+		where
+		u.bizno=#{bizno, jdbcType=VARCHAR} and cf.regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<!-- 영업외비용 -->
+	<select id="getNonOperExpensefromAuto" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum
+		(case when accountNo in (931, 933, 960) and
+		sortno=3 then amount else
+		0 end) as NonOperExpensefromAutoSlip
+		from
+		autoslip where bizno=#{bizno, jdbcType=VARCHAR}
+		and regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD')
+	</select>
+
+	<select id="getNonOperExpensefromBank" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum
+		(case when accountNo in (931, 933, 960) and
+		sortno=3 then amount else
+		0 end) as NonOperExpensefromBankSlip
+		from(select b.accountno, b.amount,
+		b.sortno, bh.bhdate from bankhistory
+		bh join
+		bankslip b on
+		bh.bhno=b.bhno
+		where bh.bizno=#{bizno,
+		jdbcType=VARCHAR} and bh.bhdate between
+		to_date(#{year}||'-01-01',
+		'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+	<select id="getNonOperExpensefromCash" resultType="Long"
+		parameterType="org.blurbird.domain.info.InfoMainVO">
+		select
+		sum
+		(case when accountNo in (931, 933, 960) and
+		sortno=3 then amount else
+		0 end) as NonOperExpensefromCashSlip
+		from(select c.accountno, c.amount,
+		C.sortno, cf.regdate from cashslip c
+		join
+		confirmed cf on
+		c.confirmedno=cf.confirmedno join receiptrequest r
+		on
+		cf.recreqno=r.recreqno join users u on r.userno=u.userno
+		where
+		u.bizno=#{bizno, jdbcType=VARCHAR} and cf.regdate between
+		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and
+		to_date(#{year}||'-12-31', 'YYYY-MM-DD'))
+	</select>
+
+
+	<insert id="report"
+		parameterType="org.blurbird.domain.info.ReportPaymentVO">
+		INSERT INTO reportpayment (reportpaymentno, bizno,
+		bizname, year, bizincome, tax, reportdate, reportdoc, paymentslip,
+		status)
+		VALUES (
+		(Seq_reportpayment.NEXTVAL),
+		(SELECT bizno FROM business WHERE business.bizno = #{bizno}),
+		(SELECT bizname FROM business WHERE business.bizno = #{bizno}),
+		#{year}, #{bizincome}, #{tax},
+		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')),
+		#{reportdoc}, #{paymentslip}, #{status}
+		)
+	</insert>
+
+	<update id="transfer"
+		parameterType="org.blurbird.domain.info.ReportPaymentVO">
+		update reportpayment set transdate =
+		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')),
+		status = #{status} where
+		bizno=#{bizno}
+	</update>
+
+	<select id="rptfResult"
+		resultType="org.blurbird.domain.info.ReportPaymentVO"
+		parameterType="org.blurbird.domain.info.ReportPaymentVO">
+		select * from reportpayment where bizno=#{bizno}
+	</select>
+
+
+
+	<!-- 재무상태표 항목 (확장 예정) -->
+	<select id="getA"
+		resultType="org.blurbird.domain.info.FinancialSVO">
+		select
+		sum(case WHEN accountNo IN (101, 102, 103, 108, 120,
+		146, 150, 153) and
+		sortno=3 THEN amount else 0 end) as CurrentAssets
+		from (select b.accountno, b.amount, b.sortno, bh.bhdate from
+		bankhistory
+		bh join bankslip b on bh.bhno=b.bhno
+		where bh.bhdate between
+		to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+
+
+
+</mapper>

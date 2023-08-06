@@ -3,7 +3,6 @@ package org.blurbird.mapper;
 import java.sql.Date;
 import java.util.List;
 
-import org.blurbird.domain.MemberVO;
 import org.blurbird.domain.receipt.AccountVO;
 import org.blurbird.domain.receipt.CashSlipVO;
 import org.blurbird.domain.receipt.ConfirmedVO;
@@ -20,4 +19,6 @@ public interface ReceiptMapper {
 	public void unconfirmedReceipt(UnconfirmedReasonVO unconfirmed);
 	public void cashslipConfirmed(CashSlipVO cashSlipVO);
 	public ReceiptRequestVO judgeReceipt(String recreqno);
+	public ReceiptRequestVO getReceiptRequestsWithConfirmation(String recreqno);
+	public String getUserno(String businesslicense);
 }

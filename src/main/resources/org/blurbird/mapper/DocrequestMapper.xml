@@ -5,7 +5,7 @@
 <mapper namespace="org.blurbird.mapper.DocrequestMapper">
 
 <!-- MemberVO를 위한 resultMap -->
-<resultMap id="MemberResultMap" type="org.blurbird.domain.MemberVO">
+<resultMap id="MemberResultMap" type="org.blurbird.domain.common.MemberVO">
     <id property="memberno" column="memberno" />
     <result property="membername" column="membername" />
     <result property="memberid" column="memberid" />
@@ -14,7 +14,7 @@
 </resultMap>
 
 <!-- UsersVO를 위한 resultMap -->
-<resultMap id="UsersResultMap" type="org.blurbird.domain.UsersVO">
+<resultMap id="UsersResultMap" type="org.blurbird.domain.common.UsersVO">
     <id property="userno" column="userno" />
     <result property="memberno" column="memberno" />
     <result property="bizno" column="bizno" />
@@ -58,13 +58,13 @@
 </resultMap>
 
 <!-- businessResultMap: ResultMap for BusinessVO -->
-<resultMap id="businessResultMap" type="org.blurbird.domain.bank.BusinessVO">
+<resultMap id="businessResultMap" type="org.blurbird.domain.common.BusinessVO">
     <result property="bizno" column="bizno" />
     <result property="bizname" column="bizname" />
     <result property="businesslicense" column="businesslicense" />
     <result property="bizaddress" column="bizaddress" />
     <result property="bistel" column="bistel" />
-    <result property="indusrty" column="industry" />
+    <result property="industry" column="industry" />
 </resultMap>
 
 <!-- DocumentRequestList 를위한 resultMap -->
@@ -92,19 +92,24 @@
     </association>
 </resultMap>
 
+
+
 	<!--  getDocrequest 전체 -->
 <select id="getDocrequestList" resultMap="DocumentRequestListResultMap">
     <![CDATA[
-        SELECT *
+		SELECT *
         FROM documentrequest dr
         INNER JOIN users u ON dr.userno = u.userno
         INNER JOIN member m ON u.memberno = m.memberno
         INNER JOIN docreqhistory drh ON dr.docreqno = drh.docreqno
         INNER JOIN drstate ds ON drh.drstateno = ds.drstateno
         INNER JOIN business bs ON u.bizno = bs.bizno
-        WHERE dr.docreqno > 0
+        WHERE dr.docreqno > 0 ORDER by dr.docreqno DESC
     ]]>
 </select>
+
+
+
 
 <select id="getDocrequestread" resultMap="DocumentRequestListResultMap" parameterType="String">
     <![CDATA[
@@ -119,6 +124,7 @@
     ]]>
 </select>
 
+
 <insert id="createdoc" parameterType="org.blurbird.domain.docrequest.DocumentRequestVO">
 	INSERT INTO documentrequest (docreqno, userno, applicationdate, purpose, count, wishdate, way, doctagetdate, doctype)
 	VALUES (DOCREQNO_SEQ.nextval, '2', sysdate, '${purpose}', '${count}', #{wishdate}, '${way}', #{doctagetdate}, '${doctype}')
@@ -129,15 +135,30 @@
 	VALUES (docreqhis_SEQ.nextval, '1', DOCREQNO_SEQ.CURRVAL, sysdate)
 </insert>
 
+
+
+
 <insert id="issuance" parameterType="String">
 	INSERT INTO docreqhistory (historyno, drstateno, docreqno, receivingdate)
 	VALUES (docreqhis_SEQ.nextval, '3', #{docreqno}, sysdate)
 </insert>
 
+<delete id="issuancedel" parameterType="String">
+	DELETE FROM docreqhistory
+	WHERE drstateno = '1' AND docreqno = #{docreqno}
+</delete>
+
+
+
 <insert id="received" parameterType="String">
 	INSERT INTO docreqhistory (historyno, drstateno, docreqno, receivingdate)
 	VALUES (docreqhis_SEQ.nextval, '4', #{docreqno}, sysdate)
 </insert>
+
+<delete id="receiveddel" parameterType="String">
+	DELETE FROM docreqhistory
+	WHERE drstateno = '3' AND docreqno = #{docreqno}
+</delete>
 
 
 </mapper>
