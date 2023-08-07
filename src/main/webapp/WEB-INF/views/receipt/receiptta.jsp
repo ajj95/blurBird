@@ -152,7 +152,7 @@
 								<div class="left">
 									<!--Start div left  -->
 									<div>
-										<img src="/resources/upload/apple-touch-icon.png" alt="receipt"
+										<img src="/resources/upload/download.png" alt="receipt"
 											class="img-fluid custom-image">
 									</div>
 								</div>
@@ -377,7 +377,7 @@
 									<div class="modal-body">
 										<form>
 											<textarea class="form-control"
-												id="message-text">몰?루는건가.. 그래... 그런일이 있었지.. 하지만 알려주지않겠다.</textarea>
+												id="message-text"></textarea>
 										</form>
 									</div>
 									<div class="modal-footer">

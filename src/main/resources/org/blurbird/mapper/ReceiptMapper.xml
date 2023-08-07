@@ -36,7 +36,7 @@ SELECT
         confirmed C ON RR.RECREQNO = C.RECREQNO
     WHERE
        REQDATE BETWEEN #{startDate} and #{endDate}
-       and userno = 5
+       and userno = 1
 	]]>
 	</select>
 
@@ -61,7 +61,7 @@ SELECT
 		insert into receiptrequest
 		(recreqno,userno,reqdate,purpose,receiptpath)
 		VALUES
-		(seq_recreqno.nextval,'5',TO_DATE(sysdate,'YY/MM/DD'),#{purpose},#{receiptpath})
+		(seq_recreqno.nextval,'1',TO_DATE(sysdate,'YY/MM/DD'),#{purpose},#{receiptpath})
 	</insert>
 
 	<insert id="confirmedReceipt">
