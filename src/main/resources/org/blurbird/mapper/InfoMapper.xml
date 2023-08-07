@@ -309,6 +309,15 @@
 		parameterType="org.blurbird.domain.info.ReportPaymentVO">
 		select * from reportpayment where bizno=#{bizno}
 	</select>
+	
+<!-- 	<select id="getList" -->
+<!-- 		resultType="org.blurbird.domain.info.InfoMainVO" -->
+<!-- 		parameterType="org.blurbird.domain.info.InfoMainVO"> -->
+<!-- 		select DISTINCT reportpayment.bizno, reportpayment.bizname, reportpayment.year, reportpayment.bizincome, reportpayment.tax, reportpayment.reportdate, reportpayment.reportdoc, reportpayment.paymentslip, reportpayment.transdate, reportpayment.status from reportpayment -->
+<!-- 		 join autoslip on autoslip.bizno=reportpayment.bizno where reportpayment.bizno=#{bizno} and regdate between -->
+<!-- 		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and -->
+<!-- 		to_date(#{year}||'-12-31', 'YYYY-MM-DD') -->
+<!-- 	</select> -->
 
 
 

@@ -79,16 +79,23 @@ th:first-child(2), td:first-child(2) {
 	display: flex;
 }
 
+/* :root { */
+/*   --completed-width: newValue; */
+/* } */
+
 .completed {
-	width: 20%;
+width: 50%;
 	height: 30px;
-	background-color: skyblue;
+	padding: 0;
+	text-align: center;
+	background-color: #4169E1;
+	color: #fff;
 	font-weight: 600;
 	font-size: .8rem;
 }
 
 .undeclared {
-	width: 100%;
+	width: 50%;
 	height: 30px;
 	padding: 0;
 	text-align: center;
@@ -107,9 +114,9 @@ th:first-child(2), td:first-child(2) {
 	font-weight: 700;
 }
 
-.printButton {
-	border: 0.5px;
-}
+/* .printButton { */
+/* 	border: 0.5px; */
+/* } */
 </style>
 <script type="text/javascript">
 	$(document).ready(
@@ -141,6 +148,13 @@ th:first-child(2), td:first-child(2) {
 				                   statuscount = response.statuscount;
 				         			totalcount = response.totalcount;
 // 				         			console.log("statuscount: " + statuscount);
+				         			
+				         			 // 비율 계산
+            var percentage = ((statuscount / totalcount) * 100).toFixed(1);
+            console.log("Percentage: " + percentage + "%");
+            
+         // .percentage 클래스가 지정된 div에 비율 값을 넣기
+            $(".percentage").text(percentage + "%");
 				         			
 				         			let start = $(".statusBar");
 							           
@@ -188,7 +202,22 @@ th:first-child(2), td:first-child(2) {
 					
 						$("#submitYear").on("click",function(e) {
 							
+							
+							
 									e.preventDefault(); // 폼 제출 방지
+									
+									// 예시로 외부에서 값을 받아오는 함수
+									function getValueFromExternalSource() {
+									  // 여기에서 외부에서 값을 받아오는 로직을 구현
+									  
+									  
+									  
+									  return "40%"; // 외부에서 받아온 값
+									}
+									
+									const completedElement = document.querySelector(".completed");
+									const newValue = getValueFromExternalSource();
+									completedElement.style.setProperty("--completed-width", newValue);
 									
 // 									var pct = ".percentage";
 // 									var graph = ".graph";
@@ -309,7 +338,7 @@ th:first-child(2), td:first-child(2) {
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
-																html += '<td >'+ '<input type="button" class="rptfbtn" value="신고서작성"/>'+ '</td>';
+																html += '<td >'+ '<input type="button" class="rptfbtn btn btn-primary" value="신고서작성"/>'+ '</td>';
 																html += '</tr>';
 																$(this).append(html);
 																
@@ -382,7 +411,7 @@ th:first-child(2), td:first-child(2) {
 																loc.eq(4).text(formattedDate);
 																loc.eq(5).text(data.reportdoc);
 																loc.eq(6).text(data.paymentslip);
-																loc.eq(8).html('<input type="button" class="transferbtn" value="'+data.status+'"/>');
+																loc.eq(8).html('<input type="button" class="transferbtn btn btn-primary" value="'+data.status+'"/>');
 																
 																getStatusCount();
 
@@ -406,7 +435,8 @@ th:first-child(2), td:first-child(2) {
 					var date = new Date(data.reportdate);
 					var formattedDate = date.toLocaleDateString('ko-KR');
 					loc.eq(7).text(formattedDate);
-					loc.eq(8).html('<input type="button" disabled value="'+data.status+'"/>');
+					loc.eq(8).html('<input type="button" class="btn btn-primary" disabled value="'+data.status+'"/>');
+					
 					
 					getStatusCount();
 				},
@@ -485,13 +515,14 @@ th:first-child(2), td:first-child(2) {
 
 					<!-- 지급년월/연월선택 캘린더 -->
 					<form class="selectYear" action="/info/infoTA" method="post">
-						<span>조회 년도</span>
+					<br>
+						<div><h4>조회 년도</h4>
 						<!-- 연월 선택 캘린더 -->
 						<div class="selectMonth">
 							<input type="number" name="year" placeholder="2023"
 								value='<c:out value="${year}"/>' min="1900" max="2100"></input>
-							<button type="submit" id="submitYear">조회</button>
-						</div>
+							<button type="submit" class="btn btn-outline-secondary" id="submitYear">조회</button>
+						</div></div>
 					</form>
 
 					<br>
@@ -502,35 +533,35 @@ th:first-child(2), td:first-child(2) {
 						<!-- 신고현황 바 위의 정보 -->
 						<div class="barInfo">
 							<div>국세청 신고현황</div>
-							<div class="percentage">20%</div>
+							<div class="percentage"></div>
 						</div>
 
 						<!-- 전체 건수 나타내는 신고현황 바(막대기) -->
 						<div class="statusBar">
 
-<!-- 							<div class="graph"> -->
-<!-- 								<div class="bar completed"> -->
-<!-- 									<dl class="desc"> -->
-<!-- 										<dt> -->
-<!-- 											신고완료 <em>1</em>건 -->
-<!-- 										</dt> -->
-<!-- 									</dl> -->
-<!-- 								</div> -->
-<!-- 								<div class="bar undeclared"> -->
-<!-- 									<dl class="desc"> -->
-<!-- 										<dt> -->
-<!-- 											미신고 <em>4</em>건 -->
-<!-- 										</dt> -->
-<!-- 									</dl> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
+							<div class="graph">
+								<div class="bar completed">
+									<dl class="desc">
+										<dt>
+											신고완료 <em></em>
+										</dt>
+									</dl>
+								</div>
+								<div class="bar undeclared">
+									<dl class="desc">
+										<dt>
+											 <em>미신고</em>
+										</dt>
+									</dl>
+								</div>
+							</div>
 						</div>
 					</div>
 					<br>
 
 					<div>
-						신고리스트
-						<button type="button" id="print" class="printButton"  onclick="window.print()">인쇄</button>
+						<h4>신고리스트
+						<span><button type="button" id="print" class="printButton btn btn-outline-secondary"  onclick="window.print()">인쇄</button></span></h4>
 					</div>
 
 					<div class="tab-content pt-2" id="borderedTabContent">
@@ -574,8 +605,8 @@ th:first-child(2), td:first-child(2) {
 
 
 
-							<button type="button" class="btn btn-primary">확인</button>
-							<button type="button" class="btn btn-secondary">취소</button>
+<!-- 							<button type="button" class="btn btn-primary">확인</button> -->
+<!-- 							<button type="button" class="btn btn-secondary">취소</button> -->
 
 						</div>
 

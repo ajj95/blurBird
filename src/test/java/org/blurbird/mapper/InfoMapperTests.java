@@ -8,6 +8,7 @@ import java.util.List;
 import org.blurbird.domain.info.FinancialSVO;
 import org.blurbird.domain.info.IncomeSVO;
 import org.blurbird.domain.info.InfoData;
+import org.blurbird.domain.info.InfoMainVO;
 import org.blurbird.domain.info.ReportPaymentVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +26,13 @@ public class InfoMapperTests {
 	@Autowired
 	private InfoMapper mapper;
 
-	// ���ӻ� ��� �������� �׽�Ʈ
+	// 占쏙옙占쌈삼옙 占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙 占쌓쏙옙트
 //	@Test
 //	public void testGetListBusiness() {
 //		log.info(mapper.getListBusiness());
 //	}
 
-	// ����(�� ���Աݾ�)
+	// 占쏙옙占쏙옙(占쏙옙 占쏙옙占쌉금억옙)
 //	@Test
 //	public void testGetSalesfromAutoSlip() {
 //		log.info(mapper.getSalesfromAuto());
@@ -61,7 +62,7 @@ public class InfoMapperTests {
 //		log.info("OE: " + totalOperExpense);
 //		
 //		log.info("=======================================");
-//		log.info("����ҵ�ݾ�: " + (totalSales - (totalCOGS + totalOperExpense)));
+//		log.info("占쏙옙占쏙옙撚占쌥억옙: " + (totalSales - (totalCOGS + totalOperExpense)));
 //	}
 
 //	@Test
@@ -86,14 +87,14 @@ public class InfoMapperTests {
 //			is.setBizno(infoData.getBizno());
 //
 //			if (mapper.getSalesfromAuto(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setSalesfromautoslip(0L);
 //			} else {
 //				is.setSalesfromautoslip(mapper.getSalesfromAuto(infoData));
 //			}
 //
 //			if (mapper.getSalesfromBank(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setSalesfrombankslip(0L);
 //			} else {
 //				is.setSalesfrombankslip(mapper.getSalesfromBank(infoData));
@@ -102,19 +103,19 @@ public class InfoMapperTests {
 //			is.setTotalsales(is.getSalesfromautoslip() + is.getSalesfrombankslip());
 //
 //			if (mapper.getCOGSfromAuto(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setCogsfromautoslip(0L);
 //			} else {
 //				is.setCogsfromautoslip(mapper.getCOGSfromAuto(infoData));
 //			}
 //			if (mapper.getCOGSfromBank(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setCogsfrombankslip(0L);
 //			} else {
 //				is.setCogsfrombankslip(mapper.getCOGSfromBank(infoData));
 //			}
 //			if (mapper.getCOGSfromCash(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setCogsfromcashslip(0L);
 //			} else {
 //				is.setCogsfromcashslip(mapper.getCOGSfromCash(infoData));
@@ -123,19 +124,19 @@ public class InfoMapperTests {
 //			is.setTotalcogs(is.getCogsfromautoslip() + is.getCogsfrombankslip() + is.getCogsfromcashslip());
 //
 //			if (mapper.getOperExpensefromAuto(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setOperExpensefromAutoSlip(0L);
 //			} else {
 //				is.setOperExpensefromAutoSlip(mapper.getOperExpensefromAuto(infoData));
 //			}
 //			if (mapper.getOperExpensefromBank(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setOperExpensefromBankSlip(0L);
 //			} else {
 //				is.setOperExpensefromBankSlip(mapper.getOperExpensefromBank(infoData));
 //			}
 //			if (mapper.getOperExpensefromCash(infoData) == null) {
-//				// null�� ��쿡 0���� ����
+//				// null占쏙옙 占쏙옙荑� 0占쏙옙占쏙옙 占쏙옙占쏙옙
 //				is.setOperExpensefromCashSlip(0L);
 //			} else {
 //				is.setOperExpensefromCashSlip(mapper.getOperExpensefromCash(infoData));
@@ -196,7 +197,7 @@ public class InfoMapperTests {
 //
 //			iSList.add(info);
 //		}
-//		log.info("����� ����@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
+//		log.info("占쏙옙占쏙옙占� 占쏙옙咀삼옙占�@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
 //	}
 	
 //	@Test
@@ -209,7 +210,10 @@ public class InfoMapperTests {
 	
 	@Test
 	public void test() {
-		log.info("@@@@@@@@@@@@@@Statuscount: " + mapper.getStatusCount());
+		InfoMainVO info = new InfoMainVO();
+		info.setBizno("10001");
+		info.setYear("2023");
+		log.info("@@@@@@@@@@@@@@Statuscount: " + mapper.getList(info));
 	}
 	
 }

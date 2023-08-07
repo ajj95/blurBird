@@ -67,8 +67,8 @@ public class InfoController {
 //        String dateString = sdf.format(date);
 //		
 //		reportPaymentVO.setReportdate(dateString);
-		reportPaymentVO.setReportdoc("신고서이미지");
-		reportPaymentVO.setPaymentslip("납부서이미지");
+		reportPaymentVO.setReportdoc("신고서");
+		reportPaymentVO.setPaymentslip("납부서");
 //		reportPaymentVO.setTransdate("");
 		reportPaymentVO.setStatus("납부서전송");
 		
