@@ -28,6 +28,11 @@
 	width: 250px;
 }
 
+.bar-white{
+	background-color: #dee2e6;
+	color: black;
+}
+
 .allbtn:hover {
 	background-color: #4169E1;
 }
@@ -160,23 +165,34 @@ width: 50%;
 							           
 							           start.empty();
 							           let str = '';
-							           str += '<div class="graph">';
-							           str += '<div class="bar completed">';
-							           str += '<dl class="desc">';
-							           str += '<dt>신고완료 <em>';
-							           str += statuscount;
-							           str += '</em>건';
-							           str += '</dt>';
-							           str += '</dl>';
-							           str += '</div>';
-							           str += '<div class="bar undeclared">';
-							           str += '<dl class="desc">';
-							           str += '<dt>미신고<em>';
-							      str += totalcount-statuscount;
-							           str += '</em>건';
-							           str += '</dt>';
-							           str += '</div>';
-							           str += '</div>';
+// 							           str += '<div class="graph">';
+// 							           str += '<div class="bar completed">';
+// 							           str += '<dl class="desc">';
+// 							           str += '<dt>신고완료 <em>';
+// 							           str += statuscount;
+// 							           str += '</em>건';
+// 							           str += '</dt>';
+// 							           str += '</dl>';
+// 							           str += '</div>';
+// 							           str += '<div class="bar undeclared">';
+// 							           str += '<dl class="desc">';
+// 							           str += '<dt>미신고<em>';
+// 							      str += totalcount-statuscount;
+// 							           str += '</em>건';
+// 							           str += '</dt>';
+// 							           str += '</div>';
+// 							           str += '</div>';
+console.log("percentage:" + percentage);
+console.log("statuscount:" + statuscount);
+console.log("totalcount: " + totalcount);
+
+
+										str += '<div class="progress mt-3" style="height: 40px;">';
+										
+                						str+= '<div class="progress-bar" role="progressbar" style="width: '+percentage+'%" aria-valuenow="'+ statuscount +'" aria-valuemin="0" aria-valuemax="'+totalcount+'"> 신고완료 ' +statuscount+'건</div>';
+                						str+= '<div class="progress-bar bar-white" role="progressbar" style="width: '+(100-percentage)+'%" aria-valuenow="'+ (totalcount-statuscount) +'" aria-valuemin="0" aria-valuemax="'+totalcount+'"> 미신고 ' +(totalcount-statuscount)+'건</div>';
+//                 						str+= '<div style="margin-top: 13px">미신고 ' +(totalcount-statuscount)+'건</div>';
+                						str+='</div>';
 							           
 							           start.html(str);
 				               },
@@ -207,17 +223,17 @@ width: 50%;
 									e.preventDefault(); // 폼 제출 방지
 									
 									// 예시로 외부에서 값을 받아오는 함수
-									function getValueFromExternalSource() {
-									  // 여기에서 외부에서 값을 받아오는 로직을 구현
+// 									function getValueFromExternalSource() {
+// 									  // 여기에서 외부에서 값을 받아오는 로직을 구현
 									  
 									  
 									  
-									  return "40%"; // 외부에서 받아온 값
-									}
+// 									  return "40%"; // 외부에서 받아온 값
+// 									}
 									
-									const completedElement = document.querySelector(".completed");
-									const newValue = getValueFromExternalSource();
-									completedElement.style.setProperty("--completed-width", newValue);
+// 									const completedElement = document.querySelector(".completed");
+// 									const newValue = getValueFromExternalSource();
+// 									completedElement.style.setProperty("--completed-width", newValue);
 									
 // 									var pct = ".percentage";
 // 									var graph = ".graph";
@@ -532,29 +548,32 @@ width: 50%;
 					<div>
 						<!-- 신고현황 바 위의 정보 -->
 						<div class="barInfo">
-							<div>국세청 신고현황</div>
+							<div><h4>국세청 신고현황</h4></div>
 							<div class="percentage"></div>
 						</div>
 
 						<!-- 전체 건수 나타내는 신고현황 바(막대기) -->
+<!-- 						<div class="progress mt-3"> -->
+<!--                 <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div> -->
+<!--               </div> -->
 						<div class="statusBar">
 
-							<div class="graph">
-								<div class="bar completed">
-									<dl class="desc">
-										<dt>
-											신고완료 <em></em>
-										</dt>
-									</dl>
-								</div>
-								<div class="bar undeclared">
-									<dl class="desc">
-										<dt>
-											 <em>미신고</em>
-										</dt>
-									</dl>
-								</div>
-							</div>
+<!-- 							<div class="graph"> -->
+<!-- 								<div class="bar completed"> -->
+<!-- 									<dl class="desc"> -->
+<!-- 										<dt> -->
+<!-- 											신고완료 <em></em> -->
+<!-- 										</dt> -->
+<!-- 									</dl> -->
+<!-- 								</div> -->
+<!-- 								<div class="bar undeclared"> -->
+<!-- 									<dl class="desc"> -->
+<!-- 										<dt> -->
+<!-- 											 <em>미신고</em> -->
+<!-- 										</dt> -->
+<!-- 									</dl> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
 						</div>
 					</div>
 					<br>
