@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/bank/*")
 @Log4j
 @AllArgsConstructor
-public class BankRestController {
+public class BankRestController {             
 	
 	private BankService service;
 	
