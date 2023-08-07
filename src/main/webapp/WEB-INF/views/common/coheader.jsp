@@ -2,13 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>수임사header</title>
+  <title>BlurTax edge</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -412,7 +413,7 @@ $(function(){
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="../main/mainCO" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">BlurTax</span>
         <span class="edge">edge</span>
@@ -431,17 +432,17 @@ $(function(){
           </li>
           <li class="dropdown"><a href="#"><span>증빙기장관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul class="dropnavs">
-              <li><a href="#">통장정리</a></li>
-              <li><a href="#">증빙/영수증관리</a></li>
+              <li><a href="/bank/bankco">통장정리</a></li>
+              <li><a href="/receipt/receiptco">증빙/영수증관리</a></li>
               <li><a href="#">전자세금계산서</a></li>
               <li><a href="#">청구서조회</a></li>
             </ul>
           </li>
 		  <li class="dropdown"><a href="#"><span>세무서비스관리</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
           	<ul class="dropnavs">
-              <li><a href="#">신고/납부현황</a></li>
+              <li><a href="/info/infoCO">신고/납부현황</a></li>
               <li><a href="#">문서보관함</a></li>
-              <li><a href="#">민원서류</a></li>
+              <li><a href="/docrequest/docrequestCO">민원서류</a></li>
               <li><a href="#">세무대리공유폴더</a></li>
             </ul>
           </li>
@@ -561,14 +562,18 @@ $(function(){
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="../resources/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img src="../resources/assets/img/coprofile.png" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">
+            	김성민
+            </span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
+              <h6>김성민</h6>
+              <span>
+              	그린테크소프트
+              </span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -577,7 +582,7 @@ $(function(){
             <li>
               <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-person"></i>
-                <span>My Profile</span>
+                <span>개인정보</span>
               </a>
             </li>
             <li>
@@ -587,7 +592,7 @@ $(function(){
             <li>
               <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
+                <span>환경설정</span>
               </a>
             </li>
             <li>
@@ -597,7 +602,7 @@ $(function(){
             <li>
               <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
                 <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
+                <span>도움말</span>
               </a>
             </li>
             <li>
@@ -607,7 +612,7 @@ $(function(){
             <li>
               <a class="dropdown-item d-flex align-items-center" href="#">
                 <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
+                <span>로그아웃</span>
               </a>
             </li>
 

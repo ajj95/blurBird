@@ -401,11 +401,19 @@ input.modaltext {
 .modalintitle{
   margin-right: 10px;
 }
+.btnmarginright{
+	margin-right: 5px;
+}
+ul#pills-tab {
+    margin-left: 13px;
+}
 </style>
 <script src="../resources/assets/js/bank.js"></script>
 <script type="text/javascript">
 	$(function(){
 
+
+		
 		// 사이드 바의 동적 생성되는 div 중
 		// 선택된 div의 거래처코드 값 가져오기
 		//- 이 부분은 import된 sidebar를 다뤄서 그런지 본문 스크립트에 작성해야한다.
@@ -416,10 +424,7 @@ input.modaltext {
 			$("#bizno").val(bizno);
 		});
 		
-		
-		
-		
-		
+
 	  // 내용확인 모달 창에서 저장 클릭 시 메시지 insert
 	  $("#sendmessagebtn").on("click", function(){
 		  
@@ -662,8 +667,7 @@ input.modaltext {
 										</div>
 										<button type="button" class="btn btn-secondary"
 											data-bs-dismiss="modal">닫기</button>
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">저장
-											changes</button>
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">저장</button>
 									</div>
 								</div>
 							</div>

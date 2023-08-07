@@ -13,34 +13,18 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script src="../resources/assets/js/searchbizsidebar.js"></script>
+<style type="text/css">
+	.changebackground{
+		background-color: #DCDCDC !important;
+	}
+</style>
 <script type="text/javascript">
 	$(function(){
-		let testList = ['테스트', '테스트입니다', '테스트할게'];
+		let testList = '테스트';
 		
 		// 검색어 자동완성
         $("#searchbusiness").autocomplete({         
         		source: testList
-        			/*
-        			 function(request, response) {
-		            $.ajax({
-		                type : 'POST',
-		                url: "/common/autosearch",
-		                data: { value: request.term }, // 사용자의 검색어
-		                dataType : 'json',
-		                success : function(data) {
-		                  	response(
-								$.map(data.bizList, function(item){
-									return{
-										label: item.bizname    // 목록에 표시되는 값
-										, value: item.bizname // 선택시 input에 표시되는 값
-										, idx: item.bizno        // db 인덱스
-									};
-								})//end map
-							); // data=bizNameList. autocomplete에서 바로 사용 가능
-		                }
-		            });//end ajax
-		            }
-		            */
 		        , minLength: 1
         		, select : function(event, ui){
         			// 하단의 숨겨진 input에 추천검색어 보여지도록 함
@@ -48,6 +32,36 @@
         		}
         });
 		
+			/*
+		 function(request, response) {
+       $.ajax({
+           type : 'POST',
+           url: "/common/autosearch",
+           data: { value: request.term }, // 사용자의 검색어
+           dataType : 'json',
+           success : function(data) {
+             	response(
+					$.map(data.bizList, function(item){
+						return{
+							label: item.bizname    // 목록에 표시되는 값
+							, value: item.bizname // 선택시 input에 표시되는 값
+							, idx: item.bizno        // db 인덱스
+						};
+					})//end map
+				); // data=bizNameList. autocomplete에서 바로 사용 가능
+           }
+       });//end ajax
+       }
+       */
+		
+    	// 기업 클릭 시 회색, 재클릭 시 배경색 사라짐
+		$("#businessList").on("click", ".list-group-item", function(){
+			// 기존의 a태그 모두 클래스 삭제
+			$('.list-group-item').removeClass('changebackground');
+
+    		// 클릭된 a 태그에만 클래스 추가
+    		$(this).addClass('changebackground');
+		});
 		
 	});
 </script>

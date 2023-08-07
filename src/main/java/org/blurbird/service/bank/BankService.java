@@ -68,5 +68,8 @@ public interface BankService {
 	public BankHistoryVO getBhFromMessage(String messageno);	
 	// 메시지 읽음 처리
 	public int modifyMessageState(String messageno);
+	
+	// 트랜잭션 처리: 수임사가 통장내역에 대한 메시지 입력시
+	public void insertMemoForBH(String bhno, String amountwithcommas, String memo);
 
 }
