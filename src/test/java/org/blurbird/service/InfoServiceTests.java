@@ -85,8 +85,21 @@ public class InfoServiceTests {
 //	}
 
 	
+//	@Test
+//	public void test() {
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + mapper.getListBusiness());
+//	}
+	
 	@Test
 	public void test() {
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + mapper.getListBusiness());
+		InfoMainVO info = new InfoMainVO();
+		info.setBizno("10001");
+		info.setYear("2022");
+		
+		log.info("@@@@@@@@@@@@2022: " + service.getISByBiz(info));
+		info.setBizno("10001");
+		info.setYear("2023");
+		
+		log.info("@@@@@@@@@@@@2023: " + service.getISByBiz(info));
 	}
 }

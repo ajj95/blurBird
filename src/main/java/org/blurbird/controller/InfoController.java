@@ -3,7 +3,9 @@ package org.blurbird.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.blurbird.domain.common.BusinessVO;
 import org.blurbird.domain.info.InfoMainVO;
@@ -83,6 +85,20 @@ public class InfoController {
 		service.transfer(reportPaymentVO);
 		return service.rptfResult(reportPaymentVO);
 	}
+	
+//	   // 납부서 전송 상태인 개수 가져오기
+//	   @GetMapping("/getReportStatusCount")
+//	   public ResponseEntity<Map<String, Integer>> getHistoryAndSlip() {
+//	        Map<String, Integer> response = new HashMap<>();
+//	        int count = service.getStatusCount();
+//	        int total = service.getTotalCount();
+//
+//	         response.put("statuscount", count);
+//	         response.put("totalcount", total);
+//
+//	         return ResponseEntity.ok(response);    
+//	   }
+
 	
 	@GetMapping("/infoCO")
 	public void getInfoCO() {
