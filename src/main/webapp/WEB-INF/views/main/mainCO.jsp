@@ -16,38 +16,24 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
+$(function() {
 
-	$(function() {
+    $(".first-service").on("click", function(){
+ 	   window.location.href = "/docrequest/docrequestCO";
+    });
+    
+    $(".second-service").on("click", function(){
+ 	   window.location.href = "/receipt/receiptco";
+    });
 
-		$(".menu2").on("click", function(e){
-			e.preventDefault();
-			
-		    console.log(this);
-		    var buttonId = this.id;
-			
-			
-		    // 클릭한 요소를 구분하여 처리합니다.
-		    if (buttonId == "button1") {
-		        // 버튼 1을 클릭했을 때 실행할 동작
-		        console.log("버튼 1을 클릭했습니다.");
-		        window.location.href = "/docrequest/docrequestCO"
-		    } else if (buttonId == "button2") {
-		        // 버튼 2를 클릭했을 때 실행할 동작
-		        console.log("버튼 2를 클릭했습니다.");
-		        window.location.href = "/receipt/receiptco"
-		    } else if (buttonId == "button3") {
-		        // 버튼 3를 클릭했을 때 실행할 동작
-		        console.log("버튼 3를 클릭했습니다.");
-		        window.location.href = "/bank/bankco"
-		    }else if (buttonId == "button4") {
-		        // 버튼 4를 클릭했을 때 실행할 동작
-		        console.log("버튼 4를 클릭했습니다.");
-		        window.location.href = "/info/infoCO"
-		    }else {
-		        // 다른 버튼을 클릭했을 때 실행할 동작
-		        console.log("다른 버튼을 클릭했습니다.");
-		    }
-		});
+    $(".third-service").on("click", function(){
+ 	   window.location.href = "/bank/bankco";
+    });
+    
+    $(".fourth-service").on("click", function(){
+ 	   window.location.href = "/info/infoCO"
+    });
+
 		
 	});
 </script>
@@ -107,6 +93,96 @@
 .dashboard .info-card {
 	padding: 10px 10px 10px 10px;
 }
+.service-item {
+    position: relative;
+    z-index: 1;
+    padding: 30px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+    background-color: #fff;
+    border-radius: 10px;
+    border-top-right-radius: 50px;
+    transition: all .3s;
+}
+.service-item .icon {
+  margin-left: 0px;
+  margin-bottom: 30px;
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
+  transition: all .3s;
+}
+
+.service-item h4 {
+  transition: all .3s;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.service-item p {
+  transition: all .3s;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.service-item:hover h4,
+.service-item:hover p,
+.service-item:hover .text-button a {
+  color: #fff;
+}
+
+.first-service .icon {
+  background-image: url(../resources/assets/img/service-icon-01.png);
+}
+
+.first-service:hover .icon {
+  background-image: url(../resources/assets/img/service-icon-hover-01.png);
+}
+
+.second-service .icon {
+  background-image: url(../resources/assets/img/service-icon-02.png);
+}
+
+.second-service:hover .icon {
+  background-image: url(../resources/assets/img/service-icon-hover-02.png);
+}
+
+
+.third-service .icon {
+  background-image: url(../resources/assets/img/service-icon-03.png);
+}
+
+.third-service:hover .icon {
+  background-image: url(../resources/assets/img/service-icon-hover-03.png);
+}
+
+.fourth-service .icon {
+  background-image: url(../resources/assets/img/service-icon-04.png);
+}
+
+.fourth-service:hover .icon {
+  background-image: url(../resources/assets/img/service-icon-hover-04.png);
+}
+
+.service-item:hover {
+  background-image: url(../resources/assets/img/service-bg.jpg);
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.importantmenu {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  max-width: 1050px;
+}
+
+.customers-card{
+	height: 170px;
+}
 
 
 </style>
@@ -124,31 +200,24 @@
           <div class="row">
           <div class="row row2">
 
-
-
-
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-12 login">
 
               <div class="card info-card customers-card cardf">
 
                 <div class="card-body ">
-                  <h5 class="card-title" id="loginuserbizname">그린테크소프트<span> | 수임사</span></h5>
+                  <h5 class="card-title">그린테크소프트<span> | 수임사</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6 id="loginusername">김성민</h6>
-                      <span class="text-danger small pt-1 fw-bold">
-                      	대표님
-                      </span>
-                      <span class="text-muted small pt-2 ps-1">sungmin@naver.com</span>
+                      <h6>김성민</h6>
+                      <span class="text-danger small pt-1 fw-bold">대표님</span> <span class="text-muted small pt-2 ps-1">sungmin@naver.com</span>
 
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -199,48 +268,41 @@
               </div>
             </div><!-- End menu Card -->
             
+			<div class="importantmenu">
+            	<div class="col-lg-3">
+					<div class="service-item first-service">
+						<div class="icon"></div>
+						<h4>민원 서류</h4>
+						<p>원하는 서류 실시간 확인 발급</p>
+					</div>
+				</div>
             
-            
-            
-            
-            
-            
-            
-            <div class="menu2" id="button1">
-              <div class="info-box card cardf">
-                <i class="ri-file-edit-line menu-icon"> <span class="iconfont">민원 서류</span> </i>
-                <p></p>
-              </div>
-            </div>
-            
-            
-            <div class="menu2" id="button2">
-              <div class="info-box card cardf">
-                <i class="ri-clipboard-line menu-icon"> <span class="iconfont">전표증빙</span> </i>
-                <p></p>
-              </div>
-            </div>
-            
-            
-            <div class="menu2" id="button3">
-              <div class="info-box card cardf">
-                <i class="ri-bank-card-line menu-icon"> <span class="iconfont">통장 관리</span> </i>
-                <p></p>
-              </div>
-            </div>
-            
-            
-            <div class="menu2" id="button4">
-              <div class="info-box card cardf">
-                <i class="ri-file-chart-line menu-icon"><span class="iconfont">  신고 현황</span></i>
-                <p></p>
-              </div>
-            </div>
-            </div>
+              <div class="col-lg-3">
+					<div class="service-item second-service">
+						<div class="icon"></div>
+						<h4>전표증빙</h4>
+						<p>영수증 촬영으로 편리한 전표처리</p>
+					</div>
+				</div>
 
-            
-            
-            
+				<div class="col-lg-3">
+					<div class="service-item third-service">
+						<div class="icon"></div>
+						<h4>통장 관리</h4>
+						<p>편리한 자동분개와 내용 확인</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3">
+					<div class="service-item fourth-service">
+						<div class="icon"></div>
+						<h4>신고현황</h4>
+						<p>즉시 확인 가능한 신고서, 납부서</p>
+					</div>
+				</div>
+            </div>
+            </div><!-- end row2 -->
+
             
             
             <div class="row row3">
@@ -294,6 +356,14 @@
                     회사의 <a href="/info/infoCO" class="fw-bold text-dark">종합소득세 신고</a> 완료 
                   </div>
                 </div><!-- End activity item-->
+                
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 days</div>
+                  <i class="bi bi-circle-fill activity-badge text-info align-self-start"></i>
+                  <div class="activity-content">
+                    국민 은행<a href="/bank/bankco" class="fw-bold text-dark"> 통장내역 전표처리</a> 완료 
+                  </div>
+                </div><!-- End activity item-->
 
                 <div class="activity-item d-flex">
                   <div class="activite-label">2 days</div>
@@ -304,40 +374,106 @@
                 </div><!-- End activity item-->
 
                 <div class="activity-item d-flex">
+                  <div class="activite-label">1 week</div>
+                  <i class="bi bi-circle-fill activity-badge text-warning align-self-start"></i>
+                  <div class="activity-content">
+                    기존 전표 업로드 완료
+                  </div>
+                </div><!-- End activity item-->
+                
+                <div class="activity-item d-flex">
+                  <div class="activite-label">4 weeks</div>
+                  <i class="bi bi-circle-fill activity-badge text-muted align-self-start"></i>
+                  <div class="activity-content">
+                    기본 통장, 카드 인증서 등록 완료
+                  </div>
+                </div><!-- End activity item-->
+                
+              <div class="activity-item d-flex">
                   <div class="activite-label">4 weeks</div>
                   <i class="bi bi-circle-fill activity-badge text-muted align-self-start"></i>
                   <div class="activity-content">
                     그린테크 기업 BlurTax 가입
                   </div>
-                </div><!-- End activity item-->
+               </div><!-- End activity item-->
 
               </div>
 
             </div>
           </div>
           </div>
-          
-            
-            
-            
-            
-            
-            
-            
-              <!-- Vertical Bar Chart -->
-            <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Vertical Bar Chart</h5>
 
+          <!-- Vertical Bar Chart -->
+          <div class="col-lg-6">
+  
+                  <h5 class="card-title">이익률 분석 <span>/ 상반기</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="reportsChart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      new ApexCharts(document.querySelector("#reportsChart"), {
+                        series: [{
+                          name: '매출액',
+                          data: [31, 40, 28, 51, 42, 82, 56],
+                        }, {
+                          name: '영업이익률',
+                          data: [11, 32, 45, 32, 34, 52, 41]
+                        }, {
+                          name: '순이익률',
+                          data: [15, 11, 32, 18, 9, 24, 11]
+                        }],
+                        chart: {
+                          height: 350,
+                          type: 'area',
+                          toolbar: {
+                            show: false
+                          },
+                        },
+                        markers: {
+                          size: 4
+                        },
+                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                        fill: {
+                          type: "gradient",
+                          gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.3,
+                            opacityTo: 0.4,
+                            stops: [0, 90, 100]
+                          }
+                        },
+                        dataLabels: {
+                          enabled: false
+                        },
+                        stroke: {
+                          curve: 'smooth',
+                          width: 2
+                        },
+                        xaxis: {
+                          type: 'datetime',
+                          categories: ["2023-01-01", "2023-02-01", "2023-03-01", "2023-04-01", "2023-05-01", "2023-06-01", "2023-07-01"]
+                        },
+                        tooltip: {
+                          x: {
+                            format: 'dd/MM/yy'
+                          },
+                        }
+                      }).render();
+                    });
+                  </script>
+                  <!-- End Line Chart -->
+
+                </div>
+
+            </div><!-- End Reports -->
+              <h5 class="card-title">기업 매출 & 세금 현황</h5>
               <div id="verticalBarChart" style="min-height: 400px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); position: relative;" class="echart" _echarts_instance_="ec_1691131085676"><div style="position: relative; width: 361px; height: 400px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;"><canvas data-zr-dom-id="zr_0" width="541" height="600" style="position: absolute; left: 0px; top: 0px; width: 361px; height: 400px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas></div><div class="" style="position: absolute; display: block; border-style: solid; white-space: nowrap; z-index: 9999999; box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 10px; transition: opacity 0.2s cubic-bezier(0.23, 1, 0.32, 1) 0s, visibility 0.2s cubic-bezier(0.23, 1, 0.32, 1) 0s, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s; background-color: rgb(255, 255, 255); border-width: 1px; border-radius: 4px; color: rgb(102, 102, 102); font: 14px / 21px &quot;Microsoft YaHei&quot;; padding: 10px; top: 0px; left: 0px; transform: translate3d(102px, 175px, 0px); border-color: rgb(255, 255, 255); pointer-events: none; visibility: hidden; opacity: 0;"><div style="margin: 0px 0 0;line-height:1;"><div style="margin: 0px 0 0;line-height:1;"><div style="font-size:14px;color:#666;font-weight:400;line-height:1;">China</div><div style="margin: 10px 0 0;line-height:1;"><div style="margin: 0px 0 0;line-height:1;"><div style="margin: 0px 0 0;line-height:1;"><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#5470c6;"></span><span style="font-size:14px;color:#666;font-weight:400;margin-left:2px">2011</span><span style="float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900">131,744</span><div style="clear:both"></div></div><div style="clear:both"></div></div><div style="margin: 10px 0 0;line-height:1;"><div style="margin: 0px 0 0;line-height:1;"><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#91cc75;"></span><span style="font-size:14px;color:#666;font-weight:400;margin-left:2px">2012</span><span style="float:right;margin-left:20px;font-size:14px;color:#666;font-weight:900">134,141</span><div style="clear:both"></div></div><div style="clear:both"></div></div><div style="clear:both"></div></div><div style="clear:both"></div></div><div style="clear:both"></div></div></div></div>
 
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
                   echarts.init(document.querySelector("#verticalBarChart")).setOption({
-                    title: {
-                      text: '기업 매출 & 세금 현황'
-                    },
                     tooltip: {
                       trigger: 'axis',
                       axisPointer: {
@@ -374,26 +510,17 @@
                 });
               </script>
               <!-- End Vertical Bar Chart -->
-
-            </div>
-          </div>
-        </div>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        </div><!-- End Left side columns -->
-
-    </section>
         
+        </div><!-- End Left side columns -->
+    </section>
 
 </main>
-  
+ 	<!-- Scripts -->
+	<script src="../resources/assets/js/owl-carousel.js"></script>
+	<script src="../resources/assets/js/animation.js"></script>
+	<script src="../resources/assets/js/imagesloaded.js"></script>
+	<script src="../resources/assets/js/popup.js"></script>
+	<script src="../resources/assets/js/custom.js"></script>   
   
 	<!-- End #main -->
 	<%@include file="../common/footer.jsp"%>

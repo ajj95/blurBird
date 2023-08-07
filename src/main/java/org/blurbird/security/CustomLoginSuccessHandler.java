@@ -24,6 +24,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
       , HttpServletResponse response
 			, Authentication auth) throws IOException, ServletException {
 		
+		String previousUrl = request.getHeader("referer");
 		List<String> roleName = new ArrayList<String>();
 		
 		//로그인 성공시 사용자의 정보가 Authentication 객체로 넘어옴
@@ -47,5 +48,6 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
 		
 		// 어떤 권한도 없는 경우
 		response.sendRedirect("/");
+		
 	}
 }
