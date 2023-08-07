@@ -106,7 +106,7 @@
 								<!-- 신고서 관리 graph -->
 								<div class="card-body">
 									<h5 class="card-title">
-										신고서 관리 <span>| Today</span>
+										신고서 한눈에 보기 <span>| Today</span>
 									</h5>
 									<div class="detailTitle">
 										<span></span> <span></span> <span></span>
@@ -145,7 +145,7 @@
 												<!-- 연월 선택 캘린더 -->
 													<input type="number" name="year" placeholder="2023"
 														value='<c:out value="${year}"/>' min="1900" max="2100"></input>
-													<button type="submit" id="submitYear">조회</button>
+													<button type="submit" class= "btn btn-outline-secondary" id="submitYear">조회</button>
 												</div>
 											</form>
 										<!-- 년도 선택 월력 띄우기-->
@@ -198,15 +198,15 @@
 										              datasets: [{
 										                label: '종합소득금액',
 										                data: dataValues1,
-										                fill: true,
-										                borderColor: 'rgb(75, 192, 192)',
+										                fill: false,
+										                borderColor: '#4169E1',
 										                tension: 0.5
 										              }, {
 										                label: '납부세액',
 										                data: dataValues2,
-										                fill: true,
-										                borderColor: 'rgb(255, 99, 132)',
-										                tension: 0.5
+										                fill: false,
+										                borderColor: 'rgb(153, 102, 255)',
+										                tension: 0.2
 										              }]
 										            },
 										            options: {
@@ -270,18 +270,19 @@
 									            data: {
 									              labels: ['이자소득', '배당소득', '사업소득', '근로소득', '연금소득', '기타소득'],
 									              datasets: [{
-									                label: '사업소득',
-									                data: [0, 0, bizincome, 0, 0, 0],
-									                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-									                borderColor: 'rgb(255, 99, 132)',
+									                label: '소득',
+									                data: [60000000, 96584000, bizincome, 50000000, 68760000, 84000000],
+									                backgroundColor: 'rgba(13,110,253,0.2)',
+									                borderColor: 'rgba(13,110,253)',
 									                borderWidth: 1
 									              }, {
 									                label: '납부세액',
-									                data: [0, 0, tax, 0, 0, 0],
+									                data: [15000000, 30000000, tax, 20000000, 30000000, 10000000],
 									                backgroundColor: 'rgba(153, 102, 255, 0.2)',
 									                borderColor: 'rgb(153, 102, 255)',
 									                borderWidth: 1
-									              }]
+									              }
+									              ]
 									            },
 									            options: {
 									              scales: {
@@ -359,17 +360,9 @@
 
 
 						<div class="tab-pane fade" id="bordered-profile" role="tabpanel"
-							aria-labelledby="profile-tab">Nesciunt totam et.
-							Consequuntur magnam aliquid eos nulla dolor iure eos quia.
-							Accusantium distinctio omnis et atque fugiat. Itaque doloremque
-							aliquid sint quasi quia distinctio similique. Voluptate nihil
-							recusandae mollitia dolores. Ut laboriosam voluptatum dicta.</div>
+							aria-labelledby="profile-tab"></div>
 						<div class="tab-pane fade" id="bordered-contact" role="tabpanel"
-							aria-labelledby="contact-tab">Saepe animi et soluta ad odit
-							soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium
-							quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus
-							impedit molestias nostrum veniam. Qui amet ipsum iure.
-							Dignissimos fuga tempore dolor.</div>
+							aria-labelledby="contact-tab">S.</div>
 					</div>
 					<!-- End Bordered Tabs -->
 
