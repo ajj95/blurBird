@@ -20,4 +20,8 @@ public interface InfoService {
 	public void transfer(ReportPaymentVO reportPaymentVO);
 	
 	public ReportPaymentVO rptfResult(ReportPaymentVO reportPaymentVO);
+	
+	public int getStatusCount();
+	public int getTotalCount();
+
 }

@@ -199,12 +199,17 @@ public class InfoMapperTests {
 //		log.info("����� ����@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + infoList);
 //	}
 	
+//	@Test
+//	public void test() {
+//		ReportPaymentVO rp = new ReportPaymentVO();
+//		rp.setBizno("10001");
+//		
+//		log.info("@@@@@@@@@@@@@@@@@@@@@@@"+mapper.rptfResult(rp));
+//	}
+	
 	@Test
 	public void test() {
-		ReportPaymentVO rp = new ReportPaymentVO();
-		rp.setBizno("10001");
-		
-		log.info("@@@@@@@@@@@@@@@@@@@@@@@"+mapper.rptfResult(rp));
+		log.info("@@@@@@@@@@@@@@Statuscount: " + mapper.getStatusCount());
 	}
 	
 }

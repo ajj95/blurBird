@@ -127,23 +127,23 @@ public class InfoServiceImpl implements InfoService {
 	@Override
 	public List<InfoMainVO> getList(InfoMainVO infoMainVO) {
 		IncomeSVO iS = this.getISByBiz(infoMainVO);
-		List<InfoMainVO> infoList = mapper.getListBusiness();
-//		List<InfoMainVO> infoList = new ArrayList<InfoMainVO>();
+//		List<InfoMainVO> infoList = mapper.getListBusiness();
+		List<InfoMainVO> infoList = new ArrayList<InfoMainVO>();
 			
 
-//		infoMainVO.setBizno(infoMainVO.getBizno());
-//		infoMainVO.setYear(infoMainVO.getYear());
-//		infoMainVO.setBizname(mapper.getBizName(infoMainVO).getBizname());
-//		infoMainVO.setBizincome(Long.toString(iS.getBusinessIncome()));
-//		infoMainVO.setTax(Long.toString(iS.getTax()));
-//		//TODO: mapper를 통해서 DB값 받아올것
-//		infoMainVO.setReportdate(infoMainVO.getReportdate());
-//		infoMainVO.setReportdoc(infoMainVO.getReportdoc());
-//		infoMainVO.setPaymentslip(infoMainVO.getPaymentslip());
-//		infoMainVO.setTransdate(infoMainVO.getTransdate());
-//		infoMainVO.setStatus(infoMainVO.getStatus());
+		infoMainVO.setBizno(infoMainVO.getBizno());
+		infoMainVO.setYear(infoMainVO.getYear());
+		infoMainVO.setBizname(mapper.getBizName(infoMainVO).getBizname());
+		infoMainVO.setBizincome(Long.toString(iS.getBusinessIncome()));
+		infoMainVO.setTax(Long.toString(iS.getTax()));
+		//TODO: mapper를 통해서 DB값 받아올것
+		infoMainVO.setReportdate(infoMainVO.getReportdate());
+		infoMainVO.setReportdoc(infoMainVO.getReportdoc());
+		infoMainVO.setPaymentslip(infoMainVO.getPaymentslip());
+		infoMainVO.setTransdate(infoMainVO.getTransdate());
+		infoMainVO.setStatus(infoMainVO.getStatus());
 		
-//		infoList.add(infoMainVO);
+		infoList.add(infoMainVO);
 
 		return infoList;
 	}
@@ -183,4 +183,14 @@ public class InfoServiceImpl implements InfoService {
 		return mapper.rptfResult(reportPaymentVO);
 	}
 
+	@Override
+	   public int getStatusCount() {
+	      return mapper.getStatusCount();
+	   }
+	@Override
+	   public int getTotalCount() {
+	      return mapper.getTotalCount();
+	   }
+
+	
 }

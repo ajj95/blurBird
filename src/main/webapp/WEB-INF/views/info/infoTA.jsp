@@ -114,6 +114,8 @@ th:first-child(2), td:first-child(2) {
 <script type="text/javascript">
 	$(document).ready(
 			
+			
+			
 					function() {$("#businessList").on("click",".list-group-item",function(e) {
 									e.preventDefault();
 									let bizno = $(this).find("input[name='biznoInSidebar']").val();
@@ -121,9 +123,67 @@ th:first-child(2), td:first-child(2) {
 									$("#bizno").val(bizno);
 								});
 					
-// 					var submitbtn ="#submitYear" 
+					var statuscount = "";
+					var totalcount = "";
+					
+					 function getStatusCount() {
+				         
+				           $.ajax({
+				               type: "GET",
+				               dataType:'json',
+				               url: "/info/getReportStatusCount",
+				               
+				               success: function(response) {
+				            	   
+// 				            	   console.log(response);
+// 				            	   console.log("!!!!!!" + response.statuscount);
+// 				            	   console.log(statuscount);
+				                   statuscount = response.statuscount;
+				         			totalcount = response.totalcount;
+// 				         			console.log("statuscount: " + statuscount);
+				         			
+				         			let start = $(".statusBar");
+							           
+							           start.empty();
+							           let str = '';
+							           str += '<div class="graph">';
+							           str += '<div class="bar completed">';
+							           str += '<dl class="desc">';
+							           str += '<dt>신고완료 <em>';
+							           str += statuscount;
+							           str += '</em>건';
+							           str += '</dt>';
+							           str += '</dl>';
+							           str += '</div>';
+							           str += '<div class="bar undeclared">';
+							           str += '<dl class="desc">';
+							           str += '<dt>미신고<em>';
+							      str += totalcount-statuscount;
+							           str += '</em>건';
+							           str += '</dt>';
+							           str += '</div>';
+							           str += '</div>';
+							           
+							           start.html(str);
+				               },
+				               error: function(xhr, status, error) {
+				                   console.error(error);
+				               }
+				           });
+				           
+				           
+				       }
+					
+					  function formatNumberWithCommas(number) {
+					        return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					   };
+					   
+					   
+					   
+					  
+					var submitbtn ="#submitYear" 
 						
-// 					$(".selectYear").off("click", submitbtn);
+					$(".selectYear").off("click", submitbtn);
 					
 					
 						$("#submitYear").on("click",function(e) {
@@ -152,7 +212,7 @@ th:first-child(2), td:first-child(2) {
 									
 									
 											$('#maketd').empty();
-											
+											getStatusCount();
 									processBizno(biznoList, 0 , year); // biznoList의 인덱스 0번부터 1씩 더해가면서 가져온다. -> 값이 잘 들어왔으면 잘 출력돼야 한다.
 									
 								}); // $("#submitYear").on("click",function(e) 종료
@@ -161,8 +221,8 @@ th:first-child(2), td:first-child(2) {
 								
 								
 						function processBizno(biznoList, index, year) {
-							console.log(biznoList);
-							console.log(index);
+// 							console.log(biznoList);
+// 							console.log(index);
 							
 							if (index >= biznoList.length) {
 								// 처리가 끝났을 때
@@ -184,11 +244,21 @@ th:first-child(2), td:first-child(2) {
 										dataType : 'json',
 										success : function(data) {
 											// 받은 데이터에 대한 추가 처리 또는 페이지 업데이트를 여기에서 수행합니다.
+											
+											// 납부서 전송한 개수 가져오기
+     
+											console.log("dataaaaaaaaaaaaaaaa : " + data);
+											
+											
+											
+											
 											// 다음 bizno 처리를 위해 재귀 호출
+											
+											
+											
 
 											var arr = data;
-											console.log(data); // 데이터가 잘 나오는데, 이 데이터를 받았을 때 이미 biznoList에 데이터가 저장된 bizno는 빠졍ㅅ다.
-											console.log("aaa");
+// 											console.log("aaa");
 
 // 											data.forEach(function(item, index){
 // 												console.log("인덱스: " + index);
@@ -202,13 +272,13 @@ th:first-child(2), td:first-child(2) {
 																html += '<td>'+ arr[index].bizname+ '<input type="hidden" name="bizno" value="' + arr[index].bizno + '"></td>';
 																html += '<td>'+ arr[index].year+ '</td>';
 																 if (arr[index].bizincome) {
-																        html += '<td>'+ arr[index].bizincome+ '</td>';
+																        html += '<td>'+ formatNumberWithCommas(arr[index].bizincome) + '<input type="hidden" name="bizincome" value="' + arr[index].bizincome + '"></td>';
 																    } else {
 																        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 																    }
 // 																html += '<td>'+ arr[index].bizincome+ '</td>';
 															    if (arr[index].tax) {
-															        html += '<td>'+ arr[index].tax+ '</td>';
+															        html += '<td>'+ formatNumberWithCommas(arr[index].tax) + '<input type="hidden" name="tax" value="' + arr[index].tax + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
@@ -217,25 +287,25 @@ th:first-child(2), td:first-child(2) {
 
 																  // 값이 있는 경우 해당 값을 셀에 추가
 															    if (arr[index].reportdate) {
-															        html += '<td>'+ arr[index].reportdate+ '</td>';
+															        html += '<td>'+ arr[index].reportdate + '<input type="hidden" name="reportdate" value="' + arr[index].reportdate + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
 
 															    if (arr[index].reportdoc) {
-															        html += '<td>'+ arr[index].reportdoc+ '</td>';
+															        html += '<td>'+ arr[index].reportdoc + '<input type="hidden" name="reportdoc" value="' + arr[index].reportdoc + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
 
 															    if (arr[index].paymentslip) {
-															        html += '<td>'+ arr[index].paymentslip+ '</td>';
+															        html += '<td>'+ arr[index].paymentslip + '<input type="hidden" name="paymentslip" value="' + arr[index].paymentslip + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
 
 															    if (arr[index].transdate) {
-															        html += '<td>'+ arr[index].transdate+ '</td>';
+															        html += '<td>'+ arr[index].transdate + '<input type="hidden" name="transdate" value="' + arr[index].transdate + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
@@ -244,7 +314,7 @@ th:first-child(2), td:first-child(2) {
 																$(this).append(html);
 																
 															});
-
+											getStatusCount();
 											processBizno(biznoList, index + 1,year);
 										}
 									});
@@ -294,6 +364,7 @@ th:first-child(2), td:first-child(2) {
 															success : function(data) {
 																
 																
+																
 // 																console.log(data);
 // 																console.log($('.rptfbtn')	.closest('tr');
 // 																console.log($('.rptfbtn')	.closest('tr').find("td").eq(0));
@@ -303,8 +374,8 @@ th:first-child(2), td:first-child(2) {
 
 																loc.eq(0).text(data.bizname);
 																loc.eq(1).text(data.year);
-																loc.eq(2).text(data.bizincome);
-																loc.eq(3).text(data.tax);
+																loc.eq(2).text(formatNumberWithCommas(data.bizincome));
+																loc.eq(3).text(formatNumberWithCommas(data.tax));
 
 																var date = new Date(data.reportdate);
 																var formattedDate = date.toLocaleDateString('ko-KR');
@@ -312,7 +383,8 @@ th:first-child(2), td:first-child(2) {
 																loc.eq(5).text(data.reportdoc);
 																loc.eq(6).text(data.paymentslip);
 																loc.eq(8).html('<input type="button" class="transferbtn" value="'+data.status+'"/>');
-
+																
+																getStatusCount();
 
 										var trbtn = ".transferbtn";
 					$("#maketd").off("click", trbtn);
@@ -335,6 +407,8 @@ th:first-child(2), td:first-child(2) {
 					var formattedDate = date.toLocaleDateString('ko-KR');
 					loc.eq(7).text(formattedDate);
 					loc.eq(8).html('<input type="button" disabled value="'+data.status+'"/>');
+					
+					getStatusCount();
 				},
 				error : function(xhr,status,error) {
 					console.error(error);
@@ -434,22 +508,22 @@ th:first-child(2), td:first-child(2) {
 						<!-- 전체 건수 나타내는 신고현황 바(막대기) -->
 						<div class="statusBar">
 
-							<div class="graph">
-								<div class="bar completed">
-									<dl class="desc">
-										<dt>
-											신고완료 <em>1</em>건
-										</dt>
-									</dl>
-								</div>
-								<div class="bar undeclared">
-									<dl class="desc">
-										<dt>
-											미신고 <em>4</em>건
-										</dt>
-									</dl>
-								</div>
-							</div>
+<!-- 							<div class="graph"> -->
+<!-- 								<div class="bar completed"> -->
+<!-- 									<dl class="desc"> -->
+<!-- 										<dt> -->
+<!-- 											신고완료 <em>1</em>건 -->
+<!-- 										</dt> -->
+<!-- 									</dl> -->
+<!-- 								</div> -->
+<!-- 								<div class="bar undeclared"> -->
+<!-- 									<dl class="desc"> -->
+<!-- 										<dt> -->
+<!-- 											미신고 <em>4</em>건 -->
+<!-- 										</dt> -->
+<!-- 									</dl> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
 						</div>
 					</div>
 					<br>
