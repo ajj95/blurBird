@@ -101,7 +101,7 @@
                     </div>
                     <div class="col-12">
                     <div class="loginoption">
-	                      <p class="small mb-0">계정이 없으신가요? <a href="pages-register.html">계정 만들기</a></p>
+	                      <p class="small mb-0">계정이 없으신가요? <a href="../register/registerta">계정 만들기</a></p>
 	                      <div class="findInfo">
 								<p class="small mb-0">
 									<a target="_blank" id="idinquiry" href="" style="color: black; text-align: center;">아이디 찾기</a> │

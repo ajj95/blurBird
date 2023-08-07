@@ -163,7 +163,7 @@
 									</div>
 									<div class="col-12">
 										<p class="small mb-0">
-											이미 아이디가 있으십니까? <a href="pages-login.html">Log in</a>
+											이미 아이디가 있으십니까? <a href="../main/talogin">Log in</a>
 										</p>
 									</div>
 								</div>
