@@ -128,6 +128,8 @@ public class InfoServiceImpl implements InfoService {
 	public List<InfoMainVO> getList(InfoMainVO infoMainVO) {
 		IncomeSVO iS = this.getISByBiz(infoMainVO);
 //		List<InfoMainVO> infoList = mapper.getListBusiness();
+		
+		
 		List<InfoMainVO> infoList = new ArrayList<InfoMainVO>();
 			
 

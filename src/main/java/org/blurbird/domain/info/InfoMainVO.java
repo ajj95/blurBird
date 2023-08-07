@@ -1,10 +1,13 @@
 package org.blurbird.domain.info;
 
+import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Component
 public class InfoMainVO {
 
 		private String bizno;

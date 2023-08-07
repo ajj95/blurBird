@@ -30,6 +30,8 @@ public interface InfoMapper {
 	
 	public int getStatusCount();
 	public int getTotalCount();
+	
+//	public InfoMainVO getList(InfoMainVO infoMainVO);
 
 	
 }
