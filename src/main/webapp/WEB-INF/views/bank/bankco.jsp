@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../common/coheader.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -10,8 +12,8 @@
   <title>bankco</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style type="text/css">
   #main{
   	margin-left: 0px !important;
   }
@@ -400,7 +402,7 @@ ul#pills-tab {
 }
 </style>
 <script src="../resources/assets/js/bankco.js"></script>
-<script src="text/javascript">
+<script type="text/javascript">
 
 // 아래 항목은 bankco.js에 넣으면 .ri-article-fill 부분에 충돌 일어남
 
