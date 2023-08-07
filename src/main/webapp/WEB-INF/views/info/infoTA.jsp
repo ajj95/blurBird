@@ -79,16 +79,23 @@ th:first-child(2), td:first-child(2) {
 	display: flex;
 }
 
+/* :root { */
+/*   --completed-width: newValue; */
+/* } */
+
 .completed {
-	width: 20%;
+width: 50%;
 	height: 30px;
-	background-color: skyblue;
+	padding: 0;
+	text-align: center;
+	background-color: #4169E1;
+	color: #fff;
 	font-weight: 600;
 	font-size: .8rem;
 }
 
 .undeclared {
-	width: 100%;
+	width: 50%;
 	height: 30px;
 	padding: 0;
 	text-align: center;
@@ -107,12 +114,14 @@ th:first-child(2), td:first-child(2) {
 	font-weight: 700;
 }
 
-.printButton {
-	border: 0.5px;
-}
+/* .printButton { */
+/* 	border: 0.5px; */
+/* } */
 </style>
 <script type="text/javascript">
 	$(document).ready(
+			
+			
 			
 					function() {$("#businessList").on("click",".list-group-item",function(e) {
 									e.preventDefault();
@@ -121,14 +130,94 @@ th:first-child(2), td:first-child(2) {
 									$("#bizno").val(bizno);
 								});
 					
-// 					var submitbtn ="#submitYear" 
+					var statuscount = "";
+					var totalcount = "";
+					
+					 function getStatusCount() {
+				         
+				           $.ajax({
+				               type: "GET",
+				               dataType:'json',
+				               url: "/info/getReportStatusCount",
+				               
+				               success: function(response) {
+				            	   
+// 				            	   console.log(response);
+// 				            	   console.log("!!!!!!" + response.statuscount);
+// 				            	   console.log(statuscount);
+				                   statuscount = response.statuscount;
+				         			totalcount = response.totalcount;
+// 				         			console.log("statuscount: " + statuscount);
+				         			
+				         			 // 비율 계산
+            var percentage = ((statuscount / totalcount) * 100).toFixed(1);
+            console.log("Percentage: " + percentage + "%");
+            
+         // .percentage 클래스가 지정된 div에 비율 값을 넣기
+            $(".percentage").text(percentage + "%");
+				         			
+				         			let start = $(".statusBar");
+							           
+							           start.empty();
+							           let str = '';
+							           str += '<div class="graph">';
+							           str += '<div class="bar completed">';
+							           str += '<dl class="desc">';
+							           str += '<dt>신고완료 <em>';
+							           str += statuscount;
+							           str += '</em>건';
+							           str += '</dt>';
+							           str += '</dl>';
+							           str += '</div>';
+							           str += '<div class="bar undeclared">';
+							           str += '<dl class="desc">';
+							           str += '<dt>미신고<em>';
+							      str += totalcount-statuscount;
+							           str += '</em>건';
+							           str += '</dt>';
+							           str += '</div>';
+							           str += '</div>';
+							           
+							           start.html(str);
+				               },
+				               error: function(xhr, status, error) {
+				                   console.error(error);
+				               }
+				           });
+				           
+				           
+				       }
+					
+					  function formatNumberWithCommas(number) {
+					        return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					   };
+					   
+					   
+					   
+					  
+					var submitbtn ="#submitYear" 
 						
-// 					$(".selectYear").off("click", submitbtn);
+					$(".selectYear").off("click", submitbtn);
 					
 					
 						$("#submitYear").on("click",function(e) {
 							
+							
+							
 									e.preventDefault(); // 폼 제출 방지
+									
+									// 예시로 외부에서 값을 받아오는 함수
+									function getValueFromExternalSource() {
+									  // 여기에서 외부에서 값을 받아오는 로직을 구현
+									  
+									  
+									  
+									  return "40%"; // 외부에서 받아온 값
+									}
+									
+									const completedElement = document.querySelector(".completed");
+									const newValue = getValueFromExternalSource();
+									completedElement.style.setProperty("--completed-width", newValue);
 									
 // 									var pct = ".percentage";
 // 									var graph = ".graph";
@@ -152,7 +241,7 @@ th:first-child(2), td:first-child(2) {
 									
 									
 											$('#maketd').empty();
-											
+											getStatusCount();
 									processBizno(biznoList, 0 , year); // biznoList의 인덱스 0번부터 1씩 더해가면서 가져온다. -> 값이 잘 들어왔으면 잘 출력돼야 한다.
 									
 								}); // $("#submitYear").on("click",function(e) 종료
@@ -161,8 +250,8 @@ th:first-child(2), td:first-child(2) {
 								
 								
 						function processBizno(biznoList, index, year) {
-							console.log(biznoList);
-							console.log(index);
+// 							console.log(biznoList);
+// 							console.log(index);
 							
 							if (index >= biznoList.length) {
 								// 처리가 끝났을 때
@@ -184,11 +273,21 @@ th:first-child(2), td:first-child(2) {
 										dataType : 'json',
 										success : function(data) {
 											// 받은 데이터에 대한 추가 처리 또는 페이지 업데이트를 여기에서 수행합니다.
+											
+											// 납부서 전송한 개수 가져오기
+     
+											console.log("dataaaaaaaaaaaaaaaa : " + data);
+											
+											
+											
+											
 											// 다음 bizno 처리를 위해 재귀 호출
+											
+											
+											
 
 											var arr = data;
-											console.log(data); // 데이터가 잘 나오는데, 이 데이터를 받았을 때 이미 biznoList에 데이터가 저장된 bizno는 빠졍ㅅ다.
-											console.log("aaa");
+// 											console.log("aaa");
 
 // 											data.forEach(function(item, index){
 // 												console.log("인덱스: " + index);
@@ -202,13 +301,13 @@ th:first-child(2), td:first-child(2) {
 																html += '<td>'+ arr[index].bizname+ '<input type="hidden" name="bizno" value="' + arr[index].bizno + '"></td>';
 																html += '<td>'+ arr[index].year+ '</td>';
 																 if (arr[index].bizincome) {
-																        html += '<td>'+ arr[index].bizincome+ '</td>';
+																        html += '<td>'+ formatNumberWithCommas(arr[index].bizincome) + '<input type="hidden" name="bizincome" value="' + arr[index].bizincome + '"></td>';
 																    } else {
 																        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 																    }
 // 																html += '<td>'+ arr[index].bizincome+ '</td>';
 															    if (arr[index].tax) {
-															        html += '<td>'+ arr[index].tax+ '</td>';
+															        html += '<td>'+ formatNumberWithCommas(arr[index].tax) + '<input type="hidden" name="tax" value="' + arr[index].tax + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
@@ -217,34 +316,34 @@ th:first-child(2), td:first-child(2) {
 
 																  // 값이 있는 경우 해당 값을 셀에 추가
 															    if (arr[index].reportdate) {
-															        html += '<td>'+ arr[index].reportdate+ '</td>';
+															        html += '<td>'+ arr[index].reportdate + '<input type="hidden" name="reportdate" value="' + arr[index].reportdate + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
 
 															    if (arr[index].reportdoc) {
-															        html += '<td>'+ arr[index].reportdoc+ '</td>';
+															        html += '<td>'+ arr[index].reportdoc + '<input type="hidden" name="reportdoc" value="' + arr[index].reportdoc + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
 
 															    if (arr[index].paymentslip) {
-															        html += '<td>'+ arr[index].paymentslip+ '</td>';
+															        html += '<td>'+ arr[index].paymentslip + '<input type="hidden" name="paymentslip" value="' + arr[index].paymentslip + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
 
 															    if (arr[index].transdate) {
-															        html += '<td>'+ arr[index].transdate+ '</td>';
+															        html += '<td>'+ arr[index].transdate + '<input type="hidden" name="transdate" value="' + arr[index].transdate + '"></td>';
 															    } else {
 															        html += '<td></td>'; // 값이 없는 경우 빈 셀 추가
 															    }
-																html += '<td >'+ '<input type="button" class="rptfbtn" value="신고서작성"/>'+ '</td>';
+																html += '<td >'+ '<input type="button" class="rptfbtn btn btn-primary" value="신고서작성"/>'+ '</td>';
 																html += '</tr>';
 																$(this).append(html);
 																
 															});
-
+											getStatusCount();
 											processBizno(biznoList, index + 1,year);
 										}
 									});
@@ -294,6 +393,7 @@ th:first-child(2), td:first-child(2) {
 															success : function(data) {
 																
 																
+																
 // 																console.log(data);
 // 																console.log($('.rptfbtn')	.closest('tr');
 // 																console.log($('.rptfbtn')	.closest('tr').find("td").eq(0));
@@ -303,16 +403,17 @@ th:first-child(2), td:first-child(2) {
 
 																loc.eq(0).text(data.bizname);
 																loc.eq(1).text(data.year);
-																loc.eq(2).text(data.bizincome);
-																loc.eq(3).text(data.tax);
+																loc.eq(2).text(formatNumberWithCommas(data.bizincome));
+																loc.eq(3).text(formatNumberWithCommas(data.tax));
 
 																var date = new Date(data.reportdate);
 																var formattedDate = date.toLocaleDateString('ko-KR');
 																loc.eq(4).text(formattedDate);
 																loc.eq(5).text(data.reportdoc);
 																loc.eq(6).text(data.paymentslip);
-																loc.eq(8).html('<input type="button" class="transferbtn" value="'+data.status+'"/>');
-
+																loc.eq(8).html('<input type="button" class="transferbtn btn btn-primary" value="'+data.status+'"/>');
+																
+																getStatusCount();
 
 										var trbtn = ".transferbtn";
 					$("#maketd").off("click", trbtn);
@@ -334,7 +435,10 @@ th:first-child(2), td:first-child(2) {
 					var date = new Date(data.reportdate);
 					var formattedDate = date.toLocaleDateString('ko-KR');
 					loc.eq(7).text(formattedDate);
-					loc.eq(8).html('<input type="button" disabled value="'+data.status+'"/>');
+					loc.eq(8).html('<input type="button" class="btn btn-primary" disabled value="'+data.status+'"/>');
+					
+					
+					getStatusCount();
 				},
 				error : function(xhr,status,error) {
 					console.error(error);
@@ -411,13 +515,14 @@ th:first-child(2), td:first-child(2) {
 
 					<!-- 지급년월/연월선택 캘린더 -->
 					<form class="selectYear" action="/info/infoTA" method="post">
-						<span>조회 년도</span>
+					<br>
+						<div><h4>조회 년도</h4>
 						<!-- 연월 선택 캘린더 -->
 						<div class="selectMonth">
 							<input type="number" name="year" placeholder="2023"
 								value='<c:out value="${year}"/>' min="1900" max="2100"></input>
-							<button type="submit" id="submitYear">조회</button>
-						</div>
+							<button type="submit" class="btn btn-outline-secondary" id="submitYear">조회</button>
+						</div></div>
 					</form>
 
 					<br>
@@ -428,7 +533,7 @@ th:first-child(2), td:first-child(2) {
 						<!-- 신고현황 바 위의 정보 -->
 						<div class="barInfo">
 							<div>국세청 신고현황</div>
-							<div class="percentage">20%</div>
+							<div class="percentage"></div>
 						</div>
 
 						<!-- 전체 건수 나타내는 신고현황 바(막대기) -->
@@ -438,14 +543,14 @@ th:first-child(2), td:first-child(2) {
 								<div class="bar completed">
 									<dl class="desc">
 										<dt>
-											신고완료 <em>1</em>건
+											신고완료 <em></em>
 										</dt>
 									</dl>
 								</div>
 								<div class="bar undeclared">
 									<dl class="desc">
 										<dt>
-											미신고 <em>4</em>건
+											 <em>미신고</em>
 										</dt>
 									</dl>
 								</div>
@@ -455,8 +560,8 @@ th:first-child(2), td:first-child(2) {
 					<br>
 
 					<div>
-						신고리스트
-						<button type="button" id="print" class="printButton"  onclick="window.print()">인쇄</button>
+						<h4>신고리스트
+						<span><button type="button" id="print" class="printButton btn btn-outline-secondary"  onclick="window.print()">인쇄</button></span></h4>
 					</div>
 
 					<div class="tab-content pt-2" id="borderedTabContent">
@@ -500,8 +605,8 @@ th:first-child(2), td:first-child(2) {
 
 
 
-							<button type="button" class="btn btn-primary">확인</button>
-							<button type="button" class="btn btn-secondary">취소</button>
+<!-- 							<button type="button" class="btn btn-primary">확인</button> -->
+<!-- 							<button type="button" class="btn btn-secondary">취소</button> -->
 
 						</div>
 

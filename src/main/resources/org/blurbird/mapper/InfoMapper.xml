@@ -5,11 +5,12 @@
 <mapper namespace="org.blurbird.mapper.InfoMapper">
 
 	<!-- 수임사 목록 -->
-
-	<select id="getListBusiness"  parameterType="org.blurbird.domain.info.InfoMainVO"
+	<select id="getListBusiness"
+		parameterType="org.blurbird.domain.info.InfoMainVO"
 		resultType="org.blurbird.domain.info.InfoMainVO">
-		select * from business left join reportpayment on business.bizno=reportpayment.bizno order by business.bizno
-<!-- 		where reportpayment.year=#{year}   -->
+		select * from business left join reportpayment on
+		business.bizno=reportpayment.bizno order by business.bizno
+		<!-- where reportpayment.year=#{year} -->
 	</select>
 
 	<select id="getBizName"
@@ -284,11 +285,14 @@
 		status)
 		VALUES (
 		(Seq_reportpayment.NEXTVAL),
-		(SELECT bizno FROM business WHERE business.bizno = #{bizno}),
-		(SELECT bizname FROM business WHERE business.bizno = #{bizno}),
+		(SELECT bizno FROM business
+		WHERE business.bizno = #{bizno}),
+		(SELECT bizname FROM business WHERE
+		business.bizno = #{bizno}),
 		#{year}, #{bizincome}, #{tax},
 		TO_DATE(TO_CHAR(SYSDATE, 'YYYY-MM-DD')),
-		#{reportdoc}, #{paymentslip}, #{status}
+		#{reportdoc}, #{paymentslip},
+		#{status}
 		)
 	</insert>
 
@@ -305,6 +309,15 @@
 		parameterType="org.blurbird.domain.info.ReportPaymentVO">
 		select * from reportpayment where bizno=#{bizno}
 	</select>
+	
+<!-- 	<select id="getList" -->
+<!-- 		resultType="org.blurbird.domain.info.InfoMainVO" -->
+<!-- 		parameterType="org.blurbird.domain.info.InfoMainVO"> -->
+<!-- 		select DISTINCT reportpayment.bizno, reportpayment.bizname, reportpayment.year, reportpayment.bizincome, reportpayment.tax, reportpayment.reportdate, reportpayment.reportdoc, reportpayment.paymentslip, reportpayment.transdate, reportpayment.status from reportpayment -->
+<!-- 		 join autoslip on autoslip.bizno=reportpayment.bizno where reportpayment.bizno=#{bizno} and regdate between -->
+<!-- 		to_date(#{year}||'-01-01', 'YYYY-MM-DD') and -->
+<!-- 		to_date(#{year}||'-12-31', 'YYYY-MM-DD') -->
+<!-- 	</select> -->
 
 
 
@@ -320,6 +333,16 @@
 		bh join bankslip b on bh.bhno=b.bhno
 		where bh.bhdate between
 		to_date('2023-01-01') and to_date('2023-12-31'))
+	</select>
+
+
+	<select id="getStatusCount" resultType="int">
+		select count(*) from reportpayment where status in ('납부서전송', '전송완료')
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+		select count(*) from business left join reportpayment on
+		business.bizno=reportpayment.bizno order by business.bizno
 	</select>
 
 

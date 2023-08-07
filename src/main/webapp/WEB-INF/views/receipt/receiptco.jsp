@@ -155,7 +155,7 @@ th:first-child, td:first-child {
 				<div class=card-body>
 					<div class="left" id="uploadedImageDiv">
 						<!--Start div left  -->
-						<img src="/resources/upload/apple-touch-icon.png" alt="receipt"
+						<img src="/resources/upload/upload2.png" alt="receipt"
 							class="img-fluid custom-image" id="uploadedImage">
 					</div>
 					<!-- End div left -->
@@ -223,7 +223,7 @@ th:first-child, td:first-child {
 					},
 					error : function(xhr, status, error) {
 						// 에러 처리
-						console.log("Error:", error.log());
+						console.log("Error:", error);
 					}
 				});
 			});
