@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.blurbird.mapper.RegisterMapper">
+	<select id="getMemberList"
+		resultType="org.blurbird.domain.common.MemberVO">
+		select * from member
+	</select>
+	
+	<insert id="registerMember">
+		insert into member
+		(memberno,membername,memberid,password,ssn)
+		VALUES
+		(seq_memberno.nextval,#{membername},#{memberid},#{password},#{ssn})
+	</insert>
+</mapper>
