@@ -106,7 +106,7 @@
 								<!-- 신고서 관리 graph -->
 								<div class="card-body">
 									<h5 class="card-title">
-										신고서 한눈에 보기 <span>| Today</span>
+										신고서 한눈에 보기 <span>| Month</span>
 									</h5>
 									<div class="detailTitle">
 										<span></span> <span></span> <span></span>

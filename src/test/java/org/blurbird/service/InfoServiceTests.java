@@ -94,12 +94,9 @@ public class InfoServiceTests {
 	public void test() {
 		InfoMainVO info = new InfoMainVO();
 		info.setBizno("10001");
-		info.setYear("2022");
-		
-		log.info("@@@@@@@@@@@@2022: " + service.getISByBiz(info));
-		info.setBizno("10001");
 		info.setYear("2023");
 		
-		log.info("@@@@@@@@@@@@2023: " + service.getISByBiz(info));
+	
+		log.info("@@@@@@@@@@@@2023: " + service.getList(info));
 	}
 }
