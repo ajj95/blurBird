@@ -37,9 +37,9 @@ public class InfoController {
 	
 	@GetMapping("/infoTA")
 	public void getInfoTA(Model model) {
-//		log.info("ºó ¸ðµ¨:" + model);
+//		log.info("ï¿½ï¿½ ï¿½ï¿½:" + model);
 		model.addAttribute("listCO", service.getListBusiness());
-//		log.info("Âù ¸ðµ¨: " + model);
+//		log.info("ï¿½ï¿½ ï¿½ï¿½: " + model);
 	};
 	
 	
@@ -54,8 +54,8 @@ public class InfoController {
 		
 		log.info(service.getList(infoMainVO));
 //		log.info("VO: " + infoMainVO);
-//		log.info("¸ðµ¨:" + model);
-//		log.info("list: " + service.getList(infoMainVO)); // Á¶È¸¹öÆ° ´©¸£¸é ¹øÈ£°¡ ºüÀÚ¤Ó°í µé¾î¿Â´Ù..
+//		log.info("ï¿½ï¿½:" + model);
+//		log.info("list: " + service.getList(infoMainVO)); // ï¿½ï¿½È¸ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¤Ó°ï¿½ ï¿½ï¿½ï¿½Â´ï¿½..
 		return  service.getList(infoMainVO);
 	}
 	
@@ -67,10 +67,10 @@ public class InfoController {
 //        String dateString = sdf.format(date);
 //		
 //		reportPaymentVO.setReportdate(dateString);
-		reportPaymentVO.setReportdoc("½Å°í¼­");
-		reportPaymentVO.setPaymentslip("³³ºÎ¼­");
+		reportPaymentVO.setReportdoc("ì‹ ê³ ì„œ");
+		reportPaymentVO.setPaymentslip("ë‚©ë¶€ì„œ");
 //		reportPaymentVO.setTransdate("");
-		reportPaymentVO.setStatus("³³ºÎ¼­Àü¼Û");
+		reportPaymentVO.setStatus("ë‚©ë¶€ì„œì „ì†¡");
 		
 		service.report(reportPaymentVO);
 //		log.info(service.rptfResult(reportPaymentVO));
@@ -80,13 +80,13 @@ public class InfoController {
 	@PostMapping("/infoTA/transfer")
 	public @ResponseBody ReportPaymentVO transfer(ReportPaymentVO reportPaymentVO) {
 		
-		reportPaymentVO.setStatus("Àü¼Û¿Ï·á");
+		reportPaymentVO.setStatus("ì „ì†¡ì™„ë£Œ");
 		
 		service.transfer(reportPaymentVO);
 		return service.rptfResult(reportPaymentVO);
 	}
 	
-//	   // ³³ºÎ¼­ Àü¼Û »óÅÂÀÎ °³¼ö °¡Á®¿À±â
+//	   // ï¿½ï¿½ï¿½Î¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //	   @GetMapping("/getReportStatusCount")
 //	   public ResponseEntity<Map<String, Integer>> getHistoryAndSlip() {
 //	        Map<String, Integer> response = new HashMap<>();
