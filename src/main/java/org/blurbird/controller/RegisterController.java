@@ -25,9 +25,13 @@ public class RegisterController {
 		this.service = service;
 	}
 	
-	@GetMapping("/register")
-	public void read() {
-		log.info("register!!");
+	@GetMapping("/registerta")
+	public void readta() {
+		log.info("regist ta!!");
+	}
+	@GetMapping("/registerco")
+	public void readco() {
+		log.info("regist co!!");
 	}
 
 	@PostMapping(path ="/registMember",produces = "application/json")
