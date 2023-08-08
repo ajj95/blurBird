@@ -27,12 +27,10 @@
 		<result property="authno" column="authno"></result>
 		<collection property="authList" resultMap="authMap"></collection>
 	</resultMap>
-	
 	<resultMap type="org.blurbird.domain.common.AuthVO" id="authMap">
 		<result property="memberid" column="memberid"></result>
 		<result property="authname" column="authname"></result>
 	</resultMap>
-	
 	<select id="readUser" resultMap="userMap">
 		select m.memberid "memberid", m.password "password", m.membername "membername"
 		, u.bizno "bizno", b.bizname "bizname", u.authno "authno", a.authname "authname"

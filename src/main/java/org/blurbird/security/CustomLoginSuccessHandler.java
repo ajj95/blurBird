@@ -23,15 +23,12 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
 	public void onAuthenticationSuccess(HttpServletRequest request
       , HttpServletResponse response
 			, Authentication auth) throws IOException, ServletException {
-		
-		String previousUrl = request.getHeader("referer");
 		List<String> roleName = new ArrayList<String>();
 		
 		//로그인 성공시 사용자의 정보가 Authentication 객체로 넘어옴
 		//- 넘어오는 여러 정보 forEach로 확인
 		auth.getAuthorities().forEach(authority -> {
 			roleName.add(authority.getAuthority());
-			log.info(roleName.get(0));
 		});
 		
 		// authno가 세무사인 경우
