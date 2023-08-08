@@ -26,6 +26,70 @@ $(function(){
             // 수임사: 체크 불가
            historySlipRequest(search);
         });
+        
+        $("#left").on("click", ".ri-article-fill", function(){
+			// 메모 내용, 통장내역 번호, 금액 가져와서 모달 input 에 넣기
+			let bhno = $(this).closest('tr').find('input[name="bhno"]').val();
+			let closestLink = $(this).closest('a');
+			let memo = '';
+		
+			if(closestLink.length>0){
+				memo = closestLink.data('bs-original-title');
+			}
+			
+			$("#biznoInMemoModal").val(bhno);
+			$("#insertedMemo").val(memo);
+			
+			$("#memoinsert").modal('show');
+		});
+		
+		
+		// 메모 입력 모달 창에서 저장 버튼 클릭시
+		$("#saveMemoBtn").on("click", function(){
+			let bhno = $("#biznoInMemoModal").val();
+			let memo = $("#insertedMemo").val();
+			
+		    let datas = {
+		            bhno: bhno,
+		            memo: memo,
+		   };
+			
+			// 통장내역번호, 메모로 해야하는 일들
+			$.ajax({
+		            type: "GET",
+		            url: "/bank/modifyMemo",
+		            dataType: "json",
+		            data: datas,
+		            success: function(response) {
+		               alert(response);
+		            },
+		            error: function(xhr, status, error) {
+		                console.error(error);
+		            }
+		     });
+			
+			alert("메모가 저장되었습니다.");
+			
+			// 모달 닫기
+		    $('#memoinsert').modal('hide');
+			
+			// 다시 화면 로드
+		    let startDate = $("#startdate").val();
+		    let endDate = $("#enddate").val();
+		    let bizno = $("#bizno").val();
+		    let bankname = $("#bankname").val();
+		    
+		    let search = {
+		        startdate: startDate,
+		        enddate: endDate,
+		        bizno: bizno,
+		        bankname: bankname
+		    };
+		    
+		    // 수임사: 체크 불가
+		   historySlipRequest(search);
+			
+		});
 	
 });// windowload function
 

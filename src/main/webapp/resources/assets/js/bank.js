@@ -30,8 +30,6 @@ $(function(){
  
 		// 전표 내역 중 분개내역조회 버튼 클릭 시 조회
 		$("#right").on("click", "#detailslipshow", function(){
-			// bhno 가지고 bankslip 테이블에서 2행 조회
-			
 			// 체크된 체크박스 값을 저장할 배열
 			let selectedBhnoList = [];
 			
