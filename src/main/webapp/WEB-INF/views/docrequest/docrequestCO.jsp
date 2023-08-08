@@ -271,7 +271,7 @@ table.total {
 									<div class="row mb-3">
 										<label for="inputText" class="col-sm-2 col-form-label">회사담당자</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" value="박길동" readonly="readonly" name="member.membername">
+											<input type="text" class="form-control" value="김성민" readonly="readonly" name="member.membername">
 										</div>
 									</div>
 

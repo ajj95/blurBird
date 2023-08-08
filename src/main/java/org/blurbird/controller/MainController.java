@@ -17,13 +17,11 @@ import lombok.extern.log4j.Log4j;
 public class MainController {
 
 	@GetMapping("/mainCO")
-	public void mainCO(Model model) {
-		log.info("mainCO");
+	public void mainCO() {
 	}
 	
 	@GetMapping("/mainTA")
-	public void mainTA(Model model) {
-		log.info("mainTA");
+	public void mainTA() {
 	}
 	
 	@GetMapping("/beforeloginmainco")
