@@ -257,8 +257,9 @@
 				dataType : 'json'
 			});
 			alert("registered!!!");
-			$(location).attr('href','/register/register');
+			$(location).attr('href','/main/talogin');
 		});
+		
 	</script>
 </body>
 <%@include file="../common/footer.jsp"%>

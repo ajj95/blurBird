@@ -257,7 +257,7 @@
 				dataType : 'json'
 			});
 			alert("registered!!!");
-			$(location).attr('href','/register/register');
+			$(location).attr('href','/main/cologin');
 		});
 	</script>
 </body>
